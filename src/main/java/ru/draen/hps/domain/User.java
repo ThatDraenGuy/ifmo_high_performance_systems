@@ -16,15 +16,14 @@ public class User extends DeletableEntity<Long> {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @ElementCollection(targetClass = EUserRole.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles")
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
     private Set<EUserRole> roles;
 }
