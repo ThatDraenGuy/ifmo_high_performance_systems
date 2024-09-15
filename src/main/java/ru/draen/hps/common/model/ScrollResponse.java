@@ -1,17 +1,18 @@
 package ru.draen.hps.common.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.NonNull;
 
 import java.util.List;
 import java.util.function.Function;
 
-public record ScrollResponse<T>(ListInfo listInfo, List<T> items) {
+public record ScrollResponse<T>(@NonNull ListInfo listInfo, @NonNull List<T> items) {
 
-    public ScrollResponse(List<T> items, ScrollCondition scrollCondition) {
+    public ScrollResponse(@NonNull List<T> items, @NonNull ScrollCondition scrollCondition) {
         this(new ListInfo(scrollCondition.limit(), scrollCondition.offset()), items);
     }
 
-    public <R> ScrollResponse<R> map(Function<T, R> converter) {
+    public <R> ScrollResponse<R> map(@NonNull Function<T, R> converter) {
         return new ScrollResponse<>(listInfo, items.stream().map(converter).toList());
     }
 
