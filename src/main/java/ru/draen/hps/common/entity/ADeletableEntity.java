@@ -10,7 +10,7 @@ import java.time.Instant;
 @MappedSuperclass
 @Getter
 @Setter
-public abstract class DeletableEntity<ID> implements IEntity<ID> {
+public abstract class ADeletableEntity<ID> implements IEntity<ID> {
     @Column(name = "del_user")
     protected String delUser;
 

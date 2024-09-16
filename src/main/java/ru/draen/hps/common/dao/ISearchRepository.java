@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 
 public interface ISearchRepository<E extends IEntity<ID>, ID> {
     Optional<E> findById(@NonNull ID id);
+    Optional<E> findById(@NonNull ID id, @NonNull Consumer<Root<E>> fetchProfile);
     Optional<E> findOne(@NonNull Specification<E> spec);
     Optional<E> findOne(@NonNull Specification<E> spec, @NonNull Consumer<Root<E>> fetchProfile);
     List<E> findAll(@NonNull Specification<E> spec, @NonNull ScrollCondition scrollCondition);

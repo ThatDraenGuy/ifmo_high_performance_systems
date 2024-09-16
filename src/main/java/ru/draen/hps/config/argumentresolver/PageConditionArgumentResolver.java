@@ -39,14 +39,20 @@ public class PageConditionArgumentResolver implements HandlerMethodArgumentResol
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        String pageStr = webRequest.getParameter(PAGE_PARAM);
-        String sizeStr = webRequest.getParameter(SIZE_PARAM);
+        int page = Optional.ofNullable(webRequest.getHeader("X-Page"))
+                .or(() -> Optional.ofNullable(webRequest.getParameter(PAGE_PARAM)))
+                .flatMap(this::parseNum)
+                .filter(this::validPageOrThrow)
+                .orElse(PAGE_DEFAULT);
+
+        int size = Optional.ofNullable(webRequest.getHeader("X-Per-Page"))
+                .or(() -> Optional.ofNullable(webRequest.getParameter(SIZE_PARAM)))
+                .flatMap(this::parseNum)
+                .filter(this::validSizeOrThrow)
+                .orElse(SIZE_DEFAULT);
 
         Sort sort = DEFAULT_SORT_RESOLVER.resolveArgument(parameter, mavContainer, webRequest, binderFactory);
-        return new PageCondition(
-                parseNum(pageStr).filter(this::validPageOrThrow).orElse(PAGE_DEFAULT),
-                parseNum(sizeStr).filter(this::validSizeOrThrow).orElse(SIZE_DEFAULT),
-                sort);
+        return new PageCondition(page, size, sort);
     }
 
     private boolean validPageOrThrow(Integer page) {

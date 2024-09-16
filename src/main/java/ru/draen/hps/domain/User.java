@@ -3,7 +3,7 @@ package ru.draen.hps.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import ru.draen.hps.common.entity.DeletableEntity;
+import ru.draen.hps.common.entity.ADeletableEntity;
 
 import java.util.Set;
 
@@ -11,7 +11,7 @@ import java.util.Set;
 @Table(name = "users")
 @Getter
 @Setter
-public class User extends DeletableEntity<Long> {
+public class User extends ADeletableEntity<Long> {
     @Id
     @Column(name = "user_id")
     private Long id;

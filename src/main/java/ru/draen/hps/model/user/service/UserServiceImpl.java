@@ -1,6 +1,7 @@
 package ru.draen.hps.model.user.service;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -20,7 +21,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public PageResponse<User> findAll(UserCondition condition, PageCondition pageCondition) {
+    public PageResponse<User> findAll(@NonNull UserCondition condition, @NonNull PageCondition pageCondition) {
         return readOnlyTransactionTemplate.execute(status -> {
             final Specification<User> spec = UserSpecification.getByCondition(condition);
             return new PageResponse<>(
@@ -32,7 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ScrollResponse<User> findAll(UserCondition condition, ScrollCondition scrollCondition) {
+    public ScrollResponse<User> findAll(@NonNull UserCondition condition, @NonNull ScrollCondition scrollCondition) {
         return readOnlyTransactionTemplate.execute(status -> {
             final Specification<User> spec = UserSpecification.getByCondition(condition);
             return new ScrollResponse<>(
