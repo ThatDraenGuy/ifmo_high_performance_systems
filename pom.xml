@@ -73,13 +73,12 @@
         </dependency>
 
 <!--DB STUFF-->
-        <!--            TODO liquibase-->
         <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
-<!--        <dependency>-->
-<!--            <groupId>org.liquibase</groupId>-->
-<!--            <artifactId>liquibase-core</artifactId>-->
-<!--            <version>${org.liquibase.version}</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${org.liquibase.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -160,16 +159,18 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            TODO liquibase-->
-<!--            <plugin>-->
-<!--                <groupId>org.liquibase</groupId>-->
-<!--                <artifactId>liquibase-maven-plugin</artifactId>-->
-<!--                <version>${org.liquibase.version}</version>-->
-<!--                <configuration>-->
-<!--                    <propertyFile>db/liquibase.properties</propertyFile>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-
+            <plugin>
+<!--            Заставить этот плагин читать значения из .env при выполнении вне lifecycle это та ещё боль-->
+<!--            Используйте команды так чтобы подтянуть параметры подключения к БД из .env: `mvn compile liquibase:<command>`-->
+<!--            (Или настройте аналогичное исполнение в рамках Run-конфига в ИДЕ)-->
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>${org.liquibase.version}</version>
+                <configuration>
+                    <propertyFile>db/liquibase.properties</propertyFile>
+                    <searchPath>target/classes</searchPath> <!-- путь настроен на `target` для подтягивания .env-переменных -->
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
