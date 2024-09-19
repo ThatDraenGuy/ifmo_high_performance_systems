@@ -8,8 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import ru.draen.hps.common.entity.DeletableEntity;
-import ru.draen.hps.common.entity.DeletableEntity_;
+import ru.draen.hps.common.entity.ADeletableEntity;
+import ru.draen.hps.common.entity.ADeletableEntity_;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,9 +49,9 @@ public class PredicateBuilder {
         return this;
     }
 
-    public <T extends DeletableEntity<?>> PredicateBuilder notDeleted(@NonNull Path<T> deletePath) {
+    public <T extends ADeletableEntity<?>> PredicateBuilder notDeleted(@NonNull Path<T> deletePath) {
         predicates.add(
-                cb.isNull(deletePath.get(DeletableEntity_.delDate))
+                cb.isNull(deletePath.get(ADeletableEntity_.delDate))
         );
         return this;
     }
@@ -78,7 +78,7 @@ public class PredicateBuilder {
                 .replaceAll('\\' + SQL_LIKE_ESCAPE_CHAR + "$0");
     }
 
-    public static enum EPredicateMode {
+    public enum EPredicateMode {
         AND,
         OR;
     }

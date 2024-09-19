@@ -14,7 +14,7 @@ import static java.util.Objects.isNull;
 
 @Setter
 @Slf4j
-public abstract class AbstractLabelService implements ILabelService {
+public abstract class ABasicLabelService implements ILabelService {
     private volatile Supplier<Locale> localeResolver;
 
     @Override
