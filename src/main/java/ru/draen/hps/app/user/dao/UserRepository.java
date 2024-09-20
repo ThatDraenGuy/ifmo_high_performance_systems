@@ -1,4 +1,4 @@
-package ru.draen.hps.model.user.dao;
+package ru.draen.hps.app.user.dao;
 
 import ru.draen.hps.common.dao.ICrudRepository;
 import ru.draen.hps.common.dao.IDeletableRepository;

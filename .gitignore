@@ -1,4 +1,6 @@
 .env
+.key
+.key.pub
 
 target/
 !.mvn/wrapper/maven-wrapper.jar

@@ -15,6 +15,8 @@
         <org.springframework.boot.version>3.3.3</org.springframework.boot.version>
         <org.hibernate.orm.version>6.5.2.Final</org.hibernate.orm.version>
         <org.liquibase.version>4.29.2</org.liquibase.version>
+        <io.jsonwebtoken.version>0.12.6</io.jsonwebtoken.version>
+        <org.bouncycastle.version>1.78.1</org.bouncycastle.version>
 <!--        <org.springframework.version>6.1.12</org.springframework.version>-->
     </properties>
 
@@ -72,7 +74,41 @@
             <version>4.0.0</version>
         </dependency>
 
-<!--DB STUFF-->
+<!--JWT STUFF-->
+        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${io.jsonwebtoken.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${io.jsonwebtoken.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${io.jsonwebtoken.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk18on</artifactId>
+            <version>${org.bouncycastle.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk18on -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk18on</artifactId>
+            <version>${org.bouncycastle.version}</version>
+        </dependency>
+
+
+
+        <!--DB STUFF-->
         <!-- https://mvnrepository.com/artifact/org.liquibase/liquibase-core -->
         <dependency>
             <groupId>org.liquibase</groupId>
