@@ -1,4 +1,4 @@
-package ru.draen.hps.model.user.controller.dto;
+package ru.draen.hps.app.user.controller.dto;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package ru.draen.hps.model.user.dao;
+package ru.draen.hps.app.user.dao;
 
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;

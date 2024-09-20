@@ -1,4 +1,4 @@
-package ru.draen.hps.model.user.service;
+package ru.draen.hps.app.user.service;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -10,9 +10,9 @@ import ru.draen.hps.common.model.PageResponse;
 import ru.draen.hps.common.model.ScrollCondition;
 import ru.draen.hps.common.model.ScrollResponse;
 import ru.draen.hps.domain.User;
-import ru.draen.hps.model.user.controller.dto.UserCondition;
-import ru.draen.hps.model.user.dao.UserRepository;
-import ru.draen.hps.model.user.dao.UserSpecification;
+import ru.draen.hps.app.user.controller.dto.UserCondition;
+import ru.draen.hps.app.user.dao.UserRepository;
+import ru.draen.hps.app.user.dao.UserSpecification;
 
 @Service
 @AllArgsConstructor

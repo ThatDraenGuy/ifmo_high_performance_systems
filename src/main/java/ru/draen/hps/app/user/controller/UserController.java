@@ -1,4 +1,4 @@
-package ru.draen.hps.model.user.controller;
+package ru.draen.hps.app.user.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
@@ -12,9 +12,9 @@ import ru.draen.hps.common.model.PageResponse;
 import ru.draen.hps.common.model.ScrollCondition;
 import ru.draen.hps.common.model.ScrollResponse;
 import ru.draen.hps.domain.User;
-import ru.draen.hps.model.user.controller.dto.UserCondition;
-import ru.draen.hps.model.user.controller.dto.UserDto;
-import ru.draen.hps.model.user.service.UserService;
+import ru.draen.hps.app.user.controller.dto.UserCondition;
+import ru.draen.hps.app.user.controller.dto.UserDto;
+import ru.draen.hps.app.user.service.UserService;
 
 @RestController
 @RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)

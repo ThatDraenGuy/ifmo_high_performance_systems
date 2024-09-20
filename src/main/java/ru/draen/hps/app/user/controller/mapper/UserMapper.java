@@ -1,9 +1,9 @@
-package ru.draen.hps.model.user.controller.mapper;
+package ru.draen.hps.app.user.controller.mapper;
 
 import ru.draen.hps.common.annotation.Mapper;
 import ru.draen.hps.common.mapper.IMapper;
 import ru.draen.hps.domain.User;
-import ru.draen.hps.model.user.controller.dto.UserDto;
+import ru.draen.hps.app.user.controller.dto.UserDto;
 
 @Mapper
 public class UserMapper implements IMapper<User, UserDto> {
