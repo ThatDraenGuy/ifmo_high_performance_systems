@@ -14,6 +14,13 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="ifmo-hps-v1.0.0-files" author="${author}">
+        <sqlFile path="changes/02.files.sql" relativeToChangelogFile="true" dbms="postgresql"/>
+        <rollback>
+            <sqlFile path="changes/02.files.rollback.sql" relativeToChangelogFile="true"/>
+        </rollback>
+    </changeSet>
+
     <changeSet id="ifmo-hps-v1.0.0-end" author="${author}">
         <tagDatabase tag="ifmo-hps-v1.0.0-end"/>
     </changeSet>

@@ -13,6 +13,8 @@ import java.util.Set;
 @Setter
 public class User extends ADeletableEntity<Long> {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_user_id_gen")
+    @SequenceGenerator(name = "users_user_id_gen", sequenceName = "users_user_id_seq", allocationSize = 1)
     @Column(name = "user_id")
     private Long id;
 

@@ -43,7 +43,9 @@ public abstract class AGenericRepository<E extends IEntity<ID>, ID> implements I
      * an attempt to resolve path as a chain of entity fields will be performed
      * @return Map of explicitly defined sorting attributes. It may be an empty map.
      */
-    protected abstract @NonNull Map<String, Path<?>> getExplicitSortingPaths();
+    protected @NonNull Map<String, Path<?>> getExplicitSortingPaths() {
+        return Map.of();
+    }
 
     /**
      * Override this method to somehow alter result of find methods. Useful for fetching list/plural attributes
@@ -189,5 +191,9 @@ public abstract class AGenericRepository<E extends IEntity<ID>, ID> implements I
     protected Instant getServerTimestamp() {
         Query query = entityManager.createNativeQuery("select current_timestamp as date_value");
         return ((Timestamp) query.getSingleResult()).toInstant();
+    }
+
+    protected<T> SingularAttribute<? super T, ?> getIdAttribute(Root<T> root) {
+        return root.getModel().getId(root.getModel().getIdType().getJavaType());
     }
 }

@@ -2,6 +2,7 @@ package ru.draen.hps.app.auth.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,8 +21,10 @@ import ru.draen.hps.app.auth.controller.dto.LoginRequest;
 import ru.draen.hps.app.auth.controller.dto.LoginResponse;
 import ru.draen.hps.app.auth.controller.dto.RefreshRequest;
 import ru.draen.hps.common.exception.TokenException;
+import ru.draen.hps.config.AppProfile;
 import ru.draen.hps.config.auth.JwtUtils;
 
+@Profile(AppProfile.DEV)
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor

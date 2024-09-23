@@ -17,7 +17,7 @@ public abstract class ADeletableRepository<E extends ADeletableEntity<ID>, ID> e
     @Override
     public Optional<E> findById(@NonNull ID id, @NonNull Consumer<Root<E>> fetchProfile) {
         return findOne((root, cq, cb) -> cb.and(
-                cb.equal(root, id),
+                cb.equal(root.get(getIdAttribute(root)), id),
                 cb.isNull(root.get(ADeletableEntity_.delDate))
         ), fetchProfile);
     }
