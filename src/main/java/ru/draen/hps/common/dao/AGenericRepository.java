@@ -105,6 +105,17 @@ public abstract class AGenericRepository<E extends IEntity<ID>, ID> implements I
     }
 
     @Override
+    public Stream<E> findStream(@NonNull Specification<E> spec) {
+        return findStream(spec, this::defaultFetchProfile);
+    }
+
+    @Override
+    public Stream<E> findStream(@NonNull Specification<E> spec, @NonNull Consumer<Root<E>> fetchProfile) {
+        TypedQuery<E> query = getTypedQuery(spec, Sort.unsorted(), fetchProfile);
+        return query.getResultStream();
+    }
+
+    @Override
     public long count(@NonNull Specification<E> spec) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);

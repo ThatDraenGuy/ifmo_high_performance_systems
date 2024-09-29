@@ -6,6 +6,10 @@ import java.time.*;
 
 public class TimestampHelper {
 
+    public static Instant current() {
+        return Instant.now(); //TODO
+    }
+
     public static Instant toInstant(@NonNull LocalDateTime moment) {
         return moment.atZone(ZoneId.systemDefault()).toInstant(); //TODO
     }

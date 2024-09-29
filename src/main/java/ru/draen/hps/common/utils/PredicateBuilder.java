@@ -10,6 +10,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import ru.draen.hps.common.entity.ADeletableEntity;
 import ru.draen.hps.common.entity.ADeletableEntity_;
+import ru.draen.hps.common.entity.AHistoricalEntity;
+import ru.draen.hps.common.entity.AHistoricalEntity_;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,6 +54,14 @@ public class PredicateBuilder {
                     matchMode.toMatchString(escape(ignoreCase ? item.trim().toUpperCase() : item.trim()))
             ));
         }
+        return this;
+    }
+
+    public <T extends AHistoricalEntity<?>> PredicateBuilder notDeletedOrReversed(@NonNull Path<T> histPath) {
+        notDeleted(histPath);
+        predicates.add(
+                cb.lessThan(histPath.get(AHistoricalEntity_.startDate), histPath.get(AHistoricalEntity_.endDate))
+        );
         return this;
     }
 

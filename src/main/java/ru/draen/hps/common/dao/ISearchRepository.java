@@ -10,6 +10,7 @@ import ru.draen.hps.common.model.ScrollCondition;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public interface ISearchRepository<E extends IEntity<ID>, ID> {
     Optional<E> findById(@NonNull ID id);
@@ -20,6 +21,8 @@ public interface ISearchRepository<E extends IEntity<ID>, ID> {
     List<E> findAll(@NonNull Specification<E> spec, @NonNull PageCondition pageCondition);
     List<E> findAll(@NonNull Specification<E> spec, @NonNull ScrollCondition scrollCondition, @NonNull Consumer<Root<E>> fetchProfile);
     List<E> findAll(@NonNull Specification<E> spec, @NonNull PageCondition pageCondition, @NonNull Consumer<Root<E>> fetchProfile);
+    Stream<E> findStream(@NonNull Specification<E> spec);
+    Stream<E> findStream(@NonNull Specification<E> spec, @NonNull Consumer<Root<E>> fetchProfile);
     long count(@NonNull Specification<E> spec);
     boolean exists(@NonNull Specification<E> spec);
 }
