@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Repository;
 import ru.draen.hps.I18n;
 import ru.draen.hps.common.dao.AGenericRepository;
+import ru.draen.hps.common.dao.FetchProfiles;
 import ru.draen.hps.common.exception.AppException;
 import ru.draen.hps.common.label.ILabelService;
 import ru.draen.hps.common.utils.BlobUtils;
@@ -36,7 +37,7 @@ public class FileContentRepositoryImpl extends AGenericRepository<FileContent, L
     }
 
     @Override
-    public void createFileBlob(@NonNull FileContent fileContent, @NonNull Consumer<OutputStream> blobProvider) {
+    public void fillFileBlob(@NonNull FileContent fileContent, @NonNull Consumer<OutputStream> blobProvider) {
         fileContent.setDataId(BlobUtils.writeBlob(entityManager, outputStream -> ExceptionUtils.wrapChecked(() -> {
             CheckedOutputStream crcStream = new CheckedOutputStream(outputStream, new CRC32());
             blobProvider.accept(crcStream);
@@ -52,7 +53,7 @@ public class FileContentRepositoryImpl extends AGenericRepository<FileContent, L
 
     @Override
     public FileContent save(@NonNull FileContent entity) {
-        createFileBlob(entity, outputStream ->
+        fillFileBlob(entity, outputStream ->
                 ExceptionUtils.wrapChecked(() -> IOUtils.write(entity.getData(), outputStream)));
         entityManager.persist(entity);
         entityManager.flush();
@@ -72,6 +73,6 @@ public class FileContentRepositoryImpl extends AGenericRepository<FileContent, L
 
     @Override
     protected void defaultFetchProfile(@NonNull Root<FileContent> root) {
-
+        FetchProfiles.nothing(root);
     }
 }

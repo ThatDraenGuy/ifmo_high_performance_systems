@@ -1,13 +1,13 @@
 package ru.draen.hps.app.user.controller.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import ru.draen.hps.domain.EUserRole;
 
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDto {
     private String username;
     private Set<EUserRole> roles;

@@ -1,13 +1,11 @@
 package ru.draen.hps.app.file.controller.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.draen.hps.domain.File;
 
-@Getter
-@Setter
+import static java.util.Objects.isNull;
+
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class FileBriefDto {
@@ -16,6 +14,8 @@ public class FileBriefDto {
     private Long operatorId;
 
     public static FileBriefDto of(File file) {
-        return new FileBriefDto(file.getId(), file.getFileName(), file.getOperId());
+        if (isNull(file))
+            return null;
+        return new FileBriefDto(file.getId(), file.getFileName(), file.getOperator().getId());
     }
 }

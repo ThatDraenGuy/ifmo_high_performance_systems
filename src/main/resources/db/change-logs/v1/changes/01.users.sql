@@ -1,9 +1,10 @@
 CREATE TABLE users (
     user_id SERIAL8 PRIMARY KEY,
-    username VARCHAR UNIQUE NOT NULL,
+    username VARCHAR NOT NULL,
     password VARCHAR NOT NULL,
     del_date TIMESTAMP WITH TIME ZONE NULL,
-    del_user VARCHAR NULL
+    del_user VARCHAR NULL,
+    CONSTRAINT user_name_chk EXCLUDE (username WITH =) WHERE (del_date IS NULL)
 );
 
 CREATE TABLE user_roles (

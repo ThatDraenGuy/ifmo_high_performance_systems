@@ -1,10 +1,8 @@
 package ru.draen.hps.app.file.controller.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class FileCondition {
     private Long fileId;
     private Long operatorId;

@@ -7,9 +7,12 @@ import lombok.NonNull;
 import org.springframework.stereotype.Repository;
 import ru.draen.hps.common.dao.ADeletableRepository;
 import ru.draen.hps.domain.File;
+import ru.draen.hps.domain.FileContent;
 import ru.draen.hps.domain.File_;
 
+import java.io.OutputStream;
 import java.util.List;
+import java.util.function.Consumer;
 
 @Repository
 @AllArgsConstructor
@@ -17,11 +20,22 @@ public class FileRepositoryImpl extends ADeletableRepository<File, Long> impleme
     private final FileContentRepository fileContentRepository;
 
     @Override
-    public File save(File entity) {
+    public File saveWithContent(@NonNull File entity) {
         entityManager.persist(entity);
-        entity.getContent().setId(entity.getId());
         fileContentRepository.save(entity.getContent());
         return entity;
+    }
+
+    @Override
+    public File saveWithContentProvider(@NonNull File file, @NonNull Consumer<OutputStream> contentProvider) {
+        entityManager.persist(file);
+        FileContent fileContent = new FileContent();
+        fileContent.setFile(file);
+        file.setContent(fileContent);
+        fileContentRepository.fillFileBlob(fileContent, contentProvider);
+        entityManager.persist(fileContent);
+        entityManager.flush();
+        return file;
     }
 
     @Override

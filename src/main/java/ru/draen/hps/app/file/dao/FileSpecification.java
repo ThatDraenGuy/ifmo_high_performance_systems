@@ -8,6 +8,7 @@ import ru.draen.hps.common.utils.EMatchMode;
 import ru.draen.hps.common.utils.PredicateBuilder;
 import ru.draen.hps.domain.File;
 import ru.draen.hps.domain.File_;
+import ru.draen.hps.domain.Operator_;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FileSpecification {
@@ -15,7 +16,7 @@ public class FileSpecification {
         return (root, cq, cb) -> new PredicateBuilder(cb)
                 .addIfNotNull(condition.getFileId(), fileId -> cb.equal(root.get(File_.id), fileId))
                 .addLike(condition.getFileName(), root.get(File_.fileName), EMatchMode.ANYWHERE, true)
-                .addIfNotNull(condition.getOperatorId(), operId -> cb.equal(root.get(File_.operId), operId))
+                .addIfNotNull(condition.getOperatorId(), operId -> cb.equal(root.get(File_.operator).get(Operator_.id), operId))
                 .notDeleted(root)
                 .toPredicate(PredicateBuilder.EPredicateMode.AND);
     }

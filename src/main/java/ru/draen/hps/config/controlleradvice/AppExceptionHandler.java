@@ -27,6 +27,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
             BadRequestException.class,
             NotImplementedException.class,
             NotFoundException.class,
+            ProcessingException.class,
             TokenException.class
     })
     private ResponseEntity<Object> handleExceptions(Exception e, HttpServletRequest request) {
@@ -34,6 +35,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
             case BadRequestException ex -> HttpStatus.BAD_REQUEST;
             case NotImplementedException ex -> HttpStatus.NOT_IMPLEMENTED;
             case NotFoundException ex -> HttpStatus.NOT_FOUND;
+            case ProcessingException ex -> HttpStatus.CONFLICT;
             case TokenException ex -> HttpStatus.FORBIDDEN;
             default -> HttpStatus.INTERNAL_SERVER_ERROR;
         });

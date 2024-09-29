@@ -11,12 +11,12 @@ import ru.draen.hps.common.entity.IEntity;
 import ru.draen.hps.common.model.PageCondition;
 import ru.draen.hps.common.model.ScrollCondition;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
 
@@ -63,7 +63,7 @@ public abstract class AGenericRepository<E extends IEntity<ID>, ID> implements I
 
     @Override
     public Optional<E> findById(@NonNull ID id, @NonNull Consumer<Root<E>> fetchProfile) {
-        return findOne((root, cq, cb) -> cb.equal(root, id), fetchProfile);
+        return findOne((root, cq, cb) -> cb.equal(root.get(getIdAttribute(root)), id), fetchProfile);
     }
 
     @Override
@@ -129,7 +129,7 @@ public abstract class AGenericRepository<E extends IEntity<ID>, ID> implements I
     }
 
     @Override
-    public E save(E entity) {
+    public E save(@NonNull E entity) {
         if (isNull(entity.getId())) {
             entityManager.persist(entity);
             entityManager.flush();
@@ -137,6 +137,12 @@ public abstract class AGenericRepository<E extends IEntity<ID>, ID> implements I
         } else {
             return entityManager.merge(entity);
         }
+    }
+
+    @Override
+    public void save(@NonNull Stream<E> entities) {
+        entities.forEach(entityManager::persist);
+        entityManager.flush();
     }
 
     @Override
@@ -190,7 +196,7 @@ public abstract class AGenericRepository<E extends IEntity<ID>, ID> implements I
 
     protected Instant getServerTimestamp() {
         Query query = entityManager.createNativeQuery("select current_timestamp as date_value");
-        return ((Timestamp) query.getSingleResult()).toInstant();
+        return (Instant) query.getSingleResult();
     }
 
     protected<T> SingularAttribute<? super T, ?> getIdAttribute(Root<T> root) {
