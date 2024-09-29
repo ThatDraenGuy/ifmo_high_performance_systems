@@ -54,7 +54,7 @@ public abstract class ADeletableRepository<E extends ADeletableEntity<ID>, ID> e
     @Override
     public boolean delete(@NonNull ID id) {
         return delete((root, cq, cb) -> cb.and(
-                cb.equal(root, id),
+                cb.equal(root.get(getIdAttribute(root)), id),
                 cb.isNull(root.get(ADeletableEntity_.delDate))
         ));
     }

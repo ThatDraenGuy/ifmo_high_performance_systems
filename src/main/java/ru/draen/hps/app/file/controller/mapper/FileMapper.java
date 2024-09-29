@@ -2,10 +2,13 @@ package ru.draen.hps.app.file.controller.mapper;
 
 import ru.draen.hps.app.file.controller.dto.FileContentDto;
 import ru.draen.hps.app.file.controller.dto.FileDto;
+import ru.draen.hps.app.operator.controller.dto.OperatorDto;
 import ru.draen.hps.common.annotation.Mapper;
+import ru.draen.hps.common.entity.IEntity;
 import ru.draen.hps.common.mapper.IMapper;
 import ru.draen.hps.domain.File;
 import ru.draen.hps.domain.FileContent;
+import ru.draen.hps.domain.Operator;
 
 @Mapper
 public class FileMapper implements IMapper<File, FileDto> {
@@ -13,7 +16,7 @@ public class FileMapper implements IMapper<File, FileDto> {
     public File toEntity(FileDto dto) {
         File entity = new File();
         entity.setFileName(dto.getFileName());
-        entity.setOperId(dto.getOperatorId());
+        entity.setOperator(IEntity.mapId(dto.getOperator().getOperatorId(), Operator::new));
 
         FileContent fileContent = new FileContent();
         fileContent.setData(dto.getContent().getData());
@@ -26,8 +29,8 @@ public class FileMapper implements IMapper<File, FileDto> {
     public FileDto toDto(File entity) {
         FileDto dto = new FileDto();
         dto.setFileId(entity.getId());
+        dto.setOperator(OperatorDto.of(entity.getOperator()));
         dto.setFileName(entity.getFileName());
-        dto.setOperatorId(entity.getOperId());
         dto.setContent(FileContentDto.of(entity.getContent()));
         return dto;
     }

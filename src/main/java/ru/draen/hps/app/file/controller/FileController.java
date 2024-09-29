@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.draen.hps.app.file.controller.dto.FileBriefDto;
 import ru.draen.hps.app.file.controller.dto.FileCondition;
 import ru.draen.hps.app.file.controller.dto.FileDto;
+import ru.draen.hps.app.file.controller.dto.UploadLocalFileRequest;
 import ru.draen.hps.app.file.service.FileService;
 import ru.draen.hps.common.mapper.IMapper;
 import ru.draen.hps.common.model.PageCondition;
@@ -46,6 +47,13 @@ public class FileController {
     public ResponseEntity<FileBriefDto> upload(@RequestBody @Validated(Create.class) FileDto dto) {
         return ResponseEntity.ok(
                 fileBriefMapper.toDto(fileService.create(fileMapper.toEntity(dto)))
+        );
+    }
+
+    @PostMapping("/uploadLocal")
+    public ResponseEntity<FileBriefDto> uploadLocal(@RequestBody @Validated UploadLocalFileRequest request) {
+        return ResponseEntity.ok(
+                fileBriefMapper.toDto(fileService.createFromLocal(request))
         );
     }
 

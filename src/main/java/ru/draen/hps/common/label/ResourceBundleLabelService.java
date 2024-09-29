@@ -15,7 +15,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ResourceBundleLabelService extends ABasicLabelService {
+public class ResourceBundleLabelService extends ALabelServiceBase {
     private final String baseName;
     private final Map<Locale, ResourceBundle> bundles = new ConcurrentHashMap<>();
 

@@ -9,5 +9,5 @@
         <tagDatabase tag="ifmo-hps"/>
     </changeSet>
 
-    <include file="change-logs/1.0.0/setup.xml" relativeToChangelogFile="true"/>
+    <include file="change-logs/v1/setup.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

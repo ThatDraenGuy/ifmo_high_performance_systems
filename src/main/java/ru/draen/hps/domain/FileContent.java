@@ -15,6 +15,7 @@ public class FileContent implements IEntity<Long> {
     private Long id;
 
     @OneToOne(optional = false, fetch = FetchType.LAZY, mappedBy = "content")
+    @MapsId
     private File file;
 
     @Column(name = "check_sum", nullable = false)

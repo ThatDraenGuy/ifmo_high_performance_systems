@@ -19,8 +19,9 @@ public class File extends ADeletableEntity<Long> {
     @Column(name = "file_name")
     private String fileName;
 
-    @Column(name = "oper_oper_id")
-    private Long operId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "oper_oper_id")
+    private Operator operator;
 
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id") // делаем Join с этой стороны из-за проблемы с lazy-фетчингом

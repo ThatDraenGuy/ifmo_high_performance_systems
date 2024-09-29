@@ -1,7 +1,7 @@
 CREATE TABLE files (
     file_id SERIAL8 PRIMARY KEY,
     file_name VARCHAR NOT NULL,
-    oper_oper_id INT8 NOT NULL, -- will add foreign key to operator later
+    oper_oper_id INT8 REFERENCES operators(oper_id) NOT NULL,
     del_date TIMESTAMP WITH TIME ZONE NULL,
     del_user VARCHAR NULL
 );
