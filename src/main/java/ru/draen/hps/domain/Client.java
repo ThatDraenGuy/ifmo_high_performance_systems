@@ -22,4 +22,8 @@ public class Client extends ADeletableEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "oper_oper_id")
     private Operator operator;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "trff_trff_id")
+    private Tariff tariff;
 }

@@ -17,6 +17,6 @@ public class CdrDataRepositoryImpl extends ADeletableRepository<CdrData, Long> i
     @Override
     protected void defaultFetchProfile(@NonNull Root<CdrData> root) {
         root.fetch(CdrData_.client);
-        root.fetch(CdrData_.currency);
+//        root.fetch(CdrData_.currency);
     }
 }

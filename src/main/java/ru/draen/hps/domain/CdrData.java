@@ -2,11 +2,14 @@ package ru.draen.hps.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import ru.draen.hps.common.entity.ADeletableEntity;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+
+import static java.util.Objects.isNull;
 
 @Entity
 @Table(name = "cdr_data")
@@ -23,6 +26,10 @@ public class CdrData extends ADeletableEntity<Long> {
     @JoinColumn(name = "cdrf_file_id")
     private CdrFile cdrFile;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rprt_rprt_id")
+    private Report report;
+
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "cli_cli_id")
     private Client client;
@@ -37,8 +44,8 @@ public class CdrData extends ADeletableEntity<Long> {
     @Column(name = "end_time", nullable = false)
     private Instant endTime;
 
-    @Column(name = "duration")
-    private Long duration;
+    @Column(name = "minutes")
+    private Integer minutes;
 
     @Column(name = "cost")
     private BigDecimal cost;
@@ -46,4 +53,12 @@ public class CdrData extends ADeletableEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cur_cur_id")
     private Currency currency;
+
+    public void addToCost(@NonNull BigDecimal other) {
+        if (isNull(cost)){
+            cost = other;
+        } else {
+            cost = cost.add(other);
+        }
+    }
 }
