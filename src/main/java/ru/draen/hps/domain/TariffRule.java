@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.draen.hps.common.entity.ADeletableEntity;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "tariff_rules")
 @Getter
@@ -20,12 +22,12 @@ public class TariffRule extends ADeletableEntity<Long> {
     @JoinColumn(name = "oper_oper_id")
     private Operator operator;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @Column(name = "minute_cost", nullable = false)
-    private Integer minuteCost;
+    private BigDecimal minuteCost;
 
     @Column(name = "minute_limit")
-    private Long minuteLimit;
-
-    @Column(name = "ignored_direction")
-    private ECallDirection ignoredDirection;
+    private Integer minuteLimit;
 }

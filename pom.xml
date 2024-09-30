@@ -78,6 +78,18 @@
             <version>4.0.0</version>
         </dependency>
 
+<!--TESTING-->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>1.20.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.lbruun.springboot</groupId>
+            <artifactId>preliquibase-spring-boot-starter</artifactId>
+            <version>1.5.1</version>
+        </dependency>
 
 <!--JWT STUFF-->
         <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
@@ -220,6 +232,25 @@
                     <propertyFile>db/liquibase.properties</propertyFile>
                     <searchPath>target/classes</searchPath> <!-- путь настроен на `target` для подтягивания .env-переменных -->
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.12</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

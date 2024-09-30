@@ -13,6 +13,12 @@ import java.util.Optional;
 
 public abstract class AHistoricalRepository<E extends AHistoricalEntity<ID>, ID>
         extends ADeletableRepository<E, ID> implements IHistoricalRepository<E, ID> {
+
+    @Override
+    public boolean exists(@NonNull E entity) {
+        return exists(logicalKey(entity));
+    }
+
     @Override
     public boolean exists(@NonNull Specification<E> spec) {
         return super.exists(

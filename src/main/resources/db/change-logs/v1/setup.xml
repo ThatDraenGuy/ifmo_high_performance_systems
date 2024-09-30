@@ -29,25 +29,33 @@
     </changeSet>
 
     <changeSet id="ifmo-hps-v1-clients" author="${author}">
-        <sqlFile path="changes/04.clients.sql" relativeToChangelogFile="true" dbms="postgresql"/>
+        <sqlFile path="changes/04.currencies.sql" relativeToChangelogFile="true" dbms="postgresql"/>
         <rollback>
-            <sqlFile path="changes/04.clients.rollback.sql" relativeToChangelogFile="true"/>
+            <sqlFile path="changes/04.currencies.rollback.sql" relativeToChangelogFile="true"/>
         </rollback>
     </changeSet>
 
     <changeSet id="ifmo-hps-v1-currencies" author="${author}">
-        <sqlFile path="changes/05.currencies.sql" relativeToChangelogFile="true" dbms="postgresql"/>
+        <sqlFile path="changes/05.tariff.sql" relativeToChangelogFile="true" dbms="postgresql"/>
         <rollback>
-            <sqlFile path="changes/05.currencies.rollback.sql" relativeToChangelogFile="true"/>
+            <sqlFile path="changes/05.tariff.rollback.sql" relativeToChangelogFile="true"/>
         </rollback>
     </changeSet>
 
     <changeSet id="ifmo-hps-v1-cdr" author="${author}">
-        <sqlFile path="changes/06.cdr.sql" relativeToChangelogFile="true" dbms="postgresql"/>
+        <sqlFile path="changes/06.clients.sql" relativeToChangelogFile="true" dbms="postgresql"/>
         <rollback>
-            <sqlFile path="changes/06.cdr.rollback.sql" relativeToChangelogFile="true"/>
+            <sqlFile path="changes/06.clients.rollback.sql" relativeToChangelogFile="true"/>
         </rollback>
     </changeSet>
+
+    <changeSet id="ifmo-hps-v1-tariffHist" author="${author}">
+        <sqlFile path="changes/07.cdr.sql" relativeToChangelogFile="true" dbms="postgresql"/>
+        <rollback>
+            <sqlFile path="changes/07.cdr.rollback.sql" relativeToChangelogFile="true"/>
+        </rollback>
+    </changeSet>
+
     <changeSet id="ifmo-hps-v1-end" author="${author}">
         <tagDatabase tag="ifmo-hps-v1-end"/>
     </changeSet>

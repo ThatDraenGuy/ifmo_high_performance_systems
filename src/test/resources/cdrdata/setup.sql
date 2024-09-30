@@ -1,0 +1,1 @@
+INSERT INTO cdr_data (cdrf_file_id, cli_cli_id, direction, start_time, end_time) VALUES (1, 1, 'INC', '2024-09-17T04:39:00Z', '2024-09-17T04:44:15Z');

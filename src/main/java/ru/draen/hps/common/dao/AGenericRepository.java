@@ -8,8 +8,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import ru.draen.hps.common.entity.IEntity;
-import ru.draen.hps.common.model.PageCondition;
-import ru.draen.hps.common.model.ScrollCondition;
+import ru.draen.hps.common.model.*;
 
 import java.time.Instant;
 import java.util.List;
@@ -21,7 +20,7 @@ import java.util.stream.Stream;
 import static java.util.Objects.isNull;
 
 
-public abstract class AGenericRepository<E extends IEntity<ID>, ID> implements ICrudRepository<E, ID>, ISearchRepository<E, ID> {
+public abstract class AGenericRepository<E extends IEntity<ID>, ID> implements ICrudRepository<E, ID>, ISearchRepository<E, ID>, IStreamRepository<E, ID> {
     @PersistenceContext
     protected EntityManager entityManager;
 
@@ -106,12 +105,18 @@ public abstract class AGenericRepository<E extends IEntity<ID>, ID> implements I
 
     @Override
     public Stream<E> findStream(@NonNull Specification<E> spec) {
-        return findStream(spec, this::defaultFetchProfile);
+        return findStream(spec, new StreamCondition(0, Sort.unsorted()));
     }
 
     @Override
-    public Stream<E> findStream(@NonNull Specification<E> spec, @NonNull Consumer<Root<E>> fetchProfile) {
-        TypedQuery<E> query = getTypedQuery(spec, Sort.unsorted(), fetchProfile);
+    public Stream<E> findStream(@NonNull Specification<E> spec, @NonNull StreamCondition condition) {
+        return findStream(spec, condition, this::defaultFetchProfile);
+    }
+
+    @Override
+    public Stream<E> findStream(@NonNull Specification<E> spec, @NonNull StreamCondition condition, @NonNull Consumer<Root<E>> fetchProfile) {
+        TypedQuery<E> query = getTypedQuery(spec, condition.sort(), fetchProfile);
+        query.setFirstResult(condition.offset());
         return query.getResultStream();
     }
 

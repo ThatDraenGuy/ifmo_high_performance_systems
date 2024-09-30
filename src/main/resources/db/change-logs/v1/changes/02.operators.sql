@@ -8,7 +8,7 @@ CREATE TABLE operators (
     CONSTRAINT operator_code_chk EXCLUDE (code WITH =) WHERE (del_date IS NULL)
 );
 
-INSERT INTO operators (name, code) VALUES
-('SeaNet', 'AAM21'),
-('Aquafon', 'ABKAF'),
-('Мегафон', 'RUSNW');
+--INSERT INTO operators (name, code) VALUES
+--('SeaNet', 'AAM21'),
+--('Aquafon', 'ABKAF'),
+--('Мегафон', 'RUSNW');

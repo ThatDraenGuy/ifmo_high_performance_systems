@@ -8,17 +8,18 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import ru.draen.hps.common.entity.ADeletableEntity;
-import ru.draen.hps.common.entity.ADeletableEntity_;
-import ru.draen.hps.common.entity.AHistoricalEntity;
-import ru.draen.hps.common.entity.AHistoricalEntity_;
+import ru.draen.hps.common.entity.*;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
+
+import static java.util.Objects.isNull;
 
 @AllArgsConstructor
 public class PredicateBuilder {
@@ -29,7 +30,7 @@ public class PredicateBuilder {
     private final List<Predicate> predicates = new ArrayList<>();
 
     public <T> PredicateBuilder addIfNotNull(T item, @NonNull Function<T, Predicate> func) {
-        if (item != null) {
+        if (!isNull(item)) {
             this.predicates.add(func.apply(item));
         }
         return this;
@@ -53,6 +54,33 @@ public class PredicateBuilder {
                     ignoreCase ? cb.upper(path) : path,
                     matchMode.toMatchString(escape(ignoreCase ? item.trim().toUpperCase() : item.trim()))
             ));
+        }
+        return this;
+    }
+
+    public <T extends AHistoricalEntity<?>> PredicateBuilder addActual(OffsetDateTime actualDate, @NonNull Path<T> histPath) {
+        if (!isNull(actualDate)) addActual(actualDate.toInstant(), histPath);
+        return this;
+    }
+
+    public <T extends AHistoricalEntity<?>> PredicateBuilder addActual(Instant actualDate, @NonNull Path<T> histPath) {
+        if (!isNull(actualDate)) {
+            predicates.add(
+                    cb.and(
+                            cb.lessThanOrEqualTo(histPath.get(AHistoricalEntity_.startDate), actualDate),
+                            cb.greaterThan(histPath.get(AHistoricalEntity_.endDate), actualDate),
+                            cb.isNull(histPath.get(AHistoricalEntity_.delDate))
+                    )
+            );
+        }
+        return this;
+    }
+
+    public <T extends AHistoricalEntity<?>> PredicateBuilder addStatus(EHistStatus status, Path<T> histPath) {
+        if (!isNull(status)) {
+            predicates.add(
+                HistSpecUtils.resolve(status, cb, histPath)
+            );
         }
         return this;
     }

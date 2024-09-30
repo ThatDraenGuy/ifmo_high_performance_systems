@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.draen.hps.common.entity.ADeletableEntity;
 
-import java.util.List;
-
 @Entity
 @Table(name = "tariffs")
 @Getter
@@ -24,7 +22,4 @@ public class Tariff extends ADeletableEntity<Long> {
 
     @Column(name = "name", nullable = false)
     private String name;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "tariff")
-    private List<TariffHist> rules;
 }
