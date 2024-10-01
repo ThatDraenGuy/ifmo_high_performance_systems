@@ -2,6 +2,8 @@ package ru.draen.hps.app;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.validation.Validator;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ public class AbstractTest {
 
     @Autowired
     protected Validator validator;
+
+    @PersistenceContext
+    protected EntityManager entityManager;
 
     @SneakyThrows
     protected <T> T parseJson(Resource json, Class<T> targetClass) {
