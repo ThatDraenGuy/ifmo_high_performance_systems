@@ -171,7 +171,7 @@ public abstract class AGenericRepository<E extends IEntity<ID>, ID> implements I
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaDelete<E> cd = cb.createCriteriaDelete(getEntityClass());
         Root<E> root = cd.from(getEntityClass());
-        cd.where(cb.equal(root, id));
+        cd.where(cb.equal(root.get(getIdAttribute(root)), id));
         return entityManager.createQuery(cd).executeUpdate() > 0;
     }
 

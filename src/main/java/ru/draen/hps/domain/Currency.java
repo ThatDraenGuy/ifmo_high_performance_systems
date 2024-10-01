@@ -1,19 +1,18 @@
 package ru.draen.hps.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import ru.draen.hps.common.entity.IEntity;
 
 @Entity
 @Table(name = "currencies")
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Currency implements IEntity<Long> {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "currencies_cur_id_gen")
+    @SequenceGenerator(name = "currencies_cur_id_gen", sequenceName = "currencies_cur_id_seq", allocationSize = 1)
     @Column(name = "cur_id")
     private Long id;
 
