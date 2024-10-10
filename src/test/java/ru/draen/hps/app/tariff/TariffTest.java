@@ -1,21 +1,22 @@
 package ru.draen.hps.app.tariff;
 
-import jakarta.validation.groups.Default;
-import org.junit.jupiter.api.Assertions;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
-import ru.draen.hps.app.AbstractTest;
-import ru.draen.hps.app.tariff.controller.TariffController;
-import ru.draen.hps.app.tariff.controller.dto.TariffDto;
-import ru.draen.hps.common.validation.groups.Create;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = {
@@ -23,20 +24,34 @@ import ru.draen.hps.common.validation.groups.Create;
         "spring.liquibase.default-schema=test_schema_tariff"
 })
 @SpringBootTest
-@Sql({
+@Sql(value = {
         "/operator/setup.sql",
         "/tariffrule/setup.sql"
-})
-public class TariffTest extends AbstractTest {
+}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@AutoConfigureMockMvc
+public class TariffTest {
     @Autowired
-    TariffController tariffController;
+    MockMvc mockMvc;
 
     @Test
+    @SneakyThrows
     void createTest(@Value("classpath:tariff/create.json") Resource json) {
-        TariffDto value = parseJson(json, TariffDto.class);
-        Assertions.assertTrue(validator.validate(value, Create.class, Default.class).isEmpty());
+        mockMvc.perform(post("/tariffs/").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json.getContentAsByteArray())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 
-        ResponseEntity<TariffDto> response = tariffController.create(value);
-        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    @Test
+    @SneakyThrows
+    void findTest() {
+        mockMvc.perform(get("/tariffs").queryParam("operatorId", "3").with(csrf())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/tariffs/paged").queryParam("operatorId", "3").with(csrf())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }

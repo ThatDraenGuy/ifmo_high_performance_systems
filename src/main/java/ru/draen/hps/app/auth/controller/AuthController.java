@@ -57,7 +57,7 @@ public class AuthController {
     public ResponseEntity<?> refresh(@RequestBody @Validated RefreshRequest refreshRequest) {
         String rawToken = refreshRequest.refreshToken();
         JwtUtils.RefreshToken refreshToken = jwtUtils.extractRefreshToken(rawToken);
-        String username = refreshToken.getUsername();
+        String username = refreshToken.username();
         try {
             userDetailsService.loadUserByUsername(username);
         } catch (UsernameNotFoundException e) {
