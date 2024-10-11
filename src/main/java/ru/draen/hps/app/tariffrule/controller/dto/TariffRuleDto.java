@@ -9,7 +9,7 @@ import jakarta.validation.groups.ConvertGroup;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.draen.hps.app.operator.controller.dto.OperatorDto;
+import ru.draen.hps.app.operator.controller.dto.OperatorBriefDto;
 import ru.draen.hps.common.validation.groups.Create;
 import ru.draen.hps.common.validation.groups.Pk;
 import ru.draen.hps.common.validation.groups.Update;
@@ -28,7 +28,7 @@ public class TariffRuleDto {
     @NotNull
     @Valid
     @ConvertGroup(to = Pk.class)
-    private OperatorDto operator;
+    private OperatorBriefDto operator;
 
     @Null(groups = Pk.class)
     @NotBlank

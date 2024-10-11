@@ -18,10 +18,4 @@ public class FileBriefMapper implements IMapper<File, FileBriefDto> {
         return FileBriefDto.of(entity);
     }
 
-    @Override
-    public FileBriefDto toId(File entity) {
-        FileBriefDto dto = new FileBriefDto();
-        dto.setFileId(entity.getId());
-        return dto;
-    }
 }

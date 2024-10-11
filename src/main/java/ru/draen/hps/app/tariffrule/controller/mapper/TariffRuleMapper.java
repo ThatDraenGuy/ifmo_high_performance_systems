@@ -1,6 +1,6 @@
 package ru.draen.hps.app.tariffrule.controller.mapper;
 
-import ru.draen.hps.app.operator.controller.dto.OperatorDto;
+import ru.draen.hps.app.operator.controller.dto.OperatorBriefDto;
 import ru.draen.hps.app.tariffrule.controller.dto.TariffRuleDto;
 import ru.draen.hps.common.annotation.Mapper;
 import ru.draen.hps.common.entity.IEntity;
@@ -25,17 +25,11 @@ public class TariffRuleMapper implements IMapper<TariffRule, TariffRuleDto> {
     public TariffRuleDto toDto(TariffRule entity) {
         TariffRuleDto dto = new TariffRuleDto();
         dto.setRuleId(entity.getId());
-        dto.setOperator(OperatorDto.of(entity.getOperator()));
+        dto.setOperator(OperatorBriefDto.of(entity.getOperator()));
         dto.setName(entity.getName());
         dto.setMinuteCost(entity.getMinuteCost());
         dto.setMinuteLimit(entity.getMinuteLimit());
         return dto;
     }
 
-    @Override
-    public TariffRuleDto toId(TariffRule entity) {
-        TariffRuleDto dto = new TariffRuleDto();
-        dto.setRuleId(entity.getId());
-        return dto;
-    }
 }

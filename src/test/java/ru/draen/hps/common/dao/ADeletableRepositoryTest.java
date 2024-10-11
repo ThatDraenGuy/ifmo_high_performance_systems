@@ -35,8 +35,8 @@ public class ADeletableRepositoryTest {
     @Test
     void deleteTest() {
         assertAll(
-                () -> assertTrue(deletableRepository.delete((root, cq, cb) -> cb.equal(root.get(Operator_.id), 1L))),
-                () -> assertNotNull(entityManager.find(Operator.class, 1L).getDelDate())
+                () -> assertTrue(deletableRepository.delete((root, cq, cb) -> cb.equal(root.get(Operator_.id), 101L))),
+                () -> assertNotNull(entityManager.find(Operator.class, 101L).getDelDate())
         );
     }
 }

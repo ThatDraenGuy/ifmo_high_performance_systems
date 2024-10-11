@@ -25,10 +25,4 @@ public class CdrFileMapper implements IMapper<CdrFile, CdrFileDto> {
         return dto;
     }
 
-    @Override
-    public CdrFileDto toId(CdrFile entity) {
-        CdrFileDto dto = new CdrFileDto();
-        dto.setFileId(entity.getId());
-        return dto;
-    }
 }

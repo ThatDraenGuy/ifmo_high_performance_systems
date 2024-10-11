@@ -8,7 +8,6 @@ import org.springframework.data.jpa.domain.Specification;
 import ru.draen.hps.common.entity.AHistoricalEntity;
 import ru.draen.hps.common.entity.AHistoricalEntity_;
 
-import java.util.Collection;
 import java.util.Optional;
 
 public abstract class AHistoricalRepository<E extends AHistoricalEntity<ID>, ID>
@@ -34,15 +33,6 @@ public abstract class AHistoricalRepository<E extends AHistoricalEntity<ID>, ID>
         entity.setId(null);
         super.save(entity);
         return entity.getId();
-    }
-
-    @Override
-    public void saveOrUpdate(@NonNull Collection<E> entities) {
-        entities.stream().findAny().ifPresent(this::close);
-        entities.forEach(entity -> {
-            entity.setId(null);
-            super.save(entity);
-        });
     }
 
     protected boolean close(E entity) {

@@ -2,7 +2,7 @@ package ru.draen.hps.app.file.controller.mapper;
 
 import ru.draen.hps.app.file.controller.dto.FileContentDto;
 import ru.draen.hps.app.file.controller.dto.FileDto;
-import ru.draen.hps.app.operator.controller.dto.OperatorDto;
+import ru.draen.hps.app.operator.controller.dto.OperatorBriefDto;
 import ru.draen.hps.common.annotation.Mapper;
 import ru.draen.hps.common.entity.IEntity;
 import ru.draen.hps.common.mapper.IMapper;
@@ -29,16 +29,10 @@ public class FileMapper implements IMapper<File, FileDto> {
     public FileDto toDto(File entity) {
         FileDto dto = new FileDto();
         dto.setFileId(entity.getId());
-        dto.setOperator(OperatorDto.of(entity.getOperator()));
+        dto.setOperator(OperatorBriefDto.of(entity.getOperator()));
         dto.setFileName(entity.getFileName());
         dto.setContent(FileContentDto.of(entity.getContent()));
         return dto;
     }
 
-    @Override
-    public FileDto toId(File entity) {
-        FileDto dto = new FileDto();
-        dto.setFileId(entity.getId());
-        return dto;
-    }
 }

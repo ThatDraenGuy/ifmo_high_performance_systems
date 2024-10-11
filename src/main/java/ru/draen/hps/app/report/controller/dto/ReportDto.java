@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.draen.hps.app.client.controller.dto.ClientDto;
-import ru.draen.hps.app.operator.controller.dto.OperatorDto;
+import ru.draen.hps.app.operator.controller.dto.OperatorBriefDto;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -14,7 +14,7 @@ import java.time.OffsetDateTime;
 @AllArgsConstructor
 public class ReportDto {
     private Long reportId;
-    private OperatorDto operator;
+    private OperatorBriefDto operator;
     private ClientDto client;
     private BigDecimal totalCost;
     private Integer totalMinutes;

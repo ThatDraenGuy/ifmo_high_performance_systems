@@ -50,7 +50,7 @@ public class FileController {
         );
     }
 
-    @PostMapping("/uploadLocal")
+    @PostMapping("/upload-local")
     public ResponseEntity<FileBriefDto> uploadLocal(@RequestBody @Validated UploadLocalFileRequest request) {
         return ResponseEntity.ok(
                 fileBriefMapper.toDto(fileService.createFromLocal(request))

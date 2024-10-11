@@ -17,8 +17,4 @@ public class UserMapper implements IMapper<User, UserDto> {
         return null;
     }
 
-    @Override
-    public UserDto toId(User entity) {
-        return null;
-    }
 }

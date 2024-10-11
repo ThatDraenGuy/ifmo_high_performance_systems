@@ -85,15 +85,7 @@ public class JwtUtils {
         REFRESH
     }
 
-    @Getter
-    @AllArgsConstructor
-    public class AccessToken {
-        private final String username;
-    }
+    public record AccessToken(String username) {}
 
-    @Getter
-    @AllArgsConstructor
-    public class RefreshToken {
-        private final String username;
-    }
+    public record RefreshToken(String username) {}
 }

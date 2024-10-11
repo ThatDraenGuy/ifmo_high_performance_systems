@@ -1,21 +1,22 @@
 package ru.draen.hps.app.cdrfile;
 
-import jakarta.validation.groups.Default;
-import org.junit.jupiter.api.Assertions;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
-import ru.draen.hps.app.AbstractTest;
-import ru.draen.hps.app.cdrfile.controller.CdrFileController;
-import ru.draen.hps.app.cdrfile.controller.dto.CdrFileDto;
-import ru.draen.hps.app.cdrfile.controller.dto.ParseCdrRequest;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = {
@@ -23,23 +24,36 @@ import ru.draen.hps.app.cdrfile.controller.dto.ParseCdrRequest;
         "spring.liquibase.default-schema=test_schema_cdrfile"
 })
 @SpringBootTest
-@Sql({
+@Sql(value = {
         "/operator/setup.sql",
         "/tariffrule/setup.sql",
         "/tariff/setup.sql",
         "/client/setup.sql",
-        "/file/setup.sql"
-})
-public class CdrFileTest extends AbstractTest {
+        "/file/setup.sql",
+        "/cdrfile/setup.sql",
+        "/report/setup.sql",
+        "/cdrdata/setup.sql"
+}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@AutoConfigureMockMvc
+public class CdrFileTest {
     @Autowired
-    CdrFileController cdrFileController;
+    MockMvc mockMvc;
 
     @Test
+    @SneakyThrows
     void parseTest(@Value("classpath:cdrfile/request.json") Resource json) {
-        ParseCdrRequest request = parseJson(json, ParseCdrRequest.class);
-        Assertions.assertTrue(validator.validate(request, Default.class).isEmpty());
+        mockMvc.perform(post("/cdr-files/parse").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json.getContentAsByteArray())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 
-        ResponseEntity<CdrFileDto> response = cdrFileController.parse(request);
-        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+    @Test
+    @SneakyThrows
+    void findRecordsTest() {
+        mockMvc.perform(get("/cdr-files/{id}/records", 101).with(csrf())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }

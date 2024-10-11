@@ -58,7 +58,7 @@ public class AGenericRepositoryTest {
         assertTrue(currencyRepository.exists((root, cq, cb) -> cb.conjunction()));
         assertFalse(currencyRepository.exists((root, cq, cb) -> cb.disjunction()));
 
-        assertTrue(currencyRepository.exists((root, cq, cb) -> cb.equal(root.get(Currency_.id), 1L)));
+        assertTrue(currencyRepository.exists((root, cq, cb) -> cb.equal(root.get(Currency_.id), 101L)));
         assertTrue(currencyRepository.exists((root, cq, cb) -> cb.equal(root.get(Currency_.code), "RUB")));
         assertFalse(currencyRepository.exists((root, cq, cb) -> cb.equal(root.get(Currency_.code), "ABO")));
     }
@@ -75,16 +75,16 @@ public class AGenericRepositoryTest {
     @Transactional
     void deleteTest() {
         assertAll(
-                () -> assertTrue(currencyRepository.delete(1L)),
-                () -> assertNull(entityManager.find(Currency.class, 1L))
+                () -> assertTrue(currencyRepository.delete(101L)),
+                () -> assertNull(entityManager.find(Currency.class, 101L))
         );
 
         assertFalse(currencyRepository.delete(73L));
 
         {
-            Currency currency = entityManager.find(Currency.class, 2L);
+            Currency currency = entityManager.find(Currency.class, 102L);
             currencyRepository.delete(currency);
-            assertNull(entityManager.find(Currency.class, 2L));
+            assertNull(entityManager.find(Currency.class, 102L));
         }
     }
 
@@ -125,10 +125,10 @@ public class AGenericRepositoryTest {
             List<Currency> entities = currencyRepository.findAll((root, cq, cb) -> cb.conjunction(),
                     new PageCondition(0, 10, Sort.by(Currency_.ID)));
             List<Currency> expected = List.of(
-                    new Currency(1L, "Рубль", "RUB"),
-                    new Currency(2L, "Dollar", "USD"),
-                    new Currency(3L, "ARP", "ARP"),
-                    new Currency(4L, "ATS", "ATS"));
+                    new Currency(101L, "Рубль", "RUB"),
+                    new Currency(102L, "Dollar", "USD"),
+                    new Currency(103L, "ARP", "ARP"),
+                    new Currency(104L, "ATS", "ATS"));
             assertTrue(CollectionUtils.isEqualCollection(entities, expected), () -> entities + "\n" + expected);
         }
 
@@ -137,8 +137,8 @@ public class AGenericRepositoryTest {
             List<Currency> entities = currencyRepository.findAll((root, cq, cb) -> cb.conjunction(),
                     new PageCondition(0, 2, Sort.by(Currency_.ID)));
             List<Currency> expected = List.of(
-                    new Currency(1L, "Рубль", "RUB"),
-                    new Currency(2L, "Dollar", "USD"));
+                    new Currency(101L, "Рубль", "RUB"),
+                    new Currency(102L, "Dollar", "USD"));
 
             assertTrue(CollectionUtils.isEqualCollection(entities, expected), () -> entities + "\n" + expected);
         }
@@ -148,8 +148,8 @@ public class AGenericRepositoryTest {
             List<Currency> entities = currencyRepository.findAll((root, cq, cb) -> cb.conjunction(),
                     new PageCondition(1, 2, Sort.by(Currency_.ID)));
             List<Currency> expected = List.of(
-                    new Currency(3L, "ARP", "ARP"),
-                    new Currency(4L, "ATS", "ATS"));
+                    new Currency(103L, "ARP", "ARP"),
+                    new Currency(104L, "ATS", "ATS"));
 
             assertTrue(CollectionUtils.isEqualCollection(entities, expected), () -> entities + "\n" + expected);
         }
@@ -161,10 +161,10 @@ public class AGenericRepositoryTest {
             List<Currency> entities = currencyRepository.findAll((root, cq, cb) -> cb.conjunction(),
                     new ScrollCondition(0, 10, Sort.by(Currency_.ID)));
             List<Currency> expected = List.of(
-                    new Currency(1L, "Рубль", "RUB"),
-                    new Currency(2L, "Dollar", "USD"),
-                    new Currency(3L, "ARP", "ARP"),
-                    new Currency(4L, "ATS", "ATS"));
+                    new Currency(101L, "Рубль", "RUB"),
+                    new Currency(102L, "Dollar", "USD"),
+                    new Currency(103L, "ARP", "ARP"),
+                    new Currency(104L, "ATS", "ATS"));
             assertTrue(CollectionUtils.isEqualCollection(entities, expected), () -> entities + "\n" + expected);
         }
 
@@ -172,9 +172,9 @@ public class AGenericRepositoryTest {
             List<Currency> entities = currencyRepository.findAll((root, cq, cb) -> cb.conjunction(),
                     new ScrollCondition(0, 3, Sort.by(Currency_.ID)));
             List<Currency> expected = List.of(
-                    new Currency(1L, "Рубль", "RUB"),
-                    new Currency(2L, "Dollar", "USD"),
-                    new Currency(3L, "ARP", "ARP"));
+                    new Currency(101L, "Рубль", "RUB"),
+                    new Currency(102L, "Dollar", "USD"),
+                    new Currency(103L, "ARP", "ARP"));
             assertTrue(CollectionUtils.isEqualCollection(entities, expected), () -> entities + "\n" + expected);
         }
 
@@ -182,22 +182,22 @@ public class AGenericRepositoryTest {
             List<Currency> entities = currencyRepository.findAll((root, cq, cb) -> cb.conjunction(),
                     new ScrollCondition(2, 10, Sort.by(Currency_.ID)));
             List<Currency> expected = List.of(
-                    new Currency(3L, "ARP", "ARP"),
-                    new Currency(4L, "ATS", "ATS"));
+                    new Currency(103L, "ARP", "ARP"),
+                    new Currency(104L, "ATS", "ATS"));
             assertTrue(CollectionUtils.isEqualCollection(entities, expected), () -> entities + "\n" + expected);
         }
     }
 
     @Test
     void fetchSupportTest() {
-        Client noFetch = clientRepository.findOne((root, cq, cb) -> cb.equal(root.get(Client_.id), 1L),
+        Client noFetch = clientRepository.findOne((root, cq, cb) -> cb.equal(root.get(Client_.id), 101L),
                 root -> {}).orElseThrow();
         assertAll(
                 () -> assertFalse(Persistence.getPersistenceUtil().isLoaded(noFetch.getOperator())),
                 () -> assertFalse(Persistence.getPersistenceUtil().isLoaded(noFetch.getTariff()))
         );
 
-        Client opFetch = clientRepository.findOne((root, cq, cb) -> cb.equal(root.get(Client_.id), 1L),
+        Client opFetch = clientRepository.findOne((root, cq, cb) -> cb.equal(root.get(Client_.id), 101L),
                 root -> root.fetch(Client_.operator)).orElseThrow();
         assertAll(
                 () -> assertTrue(Persistence.getPersistenceUtil().isLoaded(opFetch.getOperator())),
