@@ -15,7 +15,8 @@ services:
       SCROLL_DEFAULT_LIMIT: "15"
       SCROLL_MAX_LIMIT: "75"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     image: postgres:latest
@@ -24,7 +25,13 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: aboba
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - .pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: "pg_isready -d perform -U postgres"
+      interval: 5s
+      timeout: 2s
+      retries: 5
+      start_period: 10s
 
 volumes:
   pgdata:
