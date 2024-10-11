@@ -2,6 +2,7 @@
 .key
 .key.pub
 files/
+.pgdata
 
 target/
 !.mvn/wrapper/maven-wrapper.jar
