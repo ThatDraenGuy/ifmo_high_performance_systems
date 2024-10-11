@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.draen.hps.common.entity.ADeletableEntity;
 
+import java.util.List;
+
 @Entity
 @Table(name = "operators")
 @Getter
@@ -21,4 +23,10 @@ public class Operator extends ADeletableEntity<Long> {
 
     @Column(name = "code", nullable = false)
     private String code;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "operator_languages",
+            joinColumns =           @JoinColumn(name = "oper_oper_id", referencedColumnName = "oper_id"),
+            inverseJoinColumns =    @JoinColumn(name = "lang_lang_id", referencedColumnName = "lang_id"))
+    private List<Language> languages;
 }

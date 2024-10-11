@@ -1,12 +1,12 @@
 {
   "operator": {
-    "operatorId": 1
+    "operatorId": 101
   },
   "name": "Test tariff",
   "rules": [
     {
       "rule": {
-        "ruleId": 1
+        "ruleId": 101
       },
       "ordinal": 1
     }

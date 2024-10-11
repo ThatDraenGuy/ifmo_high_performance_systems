@@ -1,7 +1,7 @@
 package ru.draen.hps.app.tariff.controller.mapper;
 
 import lombok.AllArgsConstructor;
-import ru.draen.hps.app.operator.controller.dto.OperatorDto;
+import ru.draen.hps.app.operator.controller.dto.OperatorBriefDto;
 import ru.draen.hps.app.tariff.controller.dto.AppliedTariffRuleDto;
 import ru.draen.hps.app.tariff.controller.dto.TariffDto;
 import ru.draen.hps.app.tariffrule.controller.dto.TariffRuleDto;
@@ -12,6 +12,8 @@ import ru.draen.hps.common.utils.TimestampHelper;
 import ru.draen.hps.domain.*;
 
 import java.util.List;
+
+import static java.util.Objects.isNull;
 
 @Mapper
 @AllArgsConstructor
@@ -26,7 +28,7 @@ public class TariffMapper implements IMapper<TariffHist, TariffDto> {
         Tariff tariff = new Tariff();
         tariff.setId(dto.getTariffId());
         tariff.setName(dto.getName());
-        tariff.setOperator(IEntity.mapId(dto.getOperator().getOperatorId(), Operator::new));
+        tariff.setOperator(IEntity.mapId(isNull(dto.getOperator()) ? null : dto.getOperator().getOperatorId(), Operator::new));
 
         entity.setTariff(tariff);
         entity.setRules(rulesToEntity(entity, dto.getRules()));
@@ -41,18 +43,11 @@ public class TariffMapper implements IMapper<TariffHist, TariffDto> {
         dto.setHistId(entity.getId());
         dto.setTariffId(entity.getTariff().getId());
         dto.setName(entity.getTariff().getName());
-        dto.setOperator(OperatorDto.of(entity.getTariff().getOperator()));
+        dto.setOperator(OperatorBriefDto.of(entity.getTariff().getOperator()));
         dto.setRules(rulesToDto(entity.getRules()));
         dto.setStartDate(TimestampHelper.atOffset(entity.getStartDate()));
         dto.setEndDate(TimestampHelper.atOffset(entity.getEndDate()));
         dto.setStatus(entity.getHistStatus());
-        return dto;
-    }
-
-    @Override
-    public TariffDto toId(TariffHist entity) {
-        TariffDto dto = new TariffDto();
-        dto.setHistId(entity.getId());
         return dto;
     }
 

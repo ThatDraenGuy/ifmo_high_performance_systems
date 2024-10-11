@@ -53,7 +53,7 @@ public class FileTest {
         mockMvc.perform(post("/files/upload-local").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(
-                                new UploadLocalFileRequest(localFile.getFile().getAbsolutePath(), 3L)))
+                                new UploadLocalFileRequest(localFile.getFile().getAbsolutePath(), 103L)))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

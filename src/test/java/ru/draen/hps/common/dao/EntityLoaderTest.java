@@ -20,10 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
         "spring.liquibase.default-schema=test_schema_entityloader"
 })
 @DataJpaTest
-@Sql({
+@Sql(value = {
         "/operator/setup.sql",
         "/currency/setup.sql"
-})
+}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @ComponentScan(basePackageClasses = EntityLoader.class)
 public class EntityLoaderTest {
     @Autowired
@@ -42,7 +42,7 @@ public class EntityLoaderTest {
     @Test
     void loadExisting() {
         Operator operator = new Operator();
-        operator.setId(1L);
+        operator.setId(101L);
         Operator dbOperator = entityLoader.load(operator);
         assertAll(
                 () -> assertEquals(operator.getId(), dbOperator.getId()),
@@ -51,7 +51,7 @@ public class EntityLoaderTest {
         );
 
         Currency currency = new Currency();
-        currency.setId(1L);
+        currency.setId(101L);
         Currency dbCurrency = entityLoader.load(currency);
         assertAll(
                 () -> assertEquals(currency.getId(), dbCurrency.getId()),

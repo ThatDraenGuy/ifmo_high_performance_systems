@@ -1,5 +1,5 @@
-INSERT INTO currencies (code, name) VALUES
-('RUB', 'Рубль'),
-('USD', 'Dollar'),
-('ARP', 'ARP'),
-('ATS', 'ATS');
+INSERT INTO currencies (cur_id, code, name) VALUES
+(101, 'RUB', 'Рубль'),
+(102, 'USD', 'Dollar'),
+(103, 'ARP', 'ARP'),
+(104, 'ATS', 'ATS');

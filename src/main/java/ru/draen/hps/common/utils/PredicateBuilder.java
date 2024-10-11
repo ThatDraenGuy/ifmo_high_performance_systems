@@ -76,7 +76,7 @@ public class PredicateBuilder {
         return this;
     }
 
-    public <T extends AHistoricalEntity<?>> PredicateBuilder addStatus(EHistStatus status, Path<T> histPath) {
+    public <T extends AHistoricalEntity<?>> PredicateBuilder addStatus(EHistStatus status, @NonNull Path<T> histPath) {
         if (!isNull(status)) {
             predicates.add(
                 HistSpecUtils.resolve(status, cb, histPath)
@@ -85,6 +85,15 @@ public class PredicateBuilder {
         return this;
     }
 
+    public <T extends AHistoricalEntity<?>> PredicateBuilder addStatus(EHistStatus status, @NonNull Instant moment,
+                                                                       @NonNull Path<T> histPath) {
+        if (!isNull(status)) {
+            predicates.add(
+                    HistSpecUtils.resolve(status, cb, histPath, moment)
+            );
+        }
+        return this;
+    }
     public <T extends AHistoricalEntity<?>> PredicateBuilder notDeletedOrReversed(@NonNull Path<T> histPath) {
         notDeleted(histPath);
         predicates.add(

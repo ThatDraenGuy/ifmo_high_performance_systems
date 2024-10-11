@@ -7,8 +7,8 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.apache.commons.collections4.CollectionUtils;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -22,9 +22,7 @@ import ru.draen.hps.common.entity.EHistStatus;
 import ru.draen.hps.domain.Operator;
 import ru.draen.hps.domain.TariffHist;
 
-import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
@@ -64,7 +62,7 @@ public class PredicateBuilderTest {
         assertTrue(args.checkFunc.apply(list));
     }
 
-    private record AddIfNotNullArgs<T>(Integer testItem, Specification<T> predicateProvider, Function<Collection<T>, Boolean> checkFunc) {}
+    private record AddIfNotNullArgs<T>(Object testItem, Specification<T> predicateProvider, Function<Collection<T>, Boolean> checkFunc) {}
 
     private static Stream<AddIfNotNullArgs<Operator>> addIfNotNullArgs() {
         return Stream.of(
@@ -81,54 +79,75 @@ public class PredicateBuilderTest {
     }
 
     @ParameterizedTest
-    @MethodSource("addActualArgs")
-    void addActualTest(AddActualArgs args) {
-        List<TariffHist> list = getTypedQuery(TariffHist.class, (root, cq, cb) -> new PredicateBuilder(cb)
-                .addActual(args.moment, root)
+    @MethodSource("addIfNotNullCollArgs")
+    void addIfNotNullCollTest(AddIfNotNullCollArgs<Operator> args) {
+        List<Operator> list = getTypedQuery(Operator.class, (root, cq, cb) -> new PredicateBuilder(cb)
+                .addIfNotNull(args.testItem, ignored -> args.predicateProvider.toPredicate(root, cq, cb))
                 .toPredicate(PredicateBuilder.EPredicateMode.AND))
                 .getResultList();
-
-        assertEquals(args.expectedCount, list.size());
+        assertTrue(args.checkFunc.apply(list));
     }
 
-    private record AddActualArgs(OffsetDateTime moment, int expectedCount) {}
+    private record AddIfNotNullCollArgs<T>(Collection<?> testItem, Specification<T> predicateProvider, Function<Collection<T>, Boolean> checkFunc) {}
 
-    private static Stream<AddActualArgs> addActualArgs() {
+    private static Stream<AddIfNotNullCollArgs<Operator>> addIfNotNullCollArgs() {
         return Stream.of(
-                new AddActualArgs(
-                        OffsetDateTime.of(2010, 1, 1, 12, 0, 0, 0, ZoneOffset.UTC),
-                        2
+                new AddIfNotNullCollArgs<>(
+                        List.of(), (root, cq, cb) -> cb.disjunction(), CollectionUtils::isNotEmpty
                 ),
-                new AddActualArgs(
-                        OffsetDateTime.of(2009, 1, 1, 12, 0, 0, 0, ZoneOffset.UTC),
-                        1
+                new AddIfNotNullCollArgs<>(
+                        List.of(1), (root, cq, cb) -> cb.disjunction(), CollectionUtils::isEmpty
                 ),
-                new AddActualArgs(
-                        OffsetDateTime.of(2008, 1, 1, 12, 0, 0, 0, ZoneOffset.UTC),
-                        0
+                new AddIfNotNullCollArgs<>(
+                        List.of(1), (root, cq, cb) -> cb.conjunction(), CollectionUtils::isNotEmpty
                 )
         );
     }
 
     @ParameterizedTest
-    @MethodSource("addStatusArgs")
-    void addStatusTest(AddStatusArgs args) {
+    @CsvSource({
+            "2010-01-01T12:00:00+00:00,  2",
+            "2009-01-01T12:00:00+00:00,  1",
+            "2008-01-01T12:00:00+00:00,  0",
+            ",                           4"
+    })
+    void addActualTest(OffsetDateTime moment, int expectedCount) {
         List<TariffHist> list = getTypedQuery(TariffHist.class, (root, cq, cb) -> new PredicateBuilder(cb)
-                .addStatus(args.status, root)
+                .addActual(moment, root)
                 .toPredicate(PredicateBuilder.EPredicateMode.AND))
                 .getResultList();
-        assertEquals(args.expectedCount, list.size());
+
+        assertEquals(expectedCount, list.size());
     }
 
-    private record AddStatusArgs(EHistStatus status, int expectedCount) {}
+    @ParameterizedTest
+    @CsvSource({
+            "ACTIVE,    2",
+            "OBSOLETE,  1",
+            "FUTURE,    0",
+            "DELETED,   1",
+            ",      4"
+    })
+    void addStatusTest(EHistStatus status, int expectedCount) {
+        List<TariffHist> list = getTypedQuery(TariffHist.class, (root, cq, cb) -> new PredicateBuilder(cb)
+                .addStatus(status, root)
+                .toPredicate(PredicateBuilder.EPredicateMode.AND))
+                .getResultList();
+        assertEquals(expectedCount, list.size());
+    }
 
-    private static Stream<AddStatusArgs> addStatusArgs() {
-        return Stream.of(
-                new AddStatusArgs(EHistStatus.ACTIVE, 2),
-                new AddStatusArgs(EHistStatus.OBSOLETE, 1),
-                new AddStatusArgs(EHistStatus.FUTURE, 0),
-                new AddStatusArgs(EHistStatus.DELETED, 1)
-        );
+    @ParameterizedTest
+    @CsvSource({
+            "ACTIVE,    2010-01-01T12:00:00+00:00,   2",
+            "ACTIVE,    2009-01-01T12:00:00+00:00,   1",
+            "ACTIVE,    2008-01-01T12:00:00+00:00,   0"
+    })
+    void addStatusAtTest(EHistStatus status, OffsetDateTime moment, int expectedCount) {
+        List<TariffHist> list = getTypedQuery(TariffHist.class, (root, cq, cb) -> new PredicateBuilder(cb)
+                .addStatus(status, moment.toInstant(), root)
+                .toPredicate(PredicateBuilder.EPredicateMode.AND))
+                .getResultList();
+        assertEquals(expectedCount, list.size());
     }
 
     private<T> TypedQuery<T> getTypedQuery(Class<T> entityClass, Specification<T> spec) {

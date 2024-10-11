@@ -74,10 +74,7 @@ public class TariffServiceImpl implements TariffService {
 
     private void prepareToSave(TariffHist entity) {
         entity.getTariff().setOperator(entityLoader.load(entity.getTariff().getOperator()));
-        entity.getRules().forEach(rule -> {
-            rule.setTariffRule(entityLoader.load(rule.getTariffRule()));
-            rule.getTariffRule().setOperator(entity.getTariff().getOperator());
-        });
+        entity.getRules().forEach(rule -> rule.setTariffRule(entityLoader.load(rule.getTariffRule())));
     }
 
     @Override

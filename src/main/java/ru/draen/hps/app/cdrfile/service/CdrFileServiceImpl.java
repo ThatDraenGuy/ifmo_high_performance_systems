@@ -22,11 +22,14 @@ import ru.draen.hps.common.label.ILabelService;
 import ru.draen.hps.common.utils.TimestampHelper;
 import ru.draen.hps.domain.*;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class CdrFileServiceImpl implements CdrFileService {
     private static final ILabelService lbs = I18n.getLabelService();
 
+    private final TransactionTemplate readOnlyTransactionTemplate;
     private final TransactionTemplate transactionTemplate;
     private final ICsvParser<CdrDataItem> dataParser;
     private final CdrFileNameParser cdrFileNameParser;
@@ -73,5 +76,10 @@ public class CdrFileServiceImpl implements CdrFileService {
             });
             return cdrFile;
         });
+    }
+
+    @Override
+    public Optional<CdrFile> findById(Long fileId) {
+        return readOnlyTransactionTemplate.execute(status -> cdrFileRepository.findById(fileId));
     }
 }

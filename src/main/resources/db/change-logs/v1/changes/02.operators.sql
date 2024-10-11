@@ -8,7 +8,18 @@ CREATE TABLE operators (
     CONSTRAINT operator_code_chk EXCLUDE (code WITH =) WHERE (del_date IS NULL)
 );
 
---INSERT INTO operators (name, code) VALUES
---('SeaNet', 'AAM21'),
---('Aquafon', 'ABKAF'),
---('Мегафон', 'RUSNW');
+CREATE TABLE languages (
+    lang_id INT8 PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    code CHAR(3) UNIQUE NOT NULL
+);
+
+INSERT INTO languages (lang_id, name, code) VALUES
+(1, 'Русский', 'RUS'),
+(2, 'Английский', 'ENG');
+
+CREATE TABLE operator_languages (
+    oper_oper_id INT8 REFERENCES operators(oper_id),
+    lang_lang_id INT8 REFERENCES languages(lang_id),
+    CONSTRAINT operator_languages_pk PRIMARY KEY (oper_oper_id, lang_lang_id)
+);

@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -28,7 +29,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "/tariffrule/setup.sql",
         "/tariff/setup.sql",
         "/client/setup.sql",
-        "/file/setup.sql"
+        "/file/setup.sql",
+        "/cdrfile/setup.sql",
+        "/report/setup.sql",
+        "/cdrdata/setup.sql"
 }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @AutoConfigureMockMvc
 public class CdrFileTest {
@@ -42,6 +46,14 @@ public class CdrFileTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json.getContentAsByteArray())
                         .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @SneakyThrows
+    void findRecordsTest() {
+        mockMvc.perform(get("/cdr-files/{id}/records", 101).with(csrf())
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 }
