@@ -22,6 +22,11 @@ public class ReportServiceImpl implements ReportService {
     private final ReportRepository reportRepository;
 
     @Override
+    public Report save(Report report) {
+        return transactionTemplate.execute(status -> reportRepository.save(report));
+    }
+
+    @Override
     public boolean delete(Long id) {
         return Boolean.TRUE.equals(transactionTemplate.execute(status -> reportRepository.delete(id))); //TODO paid/not paid
     }

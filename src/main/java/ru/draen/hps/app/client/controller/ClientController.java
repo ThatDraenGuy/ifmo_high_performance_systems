@@ -15,7 +15,7 @@ import ru.draen.hps.common.model.ScrollCondition;
 import ru.draen.hps.common.model.ScrollResponse;
 
 @RestController
-@RequestMapping(value = "/clients", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "${api.prefix}/clients", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class ClientController {
     private final ClientService clientService;

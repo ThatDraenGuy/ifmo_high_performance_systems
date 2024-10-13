@@ -9,12 +9,14 @@ import org.springframework.transaction.support.TransactionTemplate;
 import ru.draen.hps.app.client.controller.dto.ClientCondition;
 import ru.draen.hps.app.client.dao.ClientRepository;
 import ru.draen.hps.app.client.dao.ClientSpecification;
+import ru.draen.hps.common.dao.FetchProfiles;
 import ru.draen.hps.common.model.PageCondition;
 import ru.draen.hps.common.model.PageResponse;
 import ru.draen.hps.common.model.ScrollCondition;
 import ru.draen.hps.common.model.ScrollResponse;
 import ru.draen.hps.domain.Client;
 
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -56,5 +58,11 @@ public class ClientServiceImpl implements ClientService {
                             new ScrollCondition(random.nextInt(0, (int)count), 1, Sort.unsorted()))
                     .getFirst();
         });
+    }
+
+    @Override
+    public Optional<Client> findOneBrief(ClientCondition condition) {
+        return readOnlyTransactionTemplate.execute(status -> clientRepository
+                .findOne(ClientSpecification.byCondition(condition), FetchProfiles::nothing));
     }
 }

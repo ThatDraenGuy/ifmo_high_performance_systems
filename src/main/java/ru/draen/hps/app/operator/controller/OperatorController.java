@@ -17,7 +17,7 @@ import ru.draen.hps.common.validation.groups.Create;
 import ru.draen.hps.domain.Operator;
 
 @RestController
-@RequestMapping(value = "/operators", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "${api.prefix}/operators", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class OperatorController {
     private final OperatorService operatorService;

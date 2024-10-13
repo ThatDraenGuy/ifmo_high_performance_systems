@@ -5,5 +5,6 @@ import ru.draen.hps.common.service.ISearchService;
 import ru.draen.hps.domain.Report;
 
 public interface ReportService extends ISearchService<Report, ReportCondition> {
+    Report save(Report report);
     boolean delete(Long id);
 }

@@ -17,7 +17,7 @@ import ru.draen.hps.app.user.controller.dto.UserDto;
 import ru.draen.hps.app.user.service.UserService;
 
 @RestController
-@RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "${api.prefix}/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;

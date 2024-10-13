@@ -1,18 +1,18 @@
 {
-  "tariffId": 102,
+  "tariff_id": 102,
   "rules": [
     {
       "rule": {
-        "ruleId": 101
+        "rule_id": 101
       },
       "ordinal": 0
     },
     {
       "rule": {
-        "ruleId": 102
+        "rule_id": 102
       },
       "ordinal": 0
     }
   ],
-  "startDate": "2016-01-01T12:00:00+03:00"
+  "start_date": "2016-01-01T12:00:00+03:00"
 }

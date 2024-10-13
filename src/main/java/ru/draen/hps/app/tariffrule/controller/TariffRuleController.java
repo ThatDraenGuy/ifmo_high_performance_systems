@@ -17,7 +17,7 @@ import ru.draen.hps.common.validation.groups.Create;
 import ru.draen.hps.domain.TariffRule;
 
 @RestController
-@RequestMapping(value = "/tariff-rules", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "${api.prefix}/tariff-rules", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class TariffRuleController {
     private final TariffRuleService tariffRuleService;

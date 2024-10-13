@@ -38,7 +38,7 @@ public class TariffTest {
     @Test
     @SneakyThrows
     void createTest(@Value("classpath:tariff/create.json") Resource json) {
-        mockMvc.perform(post("/tariffs/").with(csrf())
+        mockMvc.perform(post("/api/v1/tariffs/").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json.getContentAsByteArray())
                         .accept(MediaType.APPLICATION_JSON))
@@ -48,11 +48,11 @@ public class TariffTest {
     @Test
     @SneakyThrows
     void findTest() {
-        mockMvc.perform(get("/tariffs").queryParam("operatorId", "3").with(csrf())
+        mockMvc.perform(get("/api/v1/tariffs").queryParam("operatorId", "3").with(csrf())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(get("/tariffs/paged").queryParam("operatorId", "3").with(csrf())
+        mockMvc.perform(get("/api/v1/tariffs/paged").queryParam("operatorId", "3").with(csrf())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -60,7 +60,7 @@ public class TariffTest {
     @Test
     @SneakyThrows
     void updateTest(@Value("classpath:tariff/update.json") Resource json) {
-        mockMvc.perform(put("/tariffs/{id}", 102).with(csrf())
+        mockMvc.perform(put("/api/v1/tariffs/{id}", 102).with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json.getContentAsByteArray())
                         .accept(MediaType.APPLICATION_JSON))

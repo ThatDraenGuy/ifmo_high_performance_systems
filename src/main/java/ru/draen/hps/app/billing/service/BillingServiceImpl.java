@@ -5,12 +5,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import ru.draen.hps.app.billing.controller.dto.BillingRequest;
-import ru.draen.hps.app.cdrdata.dao.CdrDataRepository;
 import ru.draen.hps.app.cdrdata.dao.CdrDataSpecification;
-import ru.draen.hps.app.cdrfile.dao.CdrFileRepository;
-import ru.draen.hps.app.report.dao.ReportRepository;
-import ru.draen.hps.app.tariff.dao.TariffHistRepository;
+import ru.draen.hps.app.cdrdata.service.CdrDataService;
+import ru.draen.hps.app.cdrfile.service.CdrFileService;
+import ru.draen.hps.app.report.service.ReportService;
 import ru.draen.hps.app.tariff.dao.TariffHistSpecification;
+import ru.draen.hps.app.tariff.service.TariffService;
 import ru.draen.hps.common.exception.NotFoundException;
 import ru.draen.hps.common.model.StreamCondition;
 import ru.draen.hps.domain.*;
@@ -24,25 +24,25 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public class BillingServiceImpl implements BillingService {
     private final TransactionTemplate transactionTemplate;
-    private final CdrFileRepository cdrFileRepository;
-    private final CdrDataRepository cdrDataRepository;
-    private final TariffHistRepository tariffHistRepository;
-    private final ReportRepository reportRepository;
+    private final CdrFileService cdrFileService;
+    private final CdrDataService cdrDataService;
+    private final TariffService tariffService;
+    private final ReportService reportService;
 
     @Override
     public void perform(BillingRequest request) {
         transactionTemplate.execute(status -> {
-            CdrFile cdrFile = cdrFileRepository.findById(request.cdrFileId()).orElseThrow(NotFoundException::new);
-            cdrFileRepository.getClients(cdrFile).forEach(client -> {
+            CdrFile cdrFile = cdrFileService.findById(request.cdrFileId()).orElseThrow(NotFoundException::new);
+            cdrFileService.getClients(cdrFile).forEach(client -> {
                 Report report = processClient(cdrFile, client);
-                reportRepository.save(report);
+                reportService.save(report);
             });
             return null;
         });
     }
 
     private Report processClient(CdrFile cdrFile, Client client) {
-        Stream<CdrData> calls = cdrDataRepository.findStream(CdrDataSpecification.byClient(cdrFile, client),
+        Stream<CdrData> calls = cdrDataService.findStream(CdrDataSpecification.byClient(cdrFile, client),
                 new StreamCondition(0, Sort.by(CdrData_.START_TIME)));
 
         Report report = new Report();
@@ -52,7 +52,7 @@ public class BillingServiceImpl implements BillingService {
         report.setEndTime(cdrFile.getEndTime());
         report.setTotalMinutes(0);
 
-        TariffHist tariffHist = tariffHistRepository.findOne(TariffHistSpecification.byTariff(client.getTariff(), cdrFile.getStartTime()))
+        TariffHist tariffHist = tariffService.findOne(TariffHistSpecification.byTariff(client.getTariff(), cdrFile.getStartTime()))
                 .orElseThrow(NotFoundException::new);
         List<TariffRule> tariffRules = tariffHist.getOrderedRules();
 

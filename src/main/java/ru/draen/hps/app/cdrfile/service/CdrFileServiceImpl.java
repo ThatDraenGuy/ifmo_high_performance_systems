@@ -4,18 +4,16 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import ru.draen.hps.I18n;
-import ru.draen.hps.app.cdrdata.dao.CdrDataRepository;
+import ru.draen.hps.app.cdrdata.service.CdrDataService;
 import ru.draen.hps.app.cdrdata.service.csv.CdrDataItem;
 import ru.draen.hps.app.cdrfile.dao.CdrFileRepository;
 import ru.draen.hps.app.cdrfile.service.filename.CdrFileName;
 import ru.draen.hps.app.cdrfile.service.filename.CdrFileNameParser;
 import ru.draen.hps.app.client.controller.dto.ClientCondition;
+import ru.draen.hps.app.client.service.ClientService;
 import ru.draen.hps.app.file.dao.FileContentFetchProfile;
 import ru.draen.hps.app.file.dao.FileContentRepository;
-import ru.draen.hps.app.client.dao.ClientRepository;
-import ru.draen.hps.app.client.dao.ClientSpecification;
 import ru.draen.hps.common.csv.ICsvParser;
-import ru.draen.hps.common.dao.FetchProfiles;
 import ru.draen.hps.common.exception.NotFoundException;
 import ru.draen.hps.common.exception.ProcessingException;
 import ru.draen.hps.common.label.ILabelService;
@@ -23,6 +21,7 @@ import ru.draen.hps.common.utils.TimestampHelper;
 import ru.draen.hps.domain.*;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -34,9 +33,9 @@ public class CdrFileServiceImpl implements CdrFileService {
     private final ICsvParser<CdrDataItem> dataParser;
     private final CdrFileNameParser cdrFileNameParser;
     private final CdrFileRepository cdrFileRepository;
-    private final CdrDataRepository cdrDataRepository;
+    private final CdrDataService cdrDataService;
     private final FileContentRepository fileContentRepository;
-    private final ClientRepository clientRepository;
+    private final ClientService clientService;
 
     @Override
     public CdrFile parseData(Long fileId) {
@@ -67,12 +66,11 @@ public class CdrFileServiceImpl implements CdrFileService {
                     throw new ProcessingException(lbs.msg("ProcessingException.CdrFileService.invalidCallTime"));
                 }
 
-                Client client = clientRepository
-                        .findOne(ClientSpecification.byCondition(
-                                new ClientCondition(item.getPhoneNumber(), operator.getId())), FetchProfiles::nothing)
+                Client client = clientService
+                        .findOneBrief(new ClientCondition(item.getPhoneNumber(), operator.getId()))
                         .orElseThrow(NotFoundException::new);
                 data.setClient(client);
-                cdrDataRepository.save(data);
+                cdrDataService.save(data);
             });
             return cdrFile;
         });
@@ -81,5 +79,10 @@ public class CdrFileServiceImpl implements CdrFileService {
     @Override
     public Optional<CdrFile> findById(Long fileId) {
         return readOnlyTransactionTemplate.execute(status -> cdrFileRepository.findById(fileId));
+    }
+
+    @Override
+    public Stream<Client> getClients(CdrFile entity) {
+        return readOnlyTransactionTemplate.execute(status -> cdrFileRepository.getClients(entity));
     }
 }

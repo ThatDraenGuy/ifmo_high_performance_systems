@@ -120,4 +120,9 @@ public class TariffServiceImpl implements TariffService {
     public Optional<Tariff> findById(Long id) {
         return readOnlyTransactionTemplate.execute(status -> tariffRepository.findById(id));
     }
+
+    @Override
+    public Optional<TariffHist> findOne(Specification<TariffHist> spec) {
+        return readOnlyTransactionTemplate.execute(status -> tariffHistRepository.findOne(spec));
+    }
 }

@@ -40,7 +40,7 @@ public class FileTest {
     @Test
     @SneakyThrows
     void uploadTest(@Value("classpath:file/upload.json") Resource json) {
-        mockMvc.perform(post("/files/upload").with(csrf())
+        mockMvc.perform(post("/api/v1/files/upload").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json.getContentAsByteArray())
                         .accept(MediaType.APPLICATION_JSON))
@@ -50,7 +50,7 @@ public class FileTest {
     @Test
     @SneakyThrows
     void uploadLocalTest(@Value("classpath:file/local.file") Resource localFile) {
-        mockMvc.perform(post("/files/upload-local").with(csrf())
+        mockMvc.perform(post("/api/v1/files/upload-local").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(
                                 new UploadLocalFileRequest(localFile.getFile().getAbsolutePath(), 103L)))
@@ -61,11 +61,11 @@ public class FileTest {
     @Test
     @SneakyThrows
     void findTest() {
-        mockMvc.perform(get("/files").queryParam("operatorId", "3").with(csrf())
+        mockMvc.perform(get("/api/v1/files").queryParam("operatorId", "3").with(csrf())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(get("/files/paged").queryParam("operatorId", "3").with(csrf())
+        mockMvc.perform(get("/api/v1/files/paged").queryParam("operatorId", "3").with(csrf())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

@@ -39,11 +39,11 @@ public class ReportTest {
     @Test
     @SneakyThrows
     void findTest() {
-        mockMvc.perform(get("/reports").queryParam("operatorId", "3").with(csrf())
+        mockMvc.perform(get("/api/v1/reports").queryParam("operatorId", "3").with(csrf())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(get("/reports/paged").queryParam("clientId", "1").with(csrf())
+        mockMvc.perform(get("/api/v1/reports/paged").queryParam("clientId", "1").with(csrf())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

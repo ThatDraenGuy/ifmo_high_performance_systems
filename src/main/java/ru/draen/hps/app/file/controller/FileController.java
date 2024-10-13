@@ -19,7 +19,7 @@ import ru.draen.hps.common.validation.groups.Create;
 import ru.draen.hps.domain.File;
 
 @RestController
-@RequestMapping(value = "/files", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "${api.prefix}/files", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class FileController {
     private final FileService fileService;

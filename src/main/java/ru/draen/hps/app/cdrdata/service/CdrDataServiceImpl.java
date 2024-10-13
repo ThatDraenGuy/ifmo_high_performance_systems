@@ -8,16 +8,16 @@ import org.springframework.transaction.support.TransactionTemplate;
 import ru.draen.hps.app.cdrdata.controller.dto.CdrDataCondition;
 import ru.draen.hps.app.cdrdata.dao.CdrDataRepository;
 import ru.draen.hps.app.cdrdata.dao.CdrDataSpecification;
-import ru.draen.hps.common.model.PageCondition;
-import ru.draen.hps.common.model.PageResponse;
-import ru.draen.hps.common.model.ScrollCondition;
-import ru.draen.hps.common.model.ScrollResponse;
+import ru.draen.hps.common.model.*;
 import ru.draen.hps.domain.CdrData;
+
+import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
 public class CdrDataServiceImpl implements CdrDataService {
     private final TransactionTemplate readOnlyTransactionTemplate;
+    private final TransactionTemplate transactionTemplate;
     private final CdrDataRepository cdrDataRepository;
 
     @Override
@@ -41,5 +41,15 @@ public class CdrDataServiceImpl implements CdrDataService {
                     scrollCondition
             );
         });
+    }
+
+    @Override
+    public Stream<CdrData> findStream(@NonNull Specification<CdrData> spec, @NonNull StreamCondition streamCondition) {
+        return readOnlyTransactionTemplate.execute(status -> cdrDataRepository.findStream(spec, streamCondition));
+    }
+
+    @Override
+    public CdrData save(CdrData cdrData) {
+        return transactionTemplate.execute(status -> cdrDataRepository.save(cdrData));
     }
 }
