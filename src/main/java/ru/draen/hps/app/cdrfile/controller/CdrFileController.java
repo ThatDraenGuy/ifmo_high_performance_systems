@@ -20,7 +20,7 @@ import ru.draen.hps.domain.CdrData;
 import ru.draen.hps.domain.CdrFile;
 
 @RestController
-@RequestMapping(value = "/cdr-files", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "${api.prefix}/cdr-files", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class CdrFileController {
     private final CdrFileService cdrFileService;

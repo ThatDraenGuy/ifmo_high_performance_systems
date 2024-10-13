@@ -42,7 +42,7 @@ public class PagingTest {
             "10,    10"
     })
     void validPaginationTest(int page, int size) {
-        String byParamsValue = mockMvc.perform(get("/operators/paged")
+        String byParamsValue = mockMvc.perform(get("/api/v1/operators/paged")
                 .queryParam("page", String.valueOf(page))
                 .queryParam("size", String.valueOf(size))
                 .with(csrf())
@@ -51,7 +51,7 @@ public class PagingTest {
                 .andExpect(header().exists("X-Total-Count"))
                 .andReturn().getResponse().getContentAsString();
 
-        String byHeadersValue = mockMvc.perform(get("/operators/paged")
+        String byHeadersValue = mockMvc.perform(get("/api/v1/operators/paged")
                         .header("X-Page", String.valueOf(page))
                         .header("X-Per-Page", String.valueOf(size))
                         .with(csrf())
@@ -72,7 +72,7 @@ public class PagingTest {
             "10,    51"
     })
     void invalidPagingTest(int page, int size) {
-        mockMvc.perform(get("/operators/paged")
+        mockMvc.perform(get("/api/v1/operators/paged")
                         .queryParam("page", String.valueOf(page))
                         .queryParam("size", String.valueOf(size))
                         .with(csrf())
@@ -89,7 +89,7 @@ public class PagingTest {
             "10,    10"
     })
     void validScrollingTest(int offset, int limit) {
-        mockMvc.perform(get("/operators")
+        mockMvc.perform(get("/api/v1/operators")
                         .queryParam("offset", String.valueOf(offset))
                         .queryParam("limit", String.valueOf(limit))
                         .with(csrf())
@@ -106,7 +106,7 @@ public class PagingTest {
             "10,    51"
     })
     void invalidScrollingTest(int offset, int limit) {
-        mockMvc.perform(get("/operators")
+        mockMvc.perform(get("/api/v1/operators")
                         .queryParam("offset", String.valueOf(offset))
                         .queryParam("limit", String.valueOf(limit))
                         .with(csrf())

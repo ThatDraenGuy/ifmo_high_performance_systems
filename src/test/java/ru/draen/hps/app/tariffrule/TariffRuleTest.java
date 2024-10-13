@@ -33,11 +33,11 @@ public class TariffRuleTest {
     @Test
     @SneakyThrows
     void findTest() {
-        mockMvc.perform(get("/tariff-rules").queryParam("operatorId", "3").with(csrf())
+        mockMvc.perform(get("/api/v1/tariff-rules").queryParam("operatorId", "3").with(csrf())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(get("/tariff-rules/paged").queryParam("operatorId", "3").with(csrf())
+        mockMvc.perform(get("/api/v1/tariff-rules/paged").queryParam("operatorId", "3").with(csrf())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

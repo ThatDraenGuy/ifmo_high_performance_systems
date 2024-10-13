@@ -17,7 +17,7 @@ import ru.draen.hps.common.model.ScrollResponse;
 import ru.draen.hps.domain.Report;
 
 @RestController
-@RequestMapping(value = "/reports", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "${api.prefix}/reports", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class ReportController {
     private final ReportService reportService;

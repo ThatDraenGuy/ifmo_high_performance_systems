@@ -42,7 +42,7 @@ public class BillingTest {
     @Test
     @SneakyThrows
     void performTest(@Value("classpath:billing/request.json") Resource json) {
-        mockMvc.perform(post("/billing/").with(csrf())
+        mockMvc.perform(post("/api/v1/billing/").with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json.getContentAsByteArray())
                 .accept(MediaType.APPLICATION_JSON))
@@ -52,7 +52,7 @@ public class BillingTest {
     @Test
     @SneakyThrows
     void performMissingFileTest(@Value("classpath:billing/missingFileRequest.json") Resource json) {
-        mockMvc.perform(post("/billing/").with(csrf())
+        mockMvc.perform(post("/api/v1/billing/").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json.getContentAsByteArray())
                         .accept(MediaType.APPLICATION_JSON))

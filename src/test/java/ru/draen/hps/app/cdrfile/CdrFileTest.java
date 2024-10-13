@@ -42,7 +42,7 @@ public class CdrFileTest {
     @Test
     @SneakyThrows
     void parseTest(@Value("classpath:cdrfile/request.json") Resource json) {
-        mockMvc.perform(post("/cdr-files/parse").with(csrf())
+        mockMvc.perform(post("/api/v1/cdr-files/parse").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json.getContentAsByteArray())
                         .accept(MediaType.APPLICATION_JSON))
@@ -52,7 +52,7 @@ public class CdrFileTest {
     @Test
     @SneakyThrows
     void findRecordsTest() {
-        mockMvc.perform(get("/cdr-files/{id}/records", 101).with(csrf())
+        mockMvc.perform(get("/api/v1/cdr-files/{id}/records", 101).with(csrf())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

@@ -12,7 +12,7 @@ import ru.draen.hps.app.billing.controller.dto.BillingRequest;
 import ru.draen.hps.app.billing.service.BillingService;
 
 @RestController
-@RequestMapping(value = "/billing", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "${api.prefix}/billing", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
 public class BillingController {
     private final BillingService billingService;
