@@ -44,7 +44,7 @@ public class FileTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json.getContentAsByteArray())
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -55,7 +55,7 @@ public class FileTest {
                         .content(objectMapper.writeValueAsBytes(
                                 new UploadLocalFileRequest(localFile.getFile().getAbsolutePath(), 103L)))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test

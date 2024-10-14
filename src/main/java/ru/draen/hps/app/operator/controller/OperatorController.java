@@ -1,6 +1,7 @@
 package ru.draen.hps.app.operator.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -35,7 +36,7 @@ public class OperatorController {
 
     @PostMapping("/")
     public ResponseEntity<OperatorDto> create(@RequestBody @Validated(Create.class) OperatorDto dto) {
-        return ResponseEntity.ok(
+        return ResponseEntity.status(HttpStatus.CREATED).body(
                 operatorMapper.toDto(
                         operatorService.create(operatorMapper.toEntity(dto))));
     }

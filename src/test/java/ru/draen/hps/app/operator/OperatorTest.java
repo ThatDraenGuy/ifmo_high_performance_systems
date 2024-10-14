@@ -1,4 +1,4 @@
-package ru.draen.hps.app.tariffrule;
+package ru.draen.hps.app.operator;
 
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -20,39 +20,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = {
-        "spring.jpa.properties.hibernate.default_schema=test_schema_tariffrule",
-        "spring.liquibase.default-schema=test_schema_tariffrule"
+        "spring.jpa.properties.hibernate.default_schema=test_schema_operator",
+        "spring.liquibase.default-schema=test_schema_operator"
 })
 @SpringBootTest
 @Sql(value = {
-        "/operator/setup.sql",
-        "/tariffrule/setup.sql"
+        "/operator/setup.sql"
 }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @AutoConfigureMockMvc
-public class TariffRuleTest {
+public class OperatorTest {
     @Autowired
     MockMvc mockMvc;
 
     @Test
     @SneakyThrows
     void findTest() {
-        mockMvc.perform(get("/api/v1/tariff-rules").queryParam("operatorId", "3").with(csrf())
+        mockMvc.perform(get("/api/v1/operators").with(csrf())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(get("/api/v1/tariff-rules/paged").queryParam("operatorId", "3").with(csrf())
+        mockMvc.perform(get("/api/v1/operators/paged").with(csrf())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
     @SneakyThrows
-    void createTest(@Value("classpath:tariffrule/create.json") Resource json) {
-        mockMvc.perform(post("/api/v1/tariff-rules/").with(csrf())
+    void createTest(@Value("classpath:operator/create.json") Resource json) {
+        mockMvc.perform(post("/api/v1/operators/").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json.getContentAsByteArray())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
     }
-
 }
