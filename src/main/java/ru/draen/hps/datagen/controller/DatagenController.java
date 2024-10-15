@@ -3,6 +3,7 @@ package ru.draen.hps.datagen.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +24,13 @@ public class DatagenController {
     private final DatagenService datagenService;
 
     @PostMapping("/clients")
-    public ResponseEntity<ClientGenerationResponse> generateClients(@RequestBody ClientGenerationRequest request) {
+    public ResponseEntity<ClientGenerationResponse> generateClients(@RequestBody @Validated ClientGenerationRequest request) {
         if (isNull(request.getCount())) request.setCount(DEFAULT_GENERATION_COUNT);
         return ResponseEntity.ok(new ClientGenerationResponse(datagenService.generateClients(request)));
     }
 
     @PostMapping("/cdr")
-    public ResponseEntity<CdrGenerationResponse> generateCdr(@RequestBody CdrGenerationRequest request) {
+    public ResponseEntity<CdrGenerationResponse> generateCdr(@RequestBody @Validated CdrGenerationRequest request) {
         if (isNull(request.getCallsCount())) request.setCallsCount(DEFAULT_GENERATION_COUNT);
         return ResponseEntity.ok(datagenService.generateCdr(request));
     }

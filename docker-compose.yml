@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
+    volumes:
+      - ./files:/app/files
     environment:
       DATASOURCE_URL: jdbc:postgresql://db:5432/perform
       DATASOURCE_USERNAME: postgres
@@ -24,6 +26,8 @@ services:
       POSTGRES_DB: perform
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: aboba
+    ports:
+      - "5433:5432"
     volumes:
       - .pgdata:/var/lib/postgresql/data
     healthcheck:
