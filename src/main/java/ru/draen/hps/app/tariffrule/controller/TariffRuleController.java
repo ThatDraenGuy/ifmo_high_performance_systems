@@ -1,6 +1,7 @@
 package ru.draen.hps.app.tariffrule.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -35,7 +36,7 @@ public class TariffRuleController {
 
     @PostMapping("/")
     public ResponseEntity<TariffRuleDto> create(@RequestBody @Validated(Create.class) TariffRuleDto dto) {
-        return ResponseEntity.ok(
+        return ResponseEntity.status(HttpStatus.CREATED).body(
                 tariffRuleMapper.toDto(
                         tariffRuleService.create(tariffRuleMapper.toEntity(dto)))
         );

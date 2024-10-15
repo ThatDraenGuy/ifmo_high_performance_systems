@@ -106,10 +106,10 @@ public class PredicateBuilderTest {
 
     @ParameterizedTest
     @CsvSource({
-            "2010-01-01T12:00:00+00:00,  2",
+            "2010-01-01T12:00:00+00:00,  3",
             "2009-01-01T12:00:00+00:00,  1",
             "2008-01-01T12:00:00+00:00,  0",
-            ",                           4"
+            ",                           5"
     })
     void addActualTest(OffsetDateTime moment, int expectedCount) {
         List<TariffHist> list = getTypedQuery(TariffHist.class, (root, cq, cb) -> new PredicateBuilder(cb)
@@ -122,11 +122,11 @@ public class PredicateBuilderTest {
 
     @ParameterizedTest
     @CsvSource({
-            "ACTIVE,    2",
+            "ACTIVE,    3",
             "OBSOLETE,  1",
             "FUTURE,    0",
             "DELETED,   1",
-            ",      4"
+            ",      5"
     })
     void addStatusTest(EHistStatus status, int expectedCount) {
         List<TariffHist> list = getTypedQuery(TariffHist.class, (root, cq, cb) -> new PredicateBuilder(cb)
@@ -138,7 +138,7 @@ public class PredicateBuilderTest {
 
     @ParameterizedTest
     @CsvSource({
-            "ACTIVE,    2010-01-01T12:00:00+00:00,   2",
+            "ACTIVE,    2010-01-01T12:00:00+00:00,   3",
             "ACTIVE,    2009-01-01T12:00:00+00:00,   1",
             "ACTIVE,    2008-01-01T12:00:00+00:00,   0"
     })

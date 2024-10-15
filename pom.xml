@@ -246,8 +246,6 @@
                 <configuration>
                     <excludes>
                         <exclude>**/*ru/draen/hps/datagen/**</exclude>
-                        <exclude>**/*ru/draen/hps/config/auth/**</exclude>
-                        <exclude>**/*ru/draen/hps/app/auth/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>

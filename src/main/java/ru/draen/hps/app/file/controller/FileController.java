@@ -1,6 +1,7 @@
 package ru.draen.hps.app.file.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -45,14 +46,14 @@ public class FileController {
 
     @PostMapping("/upload")
     public ResponseEntity<FileBriefDto> upload(@RequestBody @Validated(Create.class) FileDto dto) {
-        return ResponseEntity.ok(
+        return ResponseEntity.status(HttpStatus.CREATED).body(
                 fileBriefMapper.toDto(fileService.create(fileMapper.toEntity(dto)))
         );
     }
 
     @PostMapping("/upload-local")
     public ResponseEntity<FileBriefDto> uploadLocal(@RequestBody @Validated UploadLocalFileRequest request) {
-        return ResponseEntity.ok(
+        return ResponseEntity.status(HttpStatus.CREATED).body(
                 fileBriefMapper.toDto(fileService.createFromLocal(request))
         );
     }

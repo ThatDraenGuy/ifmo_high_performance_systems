@@ -10,7 +10,6 @@ import ru.draen.hps.domain.TariffHist;
 import java.util.Optional;
 
 public interface TariffService extends ICrudService<TariffHist, Long>, ISearchService<TariffHist, TariffCondition> {
-    Tariff findRandom(Long operatorId);
     Optional<Tariff> findById(Long id);
     Optional<TariffHist> findOne(Specification<TariffHist> spec);
 }

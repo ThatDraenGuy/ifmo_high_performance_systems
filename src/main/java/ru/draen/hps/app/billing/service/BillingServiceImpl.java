@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
+import ru.draen.hps.I18n;
 import ru.draen.hps.app.billing.controller.dto.BillingRequest;
 import ru.draen.hps.app.cdrdata.dao.CdrDataSpecification;
 import ru.draen.hps.app.cdrdata.service.CdrDataService;
@@ -12,6 +13,8 @@ import ru.draen.hps.app.report.service.ReportService;
 import ru.draen.hps.app.tariff.dao.TariffHistSpecification;
 import ru.draen.hps.app.tariff.service.TariffService;
 import ru.draen.hps.common.exception.NotFoundException;
+import ru.draen.hps.common.exception.ProcessingException;
+import ru.draen.hps.common.label.ILabelService;
 import ru.draen.hps.common.model.StreamCondition;
 import ru.draen.hps.domain.*;
 
@@ -20,9 +23,13 @@ import java.time.Duration;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static java.util.Objects.isNull;
+
 @Service
 @AllArgsConstructor
 public class BillingServiceImpl implements BillingService {
+    private static final ILabelService lbs = I18n.getLabelService();
+
     private final TransactionTemplate transactionTemplate;
     private final CdrFileService cdrFileService;
     private final CdrDataService cdrDataService;
@@ -68,8 +75,8 @@ public class BillingServiceImpl implements BillingService {
         int callMinutes = call.getMinutes();
 
         for (TariffRule rule : rules) {
-            int cutoffMinutes = rule.getMinuteLimit();
-            int minutesLeft = cutoffMinutes - previousMinutes;
+            Integer cutoffMinutes = rule.getMinuteLimit();
+            int minutesLeft = isNull(cutoffMinutes) ? Integer.MAX_VALUE : cutoffMinutes - previousMinutes;
 
             if (minutesLeft < 0) {
                 // это правило уже "израсходовано"
@@ -90,7 +97,7 @@ public class BillingServiceImpl implements BillingService {
             }
         }
 
-        if (callMinutes != 0) throw new IllegalStateException(); //TODO tariffHist rules exhausted
+        if (callMinutes != 0) throw new ProcessingException(lbs.msg("ProcessingException.BillingService.tariffRulesExhausted"));
 
         report.addTotalMinutes(call.getMinutes());
         report.addTotalCost(call.getCost());
