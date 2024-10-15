@@ -58,4 +58,14 @@ public class BillingTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    @SneakyThrows
+    void performInvalidTariffTest(@Value("classpath:billing/invalidTariffRequest.json") Resource json) {
+        mockMvc.perform(post("/api/v1/billing/").with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json.getContentAsByteArray())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isConflict());
+    }
 }
