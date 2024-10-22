@@ -1,24 +1,48 @@
 services:
-  app:
+  eureka-server:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/eureka-server.Dockerfile
+    ports:
+      - "8761:8761"
+
+  config-server:
+    build:
+      context: .
+      dockerfile: docker/config-server.Dockerfile
+    ports:
+      - "8800:8800"
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+
+  gateway:
+    build:
+      context: .
+      dockerfile: docker/gateway.Dockerfile
     ports:
       - "8080:8080"
-    volumes:
-      - ./files:/app/files
     environment:
-      DATASOURCE_URL: jdbc:postgresql://db:5432/perform
-      DATASOURCE_USERNAME: postgres
-      DATASOURCE_PASSWORD: aboba
-      MIGRATION_ENABLED: "true"
-      PAGINATION_DEFAULT_PAGE_SIZE: "15"
-      PAGINATION_MAX_PAGE_SIZE: "75"
-      SCROLL_DEFAULT_LIMIT: "15"
-      SCROLL_MAX_LIMIT: "75"
-    depends_on:
-      db:
-        condition: service_healthy
+      EUREKA_URL: http://eureka-server:8761/eureka/
+#  app:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - ./files:/app/files
+#    environment:
+#      DATASOURCE_URL: jdbc:postgresql://db:5432/perform
+#      DATASOURCE_USERNAME: postgres
+#      DATASOURCE_PASSWORD: aboba
+#      MIGRATION_ENABLED: "true"
+#      PAGINATION_DEFAULT_PAGE_SIZE: "15"
+#      PAGINATION_MAX_PAGE_SIZE: "75"
+#      SCROLL_DEFAULT_LIMIT: "15"
+#      SCROLL_MAX_LIMIT: "75"
+#    depends_on:
+#      db:
+#        condition: service_healthy
 
   db:
     image: postgres:latest
