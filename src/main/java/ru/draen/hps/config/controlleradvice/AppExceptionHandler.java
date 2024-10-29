@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.draen.hps.I18n;
-import ru.draen.hps.common.exception.*;
 import ru.draen.hps.common.label.ILabelService;
 import ru.draen.hps.common.model.ErrorResponse;
 

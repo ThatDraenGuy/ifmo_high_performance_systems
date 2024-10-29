@@ -1,4 +1,5 @@
-FROM maven:latest AS build
+FROM maven:3.9.9-amazoncorretto-21-alpine AS build
+
 WORKDIR /app
 COPY eureka-server/pom.xml eureka-server/pom.xml
 COPY pom.xml .
@@ -8,7 +9,9 @@ RUN --mount=type=cache,target=/root/.m2 mvn verify clean --fail-never
 COPY eureka-server/src ./src
 RUN --mount=type=cache,target=/root/.m2 mvn clean package -DskipTests
 
-FROM openjdk:24-jdk-slim
+FROM amazoncorretto:21-alpine
+
+RUN apk --no-cache add curl
 
 WORKDIR /app
 COPY --from=build /app/eureka-server/target/*.jar app.jar

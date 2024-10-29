@@ -1,4 +1,4 @@
-FROM maven:latest AS build
+FROM maven:3.9.9-amazoncorretto-21-alpine AS build
 WORKDIR /app
 COPY gateway/pom.xml gateway/pom.xml
 COPY pom.xml .
@@ -8,7 +8,7 @@ RUN --mount=type=cache,target=/root/.m2 mvn verify clean --fail-never
 COPY gateway/src ./src
 RUN --mount=type=cache,target=/root/.m2 mvn clean package -DskipTests
 
-FROM openjdk:24-jdk-slim
+FROM amazoncorretto:21-alpine
 
 WORKDIR /app
 COPY --from=build /app/gateway/target/*.jar app.jar

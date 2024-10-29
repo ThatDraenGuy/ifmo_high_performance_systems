@@ -12,6 +12,10 @@
         <module>eureka-server</module>
         <module>config-server</module>
         <module>gateway</module>
+        <module>file-service</module>
+        <module>common</module>
+        <module>cdr-service</module>
+        <module>billing-service</module>
     </modules>
 
     <properties>
@@ -25,6 +29,7 @@
         <org.bouncycastle.version>1.78.1</org.bouncycastle.version>
         <org.springframework.version>6.1.12</org.springframework.version>
         <org.springframework.cloud.version>4.1.3</org.springframework.cloud.version>
+        <jakarta.persistence.version>3.1.0</jakarta.persistence.version>
     </properties>
 
     <profiles>
@@ -158,28 +163,35 @@
 <!--        </dependency>-->
 
 
-<!--&lt;!&ndash;CODE UTILS&ndash;&gt;-->
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.projectlombok/lombok &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.projectlombok</groupId>-->
-<!--            <artifactId>lombok</artifactId>-->
-<!--            <version>1.18.34</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.commons</groupId>-->
-<!--            <artifactId>commons-lang3</artifactId>-->
-<!--            <version>3.17.0</version>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.commons</groupId>-->
-<!--            <artifactId>commons-collections4</artifactId>-->
-<!--            <version>4.4</version>-->
-<!--        </dependency>-->
+<!--CODE UTILS-->
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.34</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.17.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.4</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.17.0</version>
+        </dependency>
 
-<!--&lt;!&ndash;CSV UTILS&ndash;&gt;-->
+
+        <!--&lt;!&ndash;CSV UTILS&ndash;&gt;-->
 <!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.opencsv/opencsv &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>com.opencsv</groupId>-->
@@ -199,77 +211,61 @@
         </resources>
 
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${org.springframework.boot.version}</version>
-                <configuration>
-                    <mainClass>ru.draen.hps.Main</mainClass>
-                </configuration>
-
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>read-project-properties</goal>
-                        </goals>
-                        <configuration>
-                            <quiet>true</quiet>
-                            <files>
-                                <file>.env</file>
-                            </files>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-<!--            Заставить этот плагин читать значения из .env при выполнении вне lifecycle это та ещё боль-->
-<!--            Используйте команды так чтобы подтянуть параметры подключения к БД из .env: `mvn compile liquibase:<command>`-->
-<!--            (Или настройте аналогичное исполнение в рамках Run-конфига в ИДЕ)-->
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
-                <version>${org.liquibase.version}</version>
-                <configuration>
-                    <propertyFile>db/liquibase.properties</propertyFile>
-                    <searchPath>target/classes</searchPath> <!-- путь настроен на `target` для подтягивания .env-переменных -->
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.12</version>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*ru/draen/hps/datagen/**</exclude>
-                    </excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.codehaus.mojo</groupId>-->
+<!--                <artifactId>properties-maven-plugin</artifactId>-->
+<!--                <version>1.2.1</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>initialize</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>read-project-properties</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <quiet>true</quiet>-->
+<!--                            <files>-->
+<!--                                <file>.env</file>-->
+<!--                            </files>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+<!--            <plugin>-->
+<!--&lt;!&ndash;            Заставить этот плагин читать значения из .env при выполнении вне lifecycle это та ещё боль&ndash;&gt;-->
+<!--&lt;!&ndash;            Используйте команды так чтобы подтянуть параметры подключения к БД из .env: `mvn compile liquibase:<command>`&ndash;&gt;-->
+<!--&lt;!&ndash;            (Или настройте аналогичное исполнение в рамках Run-конфига в ИДЕ)&ndash;&gt;-->
+<!--                <groupId>org.liquibase</groupId>-->
+<!--                <artifactId>liquibase-maven-plugin</artifactId>-->
+<!--                <version>${org.liquibase.version}</version>-->
+<!--                <configuration>-->
+<!--                    <propertyFile>db/liquibase.properties</propertyFile>-->
+<!--                    <searchPath>target/classes</searchPath> &lt;!&ndash; путь настроен на `target` для подтягивания .env-переменных &ndash;&gt;-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--            <plugin>-->
+<!--                <groupId>org.jacoco</groupId>-->
+<!--                <artifactId>jacoco-maven-plugin</artifactId>-->
+<!--                <version>0.8.12</version>-->
+<!--                <configuration>-->
+<!--                    <excludes>-->
+<!--                        <exclude>**/*ru/draen/hps/datagen/**</exclude>-->
+<!--                    </excludes>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>prepare-agent</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                    <execution>-->
+<!--                        <id>report</id>-->
+<!--                        <phase>prepare-package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>report</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>
