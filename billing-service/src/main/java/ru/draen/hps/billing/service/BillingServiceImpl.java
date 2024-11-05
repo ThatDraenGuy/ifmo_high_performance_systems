@@ -1,7 +1,6 @@
 package ru.draen.hps.billing.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreaker;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
@@ -26,7 +25,6 @@ import static java.util.Objects.isNull;
 @AllArgsConstructor
 public class BillingServiceImpl implements BillingService {
     private final ILabelService lbs = I18n.getLabelService();
-    private final ReactiveCircuitBreaker circuitBreaker;
 
     private final ReportRepository reportRepository;
     private final TariffHistRepository tariffHistRepository;
@@ -36,11 +34,11 @@ public class BillingServiceImpl implements BillingService {
     @Override
     @Transactional
     public Mono<Void> perform(BillingRequest request) {
-        return circuitBreaker.run(cdrFileClient.findById(request.cdrFileId()).flatMapMany(cdrFile ->
+        return cdrFileClient.findById(request.cdrFileId()).flatMapMany(cdrFile ->
                 cdrFileClient.findClients(cdrFile.getId()).flatMap(client -> {
                     Mono<Report> report = processClient(cdrFile, client);
                     return reportRepository.saveAll(report);
-                })).then());
+                })).then();
     }
 
     private Mono<Report> processClient(CdrFile cdrFile, Client client) {
@@ -51,7 +49,7 @@ public class BillingServiceImpl implements BillingService {
                     Flux<CdrData> calls = cdrFileClient.findClientRecords(cdrFile.getId(), client.getId());
                     return calls.collect(() -> {
                         Report report = new Report();
-                        report.setOperatorId(cdrFile.getOperatorId());
+//                        report.setOperatorId(cdrFile.getOperatorId());
                         report.setClientId(client.getId());
                         report.setStartTime(cdrFile.getStartTime());
                         report.setEndTime(cdrFile.getEndTime());

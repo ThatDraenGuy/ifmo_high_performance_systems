@@ -1,4 +1,4 @@
-package ru.draen.hps.cdr.controller.dto;
+package ru.draen.hps.cdr.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

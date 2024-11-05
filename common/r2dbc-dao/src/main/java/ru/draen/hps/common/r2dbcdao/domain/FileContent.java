@@ -15,12 +15,6 @@ public class FileContent implements IEntity<Long> {
     @Column("file_file_id")
     private Long id;
 
-    @Column("file_name")
-    private String fileName;
-
-    @Column("oper_oper_id")
-    private Long operatorId;
-
     @Column("check_sum")
     private Long checkSum;
 

@@ -7,11 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.draen.hps.cdr.service.CdrDataService;
-import ru.draen.hps.cdr.controller.dto.ParseCdrRequest;
+import ru.draen.hps.cdr.dto.ParseCdrRequest;
 import ru.draen.hps.cdr.service.CdrFileService;
 import ru.draen.hps.common.r2dbcdao.domain.CdrData;
 import ru.draen.hps.common.r2dbcdao.domain.CdrFile;
-import ru.draen.hps.common.r2dbcdao.domain.Client;
 
 @RestController
 @RequestMapping(value = "${api.prefix}/cdr-files", produces = MediaType.APPLICATION_JSON_VALUE)

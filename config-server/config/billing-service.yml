@@ -1,0 +1,10 @@
+api:
+  prefix: /api/v1
+
+server:
+  port: 8081
+spring:
+  r2dbc:
+    url: ${DATASOURCE_URL:r2dbc:postgresql://db:5432/perform}
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:aboba}

@@ -22,7 +22,7 @@
         <dependency>
             <groupId>ru.draen.hps.common</groupId>
             <artifactId>core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${ru.draen.hps.version}</version>
         </dependency>
 
         <!--DB STUFF-->
@@ -34,6 +34,12 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.postgresql/r2dbc-postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>r2dbc-postgresql</artifactId>
+            <version>1.0.7.RELEASE</version>
         </dependency>
 
         <dependency>

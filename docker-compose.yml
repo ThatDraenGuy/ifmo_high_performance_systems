@@ -23,6 +23,9 @@ services:
         condition: service_healthy
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka/
+      DATASOURCE_URL: jdbc:postgresql://db:5432/perform
+      DATASOURCE_USERNAME: postgres
+      DATASOURCE_PASSWORD: aboba
     healthcheck:
       test: "curl --silent --fail config-server:8800/actuator/health | grep UP || exit 1"
       interval: 10s
@@ -41,6 +44,24 @@ services:
         condition: service_healthy
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka/
+      CONFIG_URL: http://config-server:8800
+
+  file-service:
+    build:
+      context: .
+      dockerfile: docker/file-service.Dockerfile
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    ports:
+      - "8083:8083"
+      - "5005:5005"
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      CONFIG_URL: http://config-server:8800
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
 
   cdr-service:
     build:
@@ -51,8 +72,39 @@ services:
         condition: service_healthy
       config-server:
         condition: service_healthy
+    ports:
+      - "8082:8082"
+      - "5006:5005"
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka/
+      CONFIG_URL: http://config-server:8800
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
+
+  billing-service:
+    build:
+      context: .
+      dockerfile: docker/billing-service.Dockerfile
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      CONFIG_URL: http://config-server:8800/
+
+  account-service:
+    build:
+      context: .
+      dockerfile: docker/account-service.Dockerfile
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      CONFIG_URL: http://config-server:8800/
 
   db:
     image: postgres:latest

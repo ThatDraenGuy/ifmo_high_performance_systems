@@ -13,7 +13,7 @@ spring:
       server:
         native:
           search-locations:
-            - classpath:/config
+            - file:/app/config/
 
 eureka:
   instance:

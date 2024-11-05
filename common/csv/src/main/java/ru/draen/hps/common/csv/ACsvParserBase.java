@@ -16,6 +16,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public abstract class ACsvParserBase<T> implements ICsvParser<T> {
 
@@ -26,6 +27,22 @@ public abstract class ACsvParserBase<T> implements ICsvParser<T> {
             throw new CsvParseException(results.right);
         }
         return results.left;
+    }
+
+    public Stream<T> parseStream(@NonNull InputStream content) {
+        List<CsvError> errors = new ArrayList<>();
+        CSVReader csvReader = csvReaderBuilder(new InputStreamReader(content)).build();
+        CsvToBean<T> csbToBean = csvToBeanBuilder(csvReader)
+                .withExceptionHandler(e -> {
+                    errors.add(new CsvError(e));
+                    return null;
+                })
+                .build();
+        return csbToBean.stream().onClose(() -> {
+            if (!errors.isEmpty()) {
+                throw new CsvParseException(errors);
+            }
+        });
     }
 
     @Override

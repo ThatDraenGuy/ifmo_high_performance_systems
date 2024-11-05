@@ -1,0 +1,10 @@
+api:
+  prefix: /api/v1
+
+server:
+  port: 8083
+spring:
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://db:5432/perform}
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:aboba}

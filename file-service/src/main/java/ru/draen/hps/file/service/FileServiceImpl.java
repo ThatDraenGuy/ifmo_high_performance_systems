@@ -15,6 +15,8 @@ import ru.draen.hps.file.dao.FileSpecification;
 import ru.draen.hps.common.jpadao.dao.EntityLoader;
 import ru.draen.hps.common.dbms.domain.File;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class FileServiceImpl implements FileService {
@@ -25,10 +27,12 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Flux<File> findAll(@NonNull FileCondition condition) {
-        return readOnlyTransactionTemplate.execute(status -> {
-            Specification<File> spec = FileSpecification.getByCondition(condition);
-            return Flux.fromStream(fileRepository.findStream(spec));
-        });
+        return Flux.fromIterable(
+                readOnlyTransactionTemplate.execute(status -> {
+                    Specification<File> spec = FileSpecification.getByCondition(condition);
+                    return fileRepository.findStream(spec).toList();
+                })
+        );
     }
 
     @Override
@@ -39,10 +43,10 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Mono<File> create(@NonNull File file) {
-        return transactionTemplate.execute(status -> {
+        return Mono.justOrEmpty(Optional.ofNullable(transactionTemplate.execute(status -> {
             prepareToCreate(file);
-            return Mono.just(fileRepository.saveWithContent(file));
-        });
+            return fileRepository.saveWithContent(file);
+        })));
     }
 
     @Override

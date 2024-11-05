@@ -13,5 +13,6 @@ public class FileFetchProfile {
 
     public static void withContent(From<?, File> root) {
         root.fetch(File_.content);
+        root.fetch(File_.operator);
     }
 }

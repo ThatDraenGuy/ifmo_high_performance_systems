@@ -5,8 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>ru.draen.hps</groupId>
-        <artifactId>ifmo_high_performance_systems</artifactId>
+        <artifactId>parent</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../common/parent</relativePath>
     </parent>
 
     <groupId>ru.draen.hps.file</groupId>
@@ -22,17 +23,17 @@
         <dependency>
             <groupId>ru.draen.hps.common</groupId>
             <artifactId>core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${ru.draen.hps.version}</version>
         </dependency>
         <dependency>
             <groupId>ru.draen.hps.common</groupId>
             <artifactId>dbms</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${ru.draen.hps.version}</version>
         </dependency>
         <dependency>
             <groupId>ru.draen.hps.common</groupId>
             <artifactId>jpa-dao</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${ru.draen.hps.version}</version>
         </dependency>
 
         <dependency>
@@ -40,6 +41,12 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
             <version>${org.springframework.cloud.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+            <version>${org.springframework.cloud.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
