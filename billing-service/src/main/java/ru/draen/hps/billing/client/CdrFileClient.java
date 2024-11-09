@@ -1,23 +1,25 @@
 package ru.draen.hps.billing.client;
 
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
+import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ru.draen.hps.common.r2dbcdao.domain.CdrData;
-import ru.draen.hps.common.r2dbcdao.domain.CdrFile;
-import ru.draen.hps.common.r2dbcdao.domain.Client;
+import ru.draen.hps.billing.common.model.CdrDataModel;
+import ru.draen.hps.billing.common.model.CdrFileModel;
+import ru.draen.hps.billing.common.model.ClientModel;
 
 
-@FeignClient(value = "cdr-service", path = "${api.prefix}/cdr-files")
+@ReactiveFeignClient(value = "cdr-service", path = "${api.prefix}/cdr-files")
 public interface CdrFileClient {
     @GetMapping("/{id}")
-    Mono<CdrFile> findById(@PathVariable("id") Long fileId);
+    Mono<CdrFileModel> findById(@PathVariable("id") Long fileId);
 
     @GetMapping("/{id}/clients")
-    Flux<Client> findClients(@PathVariable("id") Long fileId);
+    Flux<ClientModel> findClients(@PathVariable("id") Long fileId);
 
     @GetMapping("/{id}/records")
-    Flux<CdrData> findClientRecords(@PathVariable("id") Long fileId, Long clientId);
+    Flux<CdrDataModel> findClientRecords(@PathVariable("id") Long fileId, @RequestParam("clientId") Long clientId);
+
+    @PutMapping("/{id}")
+    Mono<CdrDataModel> updateRecord(@PathVariable("id") Long fileId, @RequestBody CdrDataModel record);
 }

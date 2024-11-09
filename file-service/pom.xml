@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>ru.draen.hps</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>app-service-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../common/parent</relativePath>
+        <relativePath>../common/app-service-parent</relativePath>
     </parent>
 
     <groupId>ru.draen.hps.file</groupId>
@@ -35,29 +35,10 @@
             <artifactId>jpa-dao</artifactId>
             <version>${ru.draen.hps.version}</version>
         </dependency>
-
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            <version>${org.springframework.cloud.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
-            <version>${org.springframework.cloud.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
+            <groupId>ru.draen.hps.common</groupId>
+            <artifactId>web-flux</artifactId>
+            <version>${ru.draen.hps.version}</version>
         </dependency>
 
         <dependency>

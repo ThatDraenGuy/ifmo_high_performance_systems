@@ -9,7 +9,7 @@ import jakarta.validation.groups.ConvertGroup;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.draen.hps.account.app.language.controller.dto.LanguageDto;
+import ru.draen.hps.account.common.dto.LanguageDto;
 import ru.draen.hps.common.core.validation.groups.Create;
 import ru.draen.hps.common.core.validation.groups.Pk;
 import ru.draen.hps.common.core.validation.groups.Update;

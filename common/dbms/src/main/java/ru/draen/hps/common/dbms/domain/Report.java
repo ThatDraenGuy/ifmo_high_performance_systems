@@ -1,8 +1,7 @@
 package ru.draen.hps.common.dbms.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import ru.draen.hps.common.jpadao.entity.ADeletableEntity;
 
 import java.math.BigDecimal;
@@ -14,6 +13,8 @@ import static java.util.Objects.isNull;
 @Table(name = "reports")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Report extends ADeletableEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reports_rprt_id_gen")
@@ -29,9 +30,11 @@ public class Report extends ADeletableEntity<Long> {
     @JoinColumn(name = "cli_cli_id")
     private Client client;
 
+    @With
     @Column(name = "total_cost", nullable = false)
     private BigDecimal totalCost;
 
+    @With
     @Column(name = "total_minutes", nullable = false)
     private Integer totalMinutes;
 
@@ -41,15 +44,11 @@ public class Report extends ADeletableEntity<Long> {
     @Column(name = "end_time", nullable = false)
     private Instant endTime;
 
-    public void addTotalCost(BigDecimal other) {
-        if (isNull(totalCost)) {
-            totalCost = other;
-        } else {
-            totalCost = totalCost.add(other);
-        }
+    public Report addTotalCost(BigDecimal other) {
+        return withTotalCost(isNull(totalCost) ? other : totalCost.add(other));
     }
 
-    public void addTotalMinutes(int minutes) {
-        totalMinutes = totalMinutes + minutes;
+    public Report addTotalMinutes(int minutes) {
+        return withTotalMinutes(this.totalMinutes + minutes);
     }
 }

@@ -19,6 +19,11 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
 
     @Override
+    public Optional<Client> findById(@NonNull Long clientId) {
+        return readOnlyTransactionTemplate.execute(status -> clientRepository.findById(clientId));
+    }
+
+    @Override
     public Optional<Client> findOne(@NonNull ClientCondition condition) {
         return readOnlyTransactionTemplate.execute(status -> {
             Specification<Client> spec = ClientSpecification.byCondition(condition);

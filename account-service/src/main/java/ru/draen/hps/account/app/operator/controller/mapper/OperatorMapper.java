@@ -1,7 +1,7 @@
 package ru.draen.hps.account.app.operator.controller.mapper;
 
 
-import ru.draen.hps.account.app.language.controller.dto.LanguageDto;
+import ru.draen.hps.account.common.dto.LanguageDto;
 import ru.draen.hps.account.app.operator.controller.dto.OperatorDto;
 import ru.draen.hps.common.core.annotation.Mapper;
 import ru.draen.hps.common.core.mapper.IMapper;

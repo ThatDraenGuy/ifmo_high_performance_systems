@@ -2,14 +2,14 @@ package ru.draen.hps.billing;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
+import reactivefeign.spring.config.EnableReactiveFeignClients;
 
 @SpringBootApplication
-@EnableFeignClients
-@EnableR2dbcRepositories
+@EnableReactiveFeignClients
 @ComponentScan("ru.draen.hps")
+@EntityScan("ru.draen.hps.common.dbms.domain")
 public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);

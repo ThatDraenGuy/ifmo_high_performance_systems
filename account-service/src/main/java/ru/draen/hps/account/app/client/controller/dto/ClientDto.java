@@ -15,9 +15,10 @@ public class ClientDto {
     private Long clientId;
     private String phoneNumber;
     private OperatorBriefDto operator;
+    private Long tariffId;
 
     public static ClientDto of(Client client) {
         if (isNull(client)) return null;
-        return new ClientDto(client.getId(), client.getPhoneNumber(), OperatorBriefDto.of(client.getOperator()));
+        return new ClientDto(client.getId(), client.getPhoneNumber(), OperatorBriefDto.of(client.getOperator()), client.getTariff().getId());
     }
 }

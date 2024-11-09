@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import ru.draen.hps.common.jpadao.transaction.StreamTransactionTemplate;
 import ru.draen.hps.file.controller.dto.FileCondition;
 import ru.draen.hps.file.dao.FileFetchProfile;
 import ru.draen.hps.file.dao.FileRepository;
@@ -21,18 +22,17 @@ import java.util.Optional;
 @AllArgsConstructor
 public class FileServiceImpl implements FileService {
     private final TransactionTemplate readOnlyTransactionTemplate;
+    private final StreamTransactionTemplate streamTransactionTemplate;
     private final TransactionTemplate transactionTemplate;
     private final FileRepository fileRepository;
     private final EntityLoader entityLoader;
 
     @Override
     public Flux<File> findAll(@NonNull FileCondition condition) {
-        return Flux.fromIterable(
-                readOnlyTransactionTemplate.execute(status -> {
-                    Specification<File> spec = FileSpecification.getByCondition(condition);
-                    return fileRepository.findStream(spec).toList();
-                })
-        );
+        return Flux.fromStream(streamTransactionTemplate.execute(status -> {
+            Specification<File> spec = FileSpecification.getByCondition(condition);
+            return fileRepository.findStream(spec);
+        }));
     }
 
     @Override

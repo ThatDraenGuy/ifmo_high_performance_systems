@@ -17,5 +17,6 @@ public class ClientRepositoryImpl extends ADeletableRepository<Client, Long> imp
     @Override
     protected void defaultFetchProfile(@NonNull Root<Client> root) {
         root.fetch(Client_.operator);
+        root.fetch(Client_.tariff);
     }
 }

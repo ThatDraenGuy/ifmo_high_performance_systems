@@ -17,9 +17,6 @@ public class CdrFile extends ADeletableEntity<Long> {
     @Column("cdrf_file_id")
     private Long id;
 
-//    @Column("oper_oper_id")
-//    private Long operatorId;
-
     @Column("start_time")
     private Instant startTime;
 
