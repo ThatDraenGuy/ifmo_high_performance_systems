@@ -2,7 +2,7 @@ spring:
   application:
     name: billing-service
   profiles:
-    active: @spring.profiles.active@
+    active: ${ACTIVE_PROFILE:test}
   config:
     import: 'configserver:'
   cloud:
@@ -19,6 +19,7 @@ spring:
 eureka:
   instance:
     hostname: localhost
+    prefer-ip-address: true
   client:
     registerWithEureka: true
     fetchRegistry: true

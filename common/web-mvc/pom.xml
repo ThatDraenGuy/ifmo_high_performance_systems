@@ -26,8 +26,20 @@
             <version>${ru.draen.hps.version}</version>
         </dependency>
         <dependency>
+            <groupId>ru.draen.hps.common</groupId>
+            <artifactId>security</artifactId>
+            <version>${ru.draen.hps.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>${org.springframework.cloud.version}</version>
         </dependency>
     </dependencies>
 </project>

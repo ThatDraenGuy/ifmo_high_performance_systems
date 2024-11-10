@@ -8,3 +8,43 @@ spring:
     url: ${DATASOURCE_URL:jdbc:postgresql://db:5432/perform}
     username: ${DATASOURCE_USERNAME:postgres}
     password: ${DATASOURCE_PASSWORD:aboba}
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+
+jwt:
+  private-key-path: ${JWT_PRIVATE_KEY_PATH:.key}
+
+reactive:
+  feign:
+    client:
+      config:
+        file-service:
+          retry:
+            builder: reactivefeign.retry.BasicReactiveRetryPolicy.Builder
+            args:
+              maxRetries: 3
+              backoffInMs: 900
+
+#resilience4j:
+#  circuitbreaker:
+#    circuitBreakerAspectOrder: 1
+#    configs:
+#      default:
+#        registerHealthIndicator: true
+#        slidingWindowSize: 50
+#  timelimiter:
+#    configs:
+#      default:
+#        timeoutDuration: 5s
+#        cancelRunningFuture: true
+#  retry:
+#    retryAspectOrder: 2
+#    configs:
+#      default:
+#        maxAttempts: 3
+#        waitDuration: 10s
+#        retryExceptions:
+#          - java.net.ConnectException
+#          - java.lang.IllegalArgumentException

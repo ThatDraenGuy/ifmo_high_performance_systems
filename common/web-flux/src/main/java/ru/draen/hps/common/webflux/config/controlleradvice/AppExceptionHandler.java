@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
@@ -25,7 +26,9 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
             NotImplementedException.class,
             NotFoundException.class,
             ProcessingException.class,
-            TokenException.class
+            TokenException.class,
+            AccessDeniedException.class,
+            Exception.class
     })
     private ResponseEntity<Object> handleExceptions(Exception e, ServerWebExchange exchange) {
         return handleException(e, exchange, switch (e) {
@@ -34,6 +37,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
             case NotFoundException ex -> HttpStatus.NOT_FOUND;
             case ProcessingException ex -> HttpStatus.CONFLICT;
             case TokenException ex -> HttpStatus.FORBIDDEN;
+            case AccessDeniedException ex -> HttpStatus.FORBIDDEN;
             default -> HttpStatus.INTERNAL_SERVER_ERROR;
         });
     }

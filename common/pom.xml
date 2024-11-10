@@ -29,5 +29,6 @@
         <module>web-mvc</module>
         <module>web-flux</module>
         <module>app-service-parent</module>
+        <module>security</module>
     </modules>
 </project>

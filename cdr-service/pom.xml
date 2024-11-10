@@ -39,6 +39,11 @@
             <artifactId>web-flux</artifactId>
             <version>${ru.draen.hps.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ru.draen.hps.common</groupId>
+            <artifactId>security</artifactId>
+            <version>${ru.draen.hps.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

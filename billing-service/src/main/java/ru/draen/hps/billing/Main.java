@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import reactivefeign.spring.config.EnableReactiveFeignClients;
 
 @SpringBootApplication
-@EnableReactiveFeignClients
+@EnableReactiveFeignClients("ru.draen.hps")
 @ComponentScan("ru.draen.hps")
 @EntityScan("ru.draen.hps.common.dbms.domain")
 public class Main {

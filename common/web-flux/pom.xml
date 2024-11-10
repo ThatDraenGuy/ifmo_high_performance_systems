@@ -25,10 +25,27 @@
             <artifactId>core</artifactId>
             <version>${ru.draen.hps.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ru.draen.hps.common</groupId>
+            <artifactId>security</artifactId>
+            <version>${ru.draen.hps.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>${org.springframework.cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.playtika.reactivefeign</groupId>
+            <artifactId>feign-reactor-spring-cloud-starter</artifactId>
+            <version>4.2.1</version>
+            <type>pom</type>
         </dependency>
     </dependencies>
 </project>

@@ -12,3 +12,17 @@ spring:
     openfeign:
       circuitbreaker:
         enabled: true
+
+jwt:
+  private-key-path: ${JWT_PRIVATE_KEY_PATH:.key}
+
+reactive:
+  feign:
+    client:
+      config:
+        file-service:
+          retry:
+            builder: reactivefeign.retry.BasicReactiveRetryPolicy.Builder
+            args:
+              maxRetries: 3
+              backoffInMs: 900

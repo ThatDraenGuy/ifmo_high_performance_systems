@@ -42,9 +42,14 @@ services:
     depends_on:
       eureka-server:
         condition: service_healthy
+      config-server:
+        condition: service_healthy
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka/
       CONFIG_URL: http://config-server:8800
+      ACTIVE_PROFILE: ${ACTIVE_PROFILE}
+    volumes:
+      - ".key:/app/.key"
 
   file-service:
     build:
@@ -61,7 +66,10 @@ services:
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka/
       CONFIG_URL: http://config-server:8800
+      ACTIVE_PROFILE: ${ACTIVE_PROFILE}
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
+    volumes:
+      - ".key:/app/.key"
 
   cdr-service:
     build:
@@ -78,7 +86,10 @@ services:
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka/
       CONFIG_URL: http://config-server:8800
+      ACTIVE_PROFILE: ${ACTIVE_PROFILE}
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
+    volumes:
+      - ".key:/app/.key"
 
   billing-service:
     build:
@@ -95,7 +106,10 @@ services:
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka/
       CONFIG_URL: http://config-server:8800/
+      ACTIVE_PROFILE: ${ACTIVE_PROFILE}
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
+    volumes:
+      - ".key:/app/.key"
 
   account-service:
     build:
@@ -111,7 +125,10 @@ services:
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka/
       CONFIG_URL: http://config-server:8800/
+      ACTIVE_PROFILE: ${ACTIVE_PROFILE}
       JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
+    volumes:
+      - ".key:/app/.key"
 
   db:
     image: postgres:latest

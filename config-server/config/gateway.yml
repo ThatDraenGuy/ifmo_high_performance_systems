@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+api:
+  account-service:
+    prefix: /account-service
+  billing-service:
+    prefix: /billing-service
+  cdr-service:
+    prefix: /cdr-service
+  file-service:
+    prefix: /file-service
+
+jwt:
+  private-key-path: ${JWT_PRIVATE_KEY_PATH:.key}

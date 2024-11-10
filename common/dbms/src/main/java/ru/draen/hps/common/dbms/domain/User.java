@@ -3,6 +3,7 @@ package ru.draen.hps.common.dbms.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import ru.draen.hps.common.core.model.EUserRole;
 import ru.draen.hps.common.jpadao.entity.ADeletableEntity;
 
 import java.util.Set;
@@ -27,5 +28,6 @@ public class User extends ADeletableEntity<Long> {
     @ElementCollection(targetClass = EUserRole.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles")
     @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private Set<EUserRole> roles;
 }

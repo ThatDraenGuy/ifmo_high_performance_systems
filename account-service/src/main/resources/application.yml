@@ -2,7 +2,7 @@ spring:
   application:
     name: account-service
   profiles:
-    active: @spring.profiles.active@
+    active: ${ACTIVE_PROFILE:test}
   config:
     import: 'configserver:'
   cloud:

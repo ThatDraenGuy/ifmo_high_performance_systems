@@ -8,7 +8,7 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 import reactivefeign.spring.config.EnableReactiveFeignClients;
 
 @SpringBootApplication
-@EnableReactiveFeignClients
+@EnableReactiveFeignClients("ru.draen.hps")
 @EnableR2dbcRepositories
 @EnableWebFlux
 @ComponentScan("ru.draen.hps")
