@@ -39,6 +39,7 @@ services:
       dockerfile: docker/gateway.Dockerfile
     ports:
       - "8080:8080"
+      - "5000:5005"
     depends_on:
       eureka-server:
         condition: service_healthy
@@ -48,6 +49,7 @@ services:
       EUREKA_URL: http://eureka-server:8761/eureka/
       CONFIG_URL: http://config-server:8800
       ACTIVE_PROFILE: ${ACTIVE_PROFILE}
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
     volumes:
       - ".key:/app/.key"
 

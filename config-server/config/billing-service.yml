@@ -1,5 +1,8 @@
 api:
   prefix: /api/v1
+  access:
+    username: test
+    password: test
 
 server:
   port: 8086
@@ -25,7 +28,7 @@ reactive:
             builder: reactivefeign.retry.BasicReactiveRetryPolicy.Builder
             args:
               maxRetries: 3
-              backoffInMs: 900
+              backoffInMs: 50
 
 #resilience4j:
 #  circuitbreaker:

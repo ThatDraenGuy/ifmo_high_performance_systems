@@ -8,6 +8,7 @@ import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
+import org.springframework.security.web.server.authentication.ServerAuthenticationEntryPointFailureHandler;
 import ru.draen.hps.common.security.config.AppProfile;
 import ru.draen.hps.common.webflux.config.auth.*;
 
@@ -17,10 +18,12 @@ import ru.draen.hps.common.webflux.config.auth.*;
 public class AuthConfiguration {
     @Bean
     public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http, AuthEntryPoint authEntryPoint,
+                                                      AccessDeniedHandler accessDeniedHandler,
                                                       AuthManager authManager, AuthConverter authConverter,
-                                                      RequestApplier requestApplier) throws Exception {
+                                                      RequestApplier requestApplier) {
         AuthenticationWebFilter authenticationWebFilter = new AuthenticationWebFilter(authManager);
         authenticationWebFilter.setServerAuthenticationConverter(authConverter);
+        authenticationWebFilter.setAuthenticationFailureHandler(new ServerAuthenticationEntryPointFailureHandler(authEntryPoint));
         http
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
@@ -29,7 +32,9 @@ public class AuthConfiguration {
                 .authorizeExchange(requestApplier::apply)
                 .authenticationManager(authManager)
                 .addFilterAt(authenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
-                .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(authEntryPoint));
+                .exceptionHandling(exceptions -> exceptions
+                        .accessDeniedHandler(accessDeniedHandler)
+                        .authenticationEntryPoint(authEntryPoint));
         return http.build();
     }
 }

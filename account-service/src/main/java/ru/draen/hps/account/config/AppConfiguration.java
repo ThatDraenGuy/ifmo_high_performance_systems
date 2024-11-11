@@ -11,8 +11,8 @@ public class AppConfiguration {
     @Bean
     public RequestApplier requestApplier(@Value("${api.prefix}") String apiPrefix) {
         return http -> http
-                .requestMatchers(apiPrefix + "/operators/**").hasRole(EUserRole.OPERATOR.name())
-                .requestMatchers(apiPrefix + "/clients/**").hasRole(EUserRole.OPERATOR.name())
+                .requestMatchers(apiPrefix + "/operators/**").hasAuthority(EUserRole.OPERATOR.name())
+                .requestMatchers(apiPrefix + "/clients/**").hasAuthority(EUserRole.OPERATOR.name())
                 .requestMatchers(apiPrefix + "/auth/**").permitAll()
                 .anyRequest().permitAll();
     }

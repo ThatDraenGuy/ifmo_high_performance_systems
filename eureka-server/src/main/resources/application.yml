@@ -9,6 +9,7 @@ spring:
 
 
 eureka:
+  renewalPercentThreshold: 0.85
   instance:
     hostname: localhost
   client:

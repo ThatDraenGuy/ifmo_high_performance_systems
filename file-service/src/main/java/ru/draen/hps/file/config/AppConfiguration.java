@@ -11,8 +11,7 @@ public class AppConfiguration {
     @Bean
     public RequestApplier requestApplier(@Value("${api.prefix}") String apiPrefix) {
         return http -> http
-//                .pathMatchers(apiPrefix + "/files/**").hasRole(EUserRole.OPERATOR.name())
-//                .anyExchange().authenticated();
-                .anyExchange().permitAll();
+                .pathMatchers(apiPrefix + "/files/**").hasAuthority(EUserRole.OPERATOR.name())
+                .anyExchange().authenticated();
     }
 }

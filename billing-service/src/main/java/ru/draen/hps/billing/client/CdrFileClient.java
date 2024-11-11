@@ -7,9 +7,10 @@ import reactor.core.publisher.Mono;
 import ru.draen.hps.billing.common.model.CdrDataModel;
 import ru.draen.hps.billing.common.model.CdrFileModel;
 import ru.draen.hps.billing.common.model.ClientModel;
+import ru.draen.hps.common.webflux.interceptor.CommonClientConfig;
 
 
-@ReactiveFeignClient(value = "cdr-service", path = "${api.prefix}/cdr-files")
+@ReactiveFeignClient(value = "cdr-service", path = "${api.prefix}/cdr-files", configuration = CommonClientConfig.class)
 public interface CdrFileClient {
     @GetMapping("/{id}")
     Mono<CdrFileModel> findById(@PathVariable("id") Long fileId);

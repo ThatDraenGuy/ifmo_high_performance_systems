@@ -5,8 +5,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Mono;
 import ru.draen.hps.common.security.config.auth.AppUserDetails;
+import ru.draen.hps.common.webflux.interceptor.CommonClientConfig;
 
-@ReactiveFeignClient(value = "user-details-service", url = "account-service:8084", path = "${api.prefix}/users")
+@ReactiveFeignClient(value = "account-service", qualifier = "user-details-client", path = "${api.prefix}/users",
+        configuration = CommonClientConfig.class)
 public interface UserDetailsClient {
     @GetMapping
     Mono<AppUserDetails> find(@RequestParam("username") String username);

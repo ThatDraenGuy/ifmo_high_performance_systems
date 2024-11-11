@@ -13,6 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.draen.hps.common.core.exception.*;
 import ru.draen.hps.common.core.model.ErrorResponse;
+import ru.draen.hps.common.security.exception.TokenException;
 
 @ControllerAdvice
 @Slf4j

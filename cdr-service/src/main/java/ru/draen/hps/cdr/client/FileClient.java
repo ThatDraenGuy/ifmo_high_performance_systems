@@ -5,9 +5,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Mono;
 import ru.draen.hps.cdr.common.model.FileModel;
+import ru.draen.hps.common.webflux.interceptor.CommonClientConfig;
 
 
-@ReactiveFeignClient(value = "file-service", path = "${api.prefix}/files")
+@ReactiveFeignClient(value = "file-service", path = "${api.prefix}/files", configuration = CommonClientConfig.class)
 public interface FileClient {
 
     @GetMapping("/{id}")

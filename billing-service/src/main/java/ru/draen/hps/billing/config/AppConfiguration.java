@@ -11,7 +11,7 @@ public class AppConfiguration {
     @Bean
     public RequestApplier requestApplier(@Value("${api.prefix}") String apiPrefix) {
         return http -> http
-                .pathMatchers(apiPrefix + "/billing/**").hasRole(EUserRole.OPERATOR.name())
+                .pathMatchers(apiPrefix + "/billing/**").hasAuthority(EUserRole.OPERATOR.name())
                 .anyExchange().authenticated();
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import ru.draen.hps.common.core.exception.*;
 import ru.draen.hps.common.core.model.ErrorResponse;
+import ru.draen.hps.common.security.exception.TokenException;
 
 @ControllerAdvice
 @Slf4j

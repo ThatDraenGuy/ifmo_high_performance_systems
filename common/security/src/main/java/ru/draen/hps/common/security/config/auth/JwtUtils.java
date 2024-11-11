@@ -6,7 +6,7 @@ import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import ru.draen.hps.common.core.exception.AppException;
-import ru.draen.hps.common.core.exception.TokenException;
+import ru.draen.hps.common.security.exception.TokenException;
 import ru.draen.hps.common.core.label.ILabelService;
 import ru.draen.hps.common.security.I18n;
 
