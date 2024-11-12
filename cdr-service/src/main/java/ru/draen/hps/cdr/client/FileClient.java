@@ -8,8 +8,7 @@ import ru.draen.hps.cdr.common.model.FileModel;
 import ru.draen.hps.common.webflux.interceptor.CommonClientConfig;
 
 
-@ReactiveFeignClient(value = "file-service", path = "${api.prefix}/files", configuration = CommonClientConfig.class, primary = false
-)
+@ReactiveFeignClient(value = "file-service", path = "${api.prefix}/files", configuration = CommonClientConfig.class, primary = false)
 public interface FileClient {
 
     @GetMapping("/{id}")
