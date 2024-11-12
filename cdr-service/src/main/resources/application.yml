@@ -23,5 +23,6 @@ eureka:
   client:
     registerWithEureka: true
     fetchRegistry: true
+    registryFetchIntervalSeconds: 5
     serviceUrl:
       defaultZone: ${EUREKA_URL}

@@ -63,8 +63,24 @@ services:
       config-server:
         condition: service_healthy
     ports:
-      - "8083:8083"
       - "5005:5005"
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      CONFIG_URL: http://config-server:8800
+      ACTIVE_PROFILE: ${ACTIVE_PROFILE}
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
+    volumes:
+      - ".key:/app/.key"
+
+  file-service-fallback:
+    build:
+      context: .
+      dockerfile: docker/file-service.Dockerfile
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka/
       CONFIG_URL: http://config-server:8800
@@ -83,7 +99,6 @@ services:
       config-server:
         condition: service_healthy
     ports:
-      - "8082:8082"
       - "5006:5005"
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka/
@@ -103,7 +118,6 @@ services:
       config-server:
         condition: service_healthy
     ports:
-      - "8086:8086"
       - "5007:5005"
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka/

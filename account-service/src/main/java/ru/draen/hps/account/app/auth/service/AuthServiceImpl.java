@@ -9,7 +9,7 @@ import ru.draen.hps.account.I18n;
 import ru.draen.hps.account.app.auth.controller.dto.RegisterRequest;
 import ru.draen.hps.account.app.user.dao.UserRepository;
 import ru.draen.hps.account.app.user.dao.UserSpecification;
-import ru.draen.hps.common.core.exception.AppException;
+import ru.draen.hps.common.core.exception.BadRequestException;
 import ru.draen.hps.common.core.label.ILabelService;
 import ru.draen.hps.common.core.model.EUserRole;
 import ru.draen.hps.common.dbms.domain.User;
@@ -31,7 +31,7 @@ public class AuthServiceImpl implements AuthService {
     public User register(RegisterRequest registerRequest) {
         return transactionTemplate.execute(status -> {
             if (userRepository.exists(UserSpecification.byUsername(registerRequest.username()))) {
-                throw new AppException(lbs.msg("AppException.registration.usernameExists"));
+                throw new BadRequestException(lbs.msg("AppException.registration.usernameExists"));
             }
             String encodedPassword = passwordEncoder.encode(registerRequest.password());
             User entity = new User();
