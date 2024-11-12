@@ -24,12 +24,8 @@ import java.util.Set;
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
-    private final ILabelService lbs = I18n.getLabelService();
-
     private final TransactionTemplate readOnlyTransactionTemplate;
-    private final TransactionTemplate transactionTemplate;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Optional<User> findByUsername(String username) {
@@ -46,21 +42,4 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(ru.draen.hps.common.security.I18n.getLabelService()
                         .msg("UsernameNotFoundException.notFound")));
     }
-
-    @Override
-    public User register(RegisterRequest registerRequest) {
-        return transactionTemplate.execute(status -> {
-            if (userRepository.exists(UserSpecification.byUsername(registerRequest.username()))) {
-                throw new AppException(lbs.msg("AppException.registration.usernameExists"));
-            }
-            String encodedPassword = passwordEncoder.encode(registerRequest.password());
-            User entity = new User();
-            entity.setUsername(registerRequest.username());
-            entity.setPassword(encodedPassword);
-            entity.setRoles(Set.of(EUserRole.CLIENT));
-            return userRepository.save(entity);
-        });
-    }
-
-
 }

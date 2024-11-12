@@ -11,8 +11,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +20,7 @@ import ru.draen.hps.account.app.auth.controller.dto.LoginRequest;
 import ru.draen.hps.account.app.auth.controller.dto.LoginResponse;
 import ru.draen.hps.account.app.auth.controller.dto.RegisterRequest;
 import ru.draen.hps.account.app.auth.controller.dto.RegisterResponse;
-import ru.draen.hps.account.app.user.service.UserService;
+import ru.draen.hps.account.app.auth.service.AuthService;
 import ru.draen.hps.common.dbms.domain.User;
 import ru.draen.hps.common.security.config.AppProfile;
 import ru.draen.hps.common.security.config.auth.JwtUtils;
@@ -34,7 +32,7 @@ import ru.draen.hps.common.security.config.auth.JwtUtils;
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
-    private final UserService userService;
+    private final AuthService authService;
 
     @Value("${jwt.access-token-expiration-secs}")
     private Long accessTokenExpirationSecs;
@@ -52,7 +50,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@RequestBody @Validated RegisterRequest registerRequest) {
-        User user = userService.register(registerRequest);
+        User user = authService.register(registerRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(new RegisterResponse(user.getUsername()));
     }
 }

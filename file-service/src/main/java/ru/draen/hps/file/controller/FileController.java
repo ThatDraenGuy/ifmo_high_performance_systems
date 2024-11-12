@@ -3,11 +3,13 @@ package ru.draen.hps.file.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import ru.draen.hps.common.core.exception.NotFoundException;
 import ru.draen.hps.file.controller.dto.FileBriefDto;
 import ru.draen.hps.file.controller.dto.FileCondition;
 import ru.draen.hps.file.controller.dto.FileDto;
@@ -31,25 +33,18 @@ public class FileController {
 
     @GetMapping("/{id}")
     public Mono<FileDto> get(@PathVariable("id") Long id) {
-        return fileService.getWithContent(id).map(fileMapper::toDto);
+        return fileService.getWithContent(id).map(fileMapper::toDto).switchIfEmpty(Mono.error(NotFoundException::new));
     }
 
     @PostMapping("/upload")
+    @ResponseStatus(HttpStatus.CREATED)
     public Mono<FileBriefDto> upload(@RequestBody @Validated(Create.class) FileDto dto) {
         return fileService.create(fileMapper.toEntity(dto)).map(fileBriefMapper::toDto);
     }
 
-//    @PostMapping("/upload-local")
-//    public ResponseEntity<FileBriefDto> uploadLocal(@RequestBody @Validated UploadLocalFileRequest request) {
-//        return ResponseEntity.status(HttpStatus.CREATED).body(
-//                fileBriefMapper.toDto(fileService.createFromLocal(request))
-//        );
-//    }
-
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> delete(@PathVariable("id") Long id) {
-        return fileService.delete(id)
-                ? Mono.empty()
-                : Mono.empty(); //TODO think
+        return fileService.delete(id).flatMap(result -> result ? Mono.empty() : Mono.error(NotFoundException::new));
     }
 }

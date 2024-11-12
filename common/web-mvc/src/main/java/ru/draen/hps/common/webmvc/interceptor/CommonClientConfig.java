@@ -4,9 +4,12 @@ import feign.RequestInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
+import ru.draen.hps.common.security.config.AppProfile;
 import ru.draen.hps.common.security.dto.TokenRequest;
 import ru.draen.hps.common.webmvc.client.TokenClient;
 
+@Profile(AppProfile.DEV)
 @RequiredArgsConstructor
 public class CommonClientConfig {
     private final TokenClient tokenClient;

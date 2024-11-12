@@ -66,6 +66,28 @@ services:
       - "8083:8083"
       - "5005:5005"
     environment:
+      APP_NAME: file-service
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      CONFIG_URL: http://config-server:8800
+      ACTIVE_PROFILE: ${ACTIVE_PROFILE}
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
+    volumes:
+      - ".key:/app/.key"
+
+  file-service-fallback:
+    build:
+      context: .
+      dockerfile: docker/file-service.Dockerfile
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    ports:
+      - "8089:8089"
+      - "5009:5005"
+    environment:
+      APP_NAME: file-service-fallback
       EUREKA_URL: http://eureka-server:8761/eureka/
       CONFIG_URL: http://config-server:8800
       ACTIVE_PROFILE: ${ACTIVE_PROFILE}

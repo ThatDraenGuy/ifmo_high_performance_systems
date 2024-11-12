@@ -13,6 +13,7 @@ import ru.draen.hps.cdr.app.cdrdata.service.CdrDataService;
 import ru.draen.hps.cdr.app.cdrfile.controller.dto.ParseCdrRequest;
 import ru.draen.hps.cdr.app.cdrfile.service.CdrFileService;
 import ru.draen.hps.cdr.common.model.ClientModel;
+import ru.draen.hps.common.core.exception.NotFoundException;
 import ru.draen.hps.common.core.mapper.IMapper;
 import ru.draen.hps.common.r2dbcdao.domain.CdrData;
 
@@ -31,12 +32,13 @@ public class CdrFileController {
 
     @GetMapping("/{id}")
     public Mono<CdrFileDto> findById(@PathVariable("id") Long id) {
-        return cdrFileService.findById(id);
+        return cdrFileService.findById(id).switchIfEmpty(Mono.error(NotFoundException::new));
     }
 
     @GetMapping("/{id}/records")
     public Flux<CdrDataDto> findRecords(@PathVariable("id") Long id, @RequestParam("clientId") Long clientId) {
         return cdrFileService.findById(id)
+                .switchIfEmpty(Mono.error(NotFoundException::new))
                 .flatMapMany(file -> cdrDataService.findByClient(file.getFileId(), clientId))
                 .map(cdrDataMapper::toDto);
     }

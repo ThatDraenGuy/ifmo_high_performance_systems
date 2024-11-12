@@ -1,6 +1,6 @@
 spring:
   application:
-    name: file-service
+    name: ${APP_NAME}
   profiles:
     active: ${ACTIVE_PROFILE:test}
   config:

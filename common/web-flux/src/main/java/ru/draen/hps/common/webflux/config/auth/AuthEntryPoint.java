@@ -1,6 +1,7 @@
 package ru.draen.hps.common.webflux.config.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -10,10 +11,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import ru.draen.hps.common.core.model.ErrorResponse;
+import ru.draen.hps.common.security.config.AppProfile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+@Profile(AppProfile.DEV)
 @Component
 public class AuthEntryPoint implements ServerAuthenticationEntryPoint {
     @Override

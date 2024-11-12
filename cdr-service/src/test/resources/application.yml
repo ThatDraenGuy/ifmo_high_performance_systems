@@ -1,0 +1,17 @@
+api:
+  prefix:
+    /api/v1
+
+spring:
+  profiles:
+    active: test
+  cloud:
+    config:
+      enabled: false
+  liquibase:
+    change-log: classpath*:db/cumulative.xml
+
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false

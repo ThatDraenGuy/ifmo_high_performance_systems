@@ -50,8 +50,8 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public boolean delete(@NonNull Long id) {
-        return Boolean.TRUE.equals(transactionTemplate.execute(status -> fileRepository.delete(id)));
+    public Mono<Boolean> delete(@NonNull Long id) {
+        return Mono.fromSupplier(() -> Boolean.TRUE.equals(transactionTemplate.execute(status -> fileRepository.delete(id))));
     }
 
     private void prepareToCreate(File file) {

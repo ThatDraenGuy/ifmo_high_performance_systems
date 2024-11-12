@@ -1,0 +1,9 @@
+{
+  "name": "Новый оператор",
+  "code": "NEWOP",
+  "languages": [
+    {
+      "language_id": 1
+    }
+  ]
+}

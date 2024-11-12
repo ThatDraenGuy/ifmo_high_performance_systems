@@ -14,6 +14,7 @@ public interface CdrDataRepository extends ReactiveCrudRepository<CdrData, Long>
     WHERE
         cdrd.cdrf_file_id = :cdrFileId
         AND cdrd.cli_cli_id = :clientId
+        AND cdrd.rprt_rprt_id IS NULL
     ORDER BY cdrd.start_time;
     """)
     Flux<CdrData> findByClient(Long cdrFileId, Long clientId);

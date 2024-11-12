@@ -10,5 +10,5 @@ public interface FileService {
     Flux<File> findAll(@NonNull FileCondition condition);
     Mono<File> getWithContent(@NonNull Long id);
     Mono<File> create(@NonNull File file);
-    boolean delete(@NonNull Long id);
+    Mono<Boolean> delete(@NonNull Long id);
 }
