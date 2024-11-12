@@ -1,0 +1,17 @@
+api:
+  prefix: /api/v1
+  access:
+    username: test
+    password: test
+
+server:
+  port: 8084
+spring:
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:postgresql://db:5432/perform}
+    username: ${DATASOURCE_USERNAME:postgres}
+    password: ${DATASOURCE_PASSWORD:aboba}
+
+jwt:
+  private-key-path: ${JWT_PRIVATE_KEY_PATH:.key}
+  access-token-expiration-secs: ${JWT_ACCESS_TOKEN_EXPIRATION_SECS:3600}

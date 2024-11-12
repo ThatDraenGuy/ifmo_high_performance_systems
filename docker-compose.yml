@@ -1,24 +1,136 @@
 services:
-  app:
+  eureka-server:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/eureka-server.Dockerfile
     ports:
-      - "8080:8080"
-    volumes:
-      - ./files:/app/files
+      - "8761:8761"
+    healthcheck:
+      test: "curl --silent --fail eureka-server:8761/actuator/health | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  config-server:
+    build:
+      context: .
+      dockerfile: docker/config-server.Dockerfile
+    ports:
+      - "8800:8800"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
     environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
       DATASOURCE_URL: jdbc:postgresql://db:5432/perform
       DATASOURCE_USERNAME: postgres
       DATASOURCE_PASSWORD: aboba
-      MIGRATION_ENABLED: "true"
-      PAGINATION_DEFAULT_PAGE_SIZE: "15"
-      PAGINATION_MAX_PAGE_SIZE: "75"
-      SCROLL_DEFAULT_LIMIT: "15"
-      SCROLL_MAX_LIMIT: "75"
+    healthcheck:
+      test: "curl --silent --fail config-server:8800/actuator/health | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  gateway:
+    build:
+      context: .
+      dockerfile: docker/gateway.Dockerfile
+    ports:
+      - "8080:8080"
+      - "5000:5005"
     depends_on:
-      db:
+      eureka-server:
         condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      CONFIG_URL: http://config-server:8800
+      ACTIVE_PROFILE: ${ACTIVE_PROFILE}
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
+    volumes:
+      - ".key:/app/.key"
+
+  file-service:
+    build:
+      context: .
+      dockerfile: docker/file-service.Dockerfile
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    ports:
+      - "8083:8083"
+      - "5005:5005"
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      CONFIG_URL: http://config-server:8800
+      ACTIVE_PROFILE: ${ACTIVE_PROFILE}
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
+    volumes:
+      - ".key:/app/.key"
+
+  cdr-service:
+    build:
+      context: .
+      dockerfile: docker/cdr-service.Dockerfile
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    ports:
+      - "8082:8082"
+      - "5006:5005"
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      CONFIG_URL: http://config-server:8800
+      ACTIVE_PROFILE: ${ACTIVE_PROFILE}
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
+    volumes:
+      - ".key:/app/.key"
+
+  billing-service:
+    build:
+      context: .
+      dockerfile: docker/billing-service.Dockerfile
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    ports:
+      - "8086:8086"
+      - "5007:5005"
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      CONFIG_URL: http://config-server:8800/
+      ACTIVE_PROFILE: ${ACTIVE_PROFILE}
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
+    volumes:
+      - ".key:/app/.key"
+
+  account-service:
+    build:
+      context: .
+      dockerfile: docker/account-service.Dockerfile
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    ports:
+      - "5008:5005"
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      CONFIG_URL: http://config-server:8800/
+      ACTIVE_PROFILE: ${ACTIVE_PROFILE}
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
+    volumes:
+      - ".key:/app/.key"
 
   db:
     image: postgres:latest

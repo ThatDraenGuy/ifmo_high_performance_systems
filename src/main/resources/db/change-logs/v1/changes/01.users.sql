@@ -12,5 +12,5 @@ CREATE TABLE user_roles (
     role VARCHAR NOT NULL,
     CONSTRAINT user_roles_pk PRIMARY KEY (user_user_id, role),
     CONSTRAINT user_roles_fk FOREIGN KEY (user_user_id) REFERENCES users(user_id),
-    CONSTRAINT user_roles_chk CHECK (role::text = ANY (ARRAY['GUEST', 'ADMIN']::text[]))
+    CONSTRAINT user_roles_chk CHECK (role::text = ANY (ARRAY['GUEST', 'CLIENT', 'OPERATOR' 'ADMIN']::text[]))
 );
