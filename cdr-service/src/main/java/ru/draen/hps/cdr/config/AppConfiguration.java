@@ -1,11 +1,31 @@
 package ru.draen.hps.cdr.config;
 
+import com.netflix.appinfo.InstanceInfo;
+import com.netflix.discovery.EurekaClient;
+import io.rsocket.core.Resume;
+import io.rsocket.loadbalance.LoadbalanceTarget;
+import io.rsocket.loadbalance.RoundRobinLoadbalanceStrategy;
+import io.rsocket.transport.netty.client.WebsocketClientTransport;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.codec.json.Jackson2JsonDecoder;
+import org.springframework.http.codec.json.Jackson2JsonEncoder;
+import org.springframework.messaging.rsocket.RSocketRequester;
+import org.springframework.messaging.rsocket.service.RSocketServiceProxyFactory;
+import org.springframework.util.MimeTypeUtils;
+import reactor.core.publisher.Flux;
+import reactor.util.retry.Retry;
+import ru.draen.hps.cdr.client.FileRSocketClient;
 import ru.draen.hps.common.core.model.EUserRole;
 import ru.draen.hps.common.webflux.config.auth.RequestApplier;
+
+import java.net.URI;
+import java.time.Duration;
+import java.util.List;
 
 @Configuration
 public class AppConfiguration {
@@ -16,5 +36,41 @@ public class AppConfiguration {
                         EUserRole.OPERATOR.name(), EUserRole.CLIENT.name())
                 .pathMatchers(apiPrefix + "/cdr-files/**").hasAuthority(EUserRole.OPERATOR.name())
                 .anyExchange().authenticated();
+    }
+
+    @Bean
+    @Lazy
+    @SneakyThrows
+    public RSocketServiceProxyFactory rSocketServiceProxyFactory(EurekaClient eurekaClient,
+                                                                 @Value("${app.socket.file-service-port}") Integer port,
+                                                                 Jackson2JsonEncoder encoder, Jackson2JsonDecoder decoder) {
+        RSocketRequester.Builder builder = RSocketRequester.builder();
+        return RSocketServiceProxyFactory.builder(builder
+                        .rsocketConnector(conn -> conn.resume(new Resume()
+                                .retry(Retry.fixedDelay(5, Duration.ofSeconds(1)))))
+                        .rsocketStrategies(strategyBuilder -> strategyBuilder.encoder(encoder).decoder(decoder).build())
+                        .dataMimeType(MimeTypeUtils.APPLICATION_JSON)
+                        .transports(eurekaHosts(eurekaClient, "file-service", port), new RoundRobinLoadbalanceStrategy()))
+                .build();
+    }
+
+    private Flux<List<LoadbalanceTarget>> eurekaHosts(EurekaClient eurekaClient, String serviceName, int port) {
+        return Flux.interval(Duration.ofSeconds(10)).map(index -> {
+            try {
+                InstanceInfo service = eurekaClient.getNextServerFromEureka(serviceName, false);
+                return List.of(LoadbalanceTarget.from(
+                        service.getHostName(),
+                        WebsocketClientTransport.create(service.getHostName(), port)
+                ));
+            } catch (Exception e) {
+                return List.of();
+            }
+        });
+    }
+
+    @Bean
+    @Lazy
+    public FileRSocketClient fileRSocketClient(RSocketServiceProxyFactory factory) {
+        return factory.createClient(FileRSocketClient.class);
     }
 }

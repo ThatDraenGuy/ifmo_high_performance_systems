@@ -1,0 +1,26 @@
+api:
+  prefix: /api/v1
+  access:
+    username: test
+    password: test
+
+server:
+  port: 8087
+
+jwt:
+  private-key-path: ${JWT_PRIVATE_KEY_PATH:.key}
+
+app:
+  kafka:
+    url: "kafka-1:9092,kafka-2:9092,kafka-3:9092"
+    group-id: notification-service
+    topics:
+      file-uploaded: file-upload
+      cdr-file-parsed: cdr-file-parsed
+      billing-performed: billing-performed
+
+spring:
+  rsocket:
+    server:
+      transport: websocket
+      port: 7000

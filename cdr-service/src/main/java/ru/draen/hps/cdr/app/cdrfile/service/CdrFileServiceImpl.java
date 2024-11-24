@@ -8,13 +8,13 @@ import reactor.core.publisher.Mono;
 import ru.draen.hps.cdr.I18n;
 import ru.draen.hps.cdr.app.cdrfile.dao.CdrFileCreateRepository;
 import ru.draen.hps.cdr.client.AccountClient;
-import ru.draen.hps.cdr.client.FileClient;
 import ru.draen.hps.cdr.app.cdrfile.controller.dto.CdrFileDto;
 import ru.draen.hps.cdr.app.cdrdata.service.CdrDataService;
 import ru.draen.hps.cdr.app.cdrdata.service.csv.CdrDataItem;
 import ru.draen.hps.cdr.app.cdrfile.dao.CdrFileRepository;
 import ru.draen.hps.cdr.app.cdrfile.service.filename.CdrFileName;
 import ru.draen.hps.cdr.app.cdrfile.service.filename.CdrFileNameParser;
+import ru.draen.hps.cdr.client.FileRSocketClient;
 import ru.draen.hps.common.core.exception.NotFoundException;
 import ru.draen.hps.common.core.exception.ProcessingException;
 import ru.draen.hps.common.core.utils.TimestampHelper;
@@ -36,12 +36,12 @@ public class CdrFileServiceImpl implements CdrFileService {
     private final CdrDataService cdrDataService;
 
     private final AccountClient accountClient;
-    private final FileClient fileClient;
+    private final FileRSocketClient fileRSocketClient;
 
     @Override
     @Transactional
     public Mono<CdrFileDto> parseData(Long fileId) {
-        return fileClient.getFile(fileId).flatMap(file -> {
+        return fileRSocketClient.getFile(fileId).flatMap(file -> {
 
             CdrFileName fileName = cdrFileNameParser.parse(file.getFileName());
             return accountClient.findOperatorById(file.getOperator().getOperatorId()).flatMap(operator -> {
@@ -86,7 +86,7 @@ public class CdrFileServiceImpl implements CdrFileService {
     @Override
     @Transactional
     public Mono<CdrFileDto> findById(Long fileId) {
-        return fileClient.getFile(fileId).flatMap(file ->
+        return fileRSocketClient.getFile(fileId).flatMap(file ->
                 cdrFileRepository.findById(fileId).map(cdrFile -> CdrFileDto.of(cdrFile, file)));
     }
 }

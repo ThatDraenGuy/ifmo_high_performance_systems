@@ -41,14 +41,14 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     @Transactional
-    public Mono<Void> perform(BillingRequest request) {
+    public Mono<Long> perform(BillingRequest request) {
         Flux<Report> reports = cdrFileClient
                 .findById(request.cdrFileId())
                 .switchIfEmpty(Mono.error(NotFoundException::new))
                 .flatMapMany(cdrFile -> cdrFileClient.findClients(cdrFile.getFileId())
                         .map(client -> Tuples.of(cdrFile, client)))
                 .flatMap(tuple -> processClient(tuple.getT1(), tuple.getT2()));
-        return reportService.save(reports).then();
+        return reportService.save(reports).then(Mono.just(request.cdrFileId()));
     }
 
     private Mono<Report> processClient(CdrFileModel cdrFile, ClientModel client) {

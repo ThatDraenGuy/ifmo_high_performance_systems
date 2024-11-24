@@ -4,6 +4,13 @@ api:
     username: test
     password: test
 
+app:
+  kafka:
+    url: "kafka-1:9092,kafka-2:9092,kafka-3:9092"
+    group-id: file-service
+    topics:
+      file-uploaded: file-upload
+
 server:
   port: 8083
 spring:
@@ -11,6 +18,11 @@ spring:
     url: ${DATASOURCE_URL:jdbc:postgresql://db:5432/perform}
     username: ${DATASOURCE_USERNAME:postgres}
     password: ${DATASOURCE_PASSWORD:aboba}
+
+  rsocket:
+    server:
+      transport: websocket
+      port: 7000
 
 jwt:
   private-key-path: ${JWT_PRIVATE_KEY_PATH:.key}
