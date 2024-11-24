@@ -1,7 +1,14 @@
 FROM maven:3.9.9-amazoncorretto-21-alpine AS build
+
 WORKDIR /app
+
 COPY config-server/pom.xml config-server/pom.xml
+COPY common common
 COPY pom.xml .
+
+WORKDIR /app/common
+RUN --mount=type=cache,target=/root/.m2 mvn clean install -DskipTests
+
 
 WORKDIR /app/config-server
 RUN --mount=type=cache,target=/root/.m2 mvn verify clean --fail-never
