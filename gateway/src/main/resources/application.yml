@@ -21,6 +21,23 @@ spring:
           enabled: 'true'
           lower-case-service-id: 'true'
 
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/openapi
+  swagger-ui:
+    path: /swagger-ui
+    enabled: true
+    urls:
+      - url: /file-service/v3/openapi
+        name: File Service
+      - url: /cdr-service/v3/openapi
+        name: Cdr Service
+      - url: /billing-service/v3/openapi
+        name: Billing Service
+      - url: /account-service/v3/openapi
+        name: Account Service
+
 eureka:
   instance:
     hostname: localhost

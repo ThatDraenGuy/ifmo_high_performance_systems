@@ -15,3 +15,7 @@ spring:
 jwt:
   private-key-path: ${JWT_PRIVATE_KEY_PATH:.key}
   access-token-expiration-secs: ${JWT_ACCESS_TOKEN_EXPIRATION_SECS:3600}
+
+springdoc:
+  api-docs:
+    path: /v3/openapi
