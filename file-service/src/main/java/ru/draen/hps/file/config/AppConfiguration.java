@@ -1,6 +1,10 @@
 package ru.draen.hps.file.config;
 
 import io.rsocket.core.Resume;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.rsocket.server.RSocketServer;
 import org.springframework.boot.rsocket.server.RSocketServerCustomizer;
@@ -14,6 +18,19 @@ import java.time.Duration;
 import java.util.Map;
 
 @Configuration
+@OpenAPIDefinition(
+        info = @Info(
+                title = "File Service",
+                description = "File Service",
+                version = "1.0",
+                contact = @Contact(
+                        name = "ThatDraenGuy"
+                )
+        ),
+        servers = {
+                @Server(url = "/file-service", description = "Gateway server")
+        }
+)
 public class AppConfiguration {
     @Bean
     public RequestApplier requestApplier(@Value("${api.prefix}") String apiPrefix) {

@@ -38,6 +38,10 @@ reactive:
               maxRetries: 3
               backoffInMs: 50
 
+springdoc:
+  api-docs:
+    path: /v3/openapi
+
 #resilience4j:
 #  circuitbreaker:
 #    circuitBreakerAspectOrder: 1

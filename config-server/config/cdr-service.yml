@@ -29,6 +29,10 @@ spring:
 jwt:
   private-key-path: ${JWT_PRIVATE_KEY_PATH:.key}
 
+springdoc:
+  api-docs:
+    path: /v3/openapi
+
 reactive:
   feign:
     client:

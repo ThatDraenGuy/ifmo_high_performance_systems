@@ -36,11 +36,6 @@
         </dependency>
         <dependency>
             <groupId>ru.draen.hps.common</groupId>
-            <artifactId>web-flux</artifactId>
-            <version>${ru.draen.hps.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ru.draen.hps.common</groupId>
             <artifactId>security</artifactId>
             <version>${ru.draen.hps.version}</version>
         </dependency>
@@ -48,6 +43,16 @@
             <groupId>ru.draen.hps.common</groupId>
             <artifactId>messaging</artifactId>
             <version>${ru.draen.hps.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.draen.hps.common</groupId>
+            <artifactId>web-flux</artifactId>
+            <version>${ru.draen.hps.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+            <version>2.6.0</version>
         </dependency>
 
 

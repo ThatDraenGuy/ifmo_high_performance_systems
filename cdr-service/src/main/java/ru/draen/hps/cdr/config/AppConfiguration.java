@@ -6,6 +6,10 @@ import io.rsocket.core.Resume;
 import io.rsocket.loadbalance.LoadbalanceTarget;
 import io.rsocket.loadbalance.RoundRobinLoadbalanceStrategy;
 import io.rsocket.transport.netty.client.WebsocketClientTransport;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.servers.Server;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +32,19 @@ import java.time.Duration;
 import java.util.List;
 
 @Configuration
+@OpenAPIDefinition(
+        info = @Info(
+                title = "Cdr Service",
+                description = "Cdr Service",
+                version = "1.0",
+                contact = @Contact(
+                        name = "ThatDraenGuy"
+                )
+        ),
+        servers = {
+                @Server(url = "/cdr-service", description = "Gateway server")
+        }
+)
 public class AppConfiguration {
     @Bean
     public RequestApplier requestApplier(@Value("${api.prefix}") String apiPrefix) {
