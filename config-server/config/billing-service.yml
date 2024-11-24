@@ -4,6 +4,14 @@ api:
     username: test
     password: test
 
+app:
+  kafka:
+    url: "kafka-1:9092,kafka-2:9092,kafka-3:9092"
+    group-id: billing-service
+    topics:
+      cdr-file-parsed: cdr-file-parsed
+      billing-performed: billing-performed
+
 server:
   port: 8086
 spring:

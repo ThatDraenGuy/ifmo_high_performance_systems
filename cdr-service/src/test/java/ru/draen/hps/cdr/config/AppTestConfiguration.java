@@ -15,7 +15,7 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 import reactor.core.publisher.Mono;
 import ru.draen.hps.cdr.Main;
 import ru.draen.hps.cdr.client.AccountClient;
-import ru.draen.hps.cdr.client.FileClient;
+import ru.draen.hps.cdr.client.FileRSocketClient;
 import ru.draen.hps.cdr.common.model.ClientModel;
 import ru.draen.hps.cdr.common.model.FileContentModel;
 import ru.draen.hps.cdr.common.model.FileModel;
@@ -23,7 +23,6 @@ import ru.draen.hps.cdr.common.model.OperatorBriefModel;
 import ru.draen.hps.common.webflux.config.AuthConfigurationStub;
 import ru.draen.hps.common.webflux.config.CommonConfiguration;
 
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -34,8 +33,8 @@ import static org.mockito.Mockito.when;
 public class AppTestConfiguration {
     @Bean
     @Primary
-    FileClient fileClient() {
-        FileClient fileClient = mock(FileClient.class);
+    FileRSocketClient fileClient() {
+        FileRSocketClient fileClient = mock(FileRSocketClient.class);
         when(fileClient.getFile(eq(101L))).thenReturn(Mono.just(new FileModel(
                         101L,
                         "cdr_RUSNW_20240901_20241001.csv",

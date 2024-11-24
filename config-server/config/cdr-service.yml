@@ -4,6 +4,16 @@ api:
     username: test
     password: test
 
+app:
+  kafka:
+    url: "kafka-1:9092,kafka-2:9092,kafka-3:9092"
+    group-id: cdr-service
+    topics:
+      file-uploaded: file-upload
+      cdr-file-parsed: cdr-file-parsed
+  socket:
+    file-service-port: 7000
+
 server:
   port: 8082
 spring:

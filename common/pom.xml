@@ -30,5 +30,6 @@
         <module>web-flux</module>
         <module>app-service-parent</module>
         <module>security</module>
+        <module>messaging</module>
     </modules>
 </project>

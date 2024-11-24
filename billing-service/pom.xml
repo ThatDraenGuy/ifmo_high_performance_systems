@@ -41,6 +41,11 @@
         </dependency>
         <dependency>
             <groupId>ru.draen.hps.common</groupId>
+            <artifactId>messaging</artifactId>
+            <version>${ru.draen.hps.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.draen.hps.common</groupId>
             <artifactId>web-flux</artifactId>
             <version>${ru.draen.hps.version}</version>
         </dependency>

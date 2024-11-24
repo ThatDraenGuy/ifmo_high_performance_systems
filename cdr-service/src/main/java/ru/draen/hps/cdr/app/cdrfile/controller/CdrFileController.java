@@ -13,6 +13,7 @@ import ru.draen.hps.cdr.app.cdrdata.service.CdrDataService;
 import ru.draen.hps.cdr.app.cdrfile.controller.dto.ParseCdrRequest;
 import ru.draen.hps.cdr.app.cdrfile.service.CdrFileService;
 import ru.draen.hps.cdr.common.model.ClientModel;
+import ru.draen.hps.cdr.producer.CdrFileParsedProducer;
 import ru.draen.hps.common.core.exception.NotFoundException;
 import ru.draen.hps.common.core.mapper.IMapper;
 import ru.draen.hps.common.r2dbcdao.domain.CdrData;
@@ -22,12 +23,13 @@ import ru.draen.hps.common.r2dbcdao.domain.CdrData;
 @AllArgsConstructor
 public class CdrFileController {
     private final CdrFileService cdrFileService;
+    private final CdrFileParsedProducer cdrFileParsedProducer;
     private final CdrDataService cdrDataService;
     private final IMapper<CdrData, CdrDataDto> cdrDataMapper;
 
     @PostMapping("/parse")
     public Mono<CdrFileDto> parse(@Validated @RequestBody ParseCdrRequest request) {
-        return cdrFileService.parseData(request.getFileId());
+        return cdrFileService.parseData(request.getFileId()).flatMap(cdrFileParsedProducer::send);
     }
 
     @GetMapping("/{id}")

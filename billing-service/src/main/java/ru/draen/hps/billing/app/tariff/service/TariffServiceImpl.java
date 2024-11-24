@@ -18,12 +18,9 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class TariffServiceImpl implements TariffService {
-    private final TransactionTemplate transactionTemplate;
     private final TransactionTemplate readOnlyTransactionTemplate;
     private final TariffRepository tariffRepository;
     private final TariffHistRepository tariffHistRepository;
-    private final TariffToRulesRepository tariffToRulesRepository;
-    private final EntityLoader entityLoader;
 
     @Override
     public Optional<Tariff> findById(Long id) {
