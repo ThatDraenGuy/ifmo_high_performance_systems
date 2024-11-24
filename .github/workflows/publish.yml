@@ -13,6 +13,7 @@ jobs:
   publish:
     name: publish service images
     runs-on: ubuntu-latest
+    environment: ghcr-publish
     strategy:
       matrix:
         service:
