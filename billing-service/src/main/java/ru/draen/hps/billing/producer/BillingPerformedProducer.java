@@ -1,6 +1,7 @@
 package ru.draen.hps.billing.producer;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -22,6 +23,7 @@ public class BillingPerformedProducer {
     private final KafkaTemplate<String, AppMessage> kafkaTemplate;
 
     @Value("${app.kafka.topics.billing-performed}")
+    @Setter
     private String billingPerformedTopic;
 
 
