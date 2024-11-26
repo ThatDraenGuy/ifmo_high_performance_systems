@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 import ru.draen.hps.billing.I18n;
 import ru.draen.hps.billing.app.billing.controller.dto.BillingRequest;
@@ -47,6 +46,7 @@ public class BillingServiceImpl implements BillingService {
                 .switchIfEmpty(Mono.error(NotFoundException::new))
                 .flatMapMany(cdrFile -> cdrFileClient.findClients(cdrFile.getFileId())
                         .map(client -> Tuples.of(cdrFile, client)))
+                .delayElements(Duration.ofMillis(100L))
                 .flatMap(tuple -> processClient(tuple.getT1(), tuple.getT2()));
         return reportService.save(reports).then(Mono.just(request.cdrFileId()));
     }

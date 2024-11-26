@@ -41,9 +41,7 @@ public class CdrFileController {
 
     @GetMapping("/{id}/records")
     public Flux<CdrDataDto> findRecords(@PathVariable("id") Long id, @RequestParam("clientId") Long clientId) {
-        return cdrFileService.findById(id)
-                .switchIfEmpty(Mono.error(NotFoundException::new))
-                .flatMapMany(file -> cdrDataService.findByClient(file.getFileId(), clientId))
+        return cdrDataService.findByClient(id, clientId)
                 .map(cdrDataMapper::toDto);
     }
 

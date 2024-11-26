@@ -146,6 +146,23 @@ services:
     volumes:
       - ".key:/app/.key"
 
+  account-service-fallback:
+    build:
+      context: .
+      dockerfile: docker/account-service.Dockerfile
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    environment:
+      EUREKA_URL: http://eureka-server:8761/eureka/
+      CONFIG_URL: http://config-server:8800/
+      ACTIVE_PROFILE: ${ACTIVE_PROFILE}
+      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,address=*:5005,server=y,suspend=n"
+    volumes:
+      - ".key:/app/.key"
+
   notification-service:
     build:
       context: .
@@ -157,6 +174,7 @@ services:
         condition: service_healthy
     ports:
       - "5010:5005"
+      - "7000:7000"
     environment:
       EUREKA_URL: http://eureka-server:8761/eureka/
       CONFIG_URL: http://config-server:8800
@@ -182,65 +200,81 @@ services:
       retries: 5
       start_period: 10s
 
-  zookeeper-1:
+  zookeeper:
     image: confluentinc/cp-zookeeper:7.4.4
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "22181:2181"
-
-  zookeeper-2:
-    image: confluentinc/cp-zookeeper:7.4.4
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - "32181:2181"
+    volumes:
+      - .zkdata:/var/lib/zookeeper/data
+      - .zklogs:/var/lib/zookeeper/log
 
   kafka-1:
     image: confluentinc/cp-kafka:7.4.4
     depends_on:
-      - zookeeper-1
-      - zookeeper-2
-
+      - zookeeper
     ports:
       - "29092:29092"
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:9092,PLAINTEXT_HOST://localhost:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '3'
+      KAFKA_MIN_INSYNC_REPLICAS: '2'
   kafka-2:
     image: confluentinc/cp-kafka:7.4.4
     depends_on:
-      - zookeeper-1
-      - zookeeper-2
+      - zookeeper
     ports:
       - "39092:39092"
     environment:
       KAFKA_BROKER_ID: 2
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:9092,PLAINTEXT_HOST://localhost:39092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '3'
+      KAFKA_MIN_INSYNC_REPLICAS: '2'
   kafka-3:
     image: confluentinc/cp-kafka:7.4.4
     depends_on:
-      - zookeeper-1
-      - zookeeper-2
+      - zookeeper
     ports:
       - "49092:49092"
     environment:
       KAFKA_BROKER_ID: 3
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181,zookeeper-2:2181
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-3:9092,PLAINTEXT_HOST://localhost:49092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '3'
+      KAFKA_MIN_INSYNC_REPLICAS: '2'
+
+  init-kafka:
+    image: confluentinc/cp-kafka:6.1.1
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+    entrypoint: [ '/bin/sh', '-c' ]
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server kafka-1:9092 --list
+
+      echo -e 'Creating kafka topics'
+      
+      kafka-topics --bootstrap-server kafka-1:9092 --create --if-not-exists --topic billing-performed --replication-factor 3 --partitions 3
+      kafka-topics --bootstrap-server kafka-1:9092 --create --if-not-exists --topic cdr-file-parsed --replication-factor 3 --partitions 3
+      kafka-topics --bootstrap-server kafka-1:9092 --create --if-not-exists --topic file-upload --replication-factor 3 --partitions 3
+
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server kafka-1:9090 --list
+      "
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest

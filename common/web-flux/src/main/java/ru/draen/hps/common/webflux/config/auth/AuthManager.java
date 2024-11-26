@@ -21,7 +21,7 @@ public class AuthManager implements ReactiveAuthenticationManager {
     public Mono<Authentication> authenticate(Authentication authentication) {
         if (authentication instanceof JwtTokenAuthentication jwtToken) {
             Mono<UserDetails> userDetails = userDetailsService.findByUsername(jwtToken.getAccessToken().username());
-            return userDetails.map(details -> new UsernamePasswordAuthenticationToken(
+            return userDetails.checkpoint().map(details -> new UsernamePasswordAuthenticationToken(
                     details, null, details.getAuthorities()));
         }
         return Mono.just(authentication);

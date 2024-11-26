@@ -28,8 +28,7 @@ public class CdrDataServiceImpl implements CdrDataService {
     @Override
     @Transactional
     public Flux<CdrData> findByClient(Long fileId, Long clientId) {
-        return accountClient.findClientById(clientId).flatMapMany(client ->
-                cdrDataRepository.findByClient(fileId, clientId));
+        return cdrDataRepository.findByClient(fileId, clientId);
     }
 
     @Override

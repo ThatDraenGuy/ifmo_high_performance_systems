@@ -25,8 +25,8 @@ public class MessageListener {
     }
 
     @KafkaListener(topics = "${app.kafka.topics.billing-performed}", properties = {"spring.json.value.default.type=ru.draen.hps.notification.model.BillingPerformedMsg"})
-    public void listenBillingPerformed(@Payload CdrFileParsedMsg msg) {
-        NotificationSink.SINK.emitNext(new NotificationInfo("file-uploaded", msg.fileId()), Sinks.EmitFailureHandler.FAIL_FAST);
+    public void listenBillingPerformed(@Payload BillingPerformedMsg msg) {
+        NotificationSink.SINK.emitNext(new NotificationInfo("billing-performed", msg.fileId()), Sinks.EmitFailureHandler.FAIL_FAST);
 
     }
 }

@@ -66,7 +66,7 @@ public class AppConfiguration {
         RSocketRequester.Builder builder = RSocketRequester.builder();
         return RSocketServiceProxyFactory.builder(builder
                         .rsocketConnector(conn -> conn.resume(new Resume()
-                                .retry(Retry.fixedDelay(5, Duration.ofSeconds(1)))))
+                                .retry(Retry.fixedDelay(5, Duration.ofMillis(100)))))
                         .rsocketStrategies(strategyBuilder -> strategyBuilder.encoder(encoder).decoder(decoder).build())
                         .dataMimeType(MimeTypeUtils.APPLICATION_JSON)
                         .transports(eurekaHosts(eurekaClient, "file-service", port), new RoundRobinLoadbalanceStrategy()))

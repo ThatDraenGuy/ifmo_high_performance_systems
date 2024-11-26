@@ -3,6 +3,8 @@
 .key.pub
 files/
 .pgdata
+.zkdata
+.zklogs
 
 target/
 !.mvn/wrapper/maven-wrapper.jar
