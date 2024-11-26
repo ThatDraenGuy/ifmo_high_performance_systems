@@ -1,5 +1,6 @@
 package ru.draen.hps.account.app.operator.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import ru.draen.hps.common.dbms.domain.Operator;
 @RestController
 @RequestMapping(value = "${api.prefix}/operators", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class OperatorController {
     private final OperatorService operatorService;
     private final IMapper<Operator, OperatorDto> operatorMapper;

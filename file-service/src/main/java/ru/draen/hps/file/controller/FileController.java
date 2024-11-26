@@ -1,5 +1,6 @@
 package ru.draen.hps.file.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +21,7 @@ import ru.draen.hps.common.core.validation.groups.Create;
 @RestController
 @RequestMapping(value = "${api.prefix}/files", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class FileController {
     private final FileService fileService;
     private final FileUploadedProducer fileUploadedProducer;

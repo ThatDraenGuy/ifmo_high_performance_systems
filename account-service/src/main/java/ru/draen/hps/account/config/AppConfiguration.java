@@ -25,11 +25,13 @@ import ru.draen.hps.common.webmvc.config.auth.RequestApplier;
 )
 public class AppConfiguration {
     @Bean
-    public RequestApplier requestApplier(@Value("${api.prefix}") String apiPrefix) {
+    public RequestApplier requestApplier(@Value("${api.prefix}") String apiPrefix,
+                                         @Value("${springdoc.api-docs.path}") String docsPath) {
         return http -> http
                 .requestMatchers(apiPrefix + "/operators/**").permitAll()
                 .requestMatchers(apiPrefix + "/clients/**").permitAll()
                 .requestMatchers(apiPrefix + "/auth/**").permitAll()
+                .requestMatchers(docsPath).permitAll()
                 .anyRequest().permitAll();
     }
 }

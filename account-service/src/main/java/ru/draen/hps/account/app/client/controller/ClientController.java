@@ -1,5 +1,6 @@
 package ru.draen.hps.account.app.client.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import ru.draen.hps.account.app.client.service.ClientService;
 @RestController
 @RequestMapping(value = "${api.prefix}/clients", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class ClientController {
     private final ClientService clientService;
 

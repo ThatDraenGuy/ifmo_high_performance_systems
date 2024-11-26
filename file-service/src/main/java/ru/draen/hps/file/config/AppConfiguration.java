@@ -33,9 +33,11 @@ import java.util.Map;
 )
 public class AppConfiguration {
     @Bean
-    public RequestApplier requestApplier(@Value("${api.prefix}") String apiPrefix) {
+    public RequestApplier requestApplier(@Value("${api.prefix}") String apiPrefix,
+                                         @Value("${springdoc.api-docs.path}") String docsPath) {
         return http -> http
                 .pathMatchers(apiPrefix + "/files/**").hasAuthority(EUserRole.OPERATOR.name())
+                .pathMatchers(docsPath).permitAll()
                 .anyExchange().authenticated();
     }
 

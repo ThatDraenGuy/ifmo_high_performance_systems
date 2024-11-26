@@ -1,5 +1,6 @@
 package ru.draen.hps.cdr.app.cdrfile.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +22,7 @@ import ru.draen.hps.common.r2dbcdao.domain.CdrData;
 @RestController
 @RequestMapping(value = "${api.prefix}/cdr-files", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class CdrFileController {
     private final CdrFileService cdrFileService;
     private final CdrFileParsedProducer cdrFileParsedProducer;

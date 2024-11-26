@@ -26,9 +26,11 @@ import ru.draen.hps.common.webflux.config.auth.RequestApplier;
 )
 public class AppConfiguration {
     @Bean
-    public RequestApplier requestApplier(@Value("${api.prefix}") String apiPrefix) {
+    public RequestApplier requestApplier(@Value("${api.prefix}") String apiPrefix,
+                                         @Value("${springdoc.api-docs.path}") String docsPath) {
         return http -> http
                 .pathMatchers(apiPrefix + "/billing/**").hasAuthority(EUserRole.OPERATOR.name())
+                .pathMatchers(docsPath).permitAll()
                 .anyExchange().authenticated();
     }
 }

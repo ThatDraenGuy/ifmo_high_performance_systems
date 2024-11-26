@@ -1,5 +1,6 @@
 package ru.draen.hps.account.app.user.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
@@ -16,6 +17,7 @@ import ru.draen.hps.common.security.config.auth.AppUserDetails;
 @RestController
 @RequestMapping(value = "${api.prefix}/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @AllArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class UserController {
     private final UserService userService;
     private final IMapper<User, AppUserDetails> userDetailsMapper;
