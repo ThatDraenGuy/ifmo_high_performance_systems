@@ -1,21 +1,22 @@
 package ru.draen.hps.file.config;
 
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.map.IMap;
 import io.rsocket.core.Resume;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.rsocket.server.RSocketServer;
 import org.springframework.boot.rsocket.server.RSocketServerCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.util.retry.Retry;
 import ru.draen.hps.common.core.model.EUserRole;
+import ru.draen.hps.common.dbms.domain.File;
 import ru.draen.hps.common.webflux.config.auth.RequestApplier;
 
 import java.time.Duration;
-import java.util.Map;
 
 @Configuration
 @OpenAPIDefinition(
@@ -48,5 +49,10 @@ public class AppConfiguration {
                         .retry(
                                 Retry.fixedDelay(5, Duration.ofSeconds(1)));
         return rSocketServer -> rSocketServer.resume(resume);
+    }
+
+    @Bean
+    public IMap<Long, File> fileCache(HazelcastInstance hazelcastInstance) {
+        return hazelcastInstance.getMap("files");
     }
 }

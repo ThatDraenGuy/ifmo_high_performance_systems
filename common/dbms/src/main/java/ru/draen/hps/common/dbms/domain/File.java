@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.draen.hps.common.jpadao.entity.ADeletableEntity;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "files")
 @Getter
 @Setter
-public class File extends ADeletableEntity<Long> {
+public class File extends ADeletableEntity<Long> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "files_file_id_gen")
     @SequenceGenerator(name = "files_file_id_gen", sequenceName = "files_file_id_seq", allocationSize = 1)

@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.draen.hps.common.jpadao.entity.IEntity;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "file_content")
 @Getter
 @Setter
-public class FileContent implements IEntity<Long> {
+public class FileContent implements IEntity<Long>, Serializable {
     @Id
     @Column(name = "file_file_id")
     private Long id;

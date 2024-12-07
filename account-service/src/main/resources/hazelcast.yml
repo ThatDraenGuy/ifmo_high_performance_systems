@@ -1,0 +1,31 @@
+hazelcast:
+  cluster-name: account-service-cluster
+  map:
+    users:
+      max-idle-seconds: 3600
+      eviction:
+        eviction-policy: LRU
+        max-size-policy: PER_NODE
+        size: 300
+    operators:
+      max-idle-seconds: 3600
+      eviction:
+        eviction-policy: LRU
+        max-size-policy: PER_NODE
+        size: 300
+    clients:
+      max-idle-seconds: 3600
+      eviction:
+        eviction-policy: LRU
+        max-size-policy: PER_NODE
+        size: 300
+    clients-phone:
+      max-idle-seconds: 3600
+      eviction:
+        eviction-policy: LRU
+        max-size-policy: PER_NODE
+        size: 300
+  network:
+    join:
+      multicast:
+        enabled: true

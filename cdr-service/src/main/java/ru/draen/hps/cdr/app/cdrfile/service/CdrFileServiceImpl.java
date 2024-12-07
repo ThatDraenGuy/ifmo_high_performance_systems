@@ -1,5 +1,6 @@
 package ru.draen.hps.cdr.app.cdrfile.service;
 
+import com.hazelcast.map.IMap;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import ru.draen.hps.common.core.utils.TimestampHelper;
 import ru.draen.hps.common.csv.ICsvParser;
 import ru.draen.hps.common.core.label.ILabelService;
 import ru.draen.hps.common.r2dbcdao.domain.*;
+import ru.draen.hps.common.webflux.utils.CacheUtils;
 
 import java.io.ByteArrayInputStream;
 
@@ -37,6 +39,7 @@ public class CdrFileServiceImpl implements CdrFileService {
 
     private final AccountClient accountClient;
     private final FileRSocketClient fileRSocketClient;
+    private final IMap<Long, CdrFileDto> cdrFileCache;
 
     @Override
     @Transactional
@@ -86,7 +89,8 @@ public class CdrFileServiceImpl implements CdrFileService {
     @Override
     @Transactional
     public Mono<CdrFileDto> findById(Long fileId) {
-        return fileRSocketClient.getFile(fileId).flatMap(file ->
-                cdrFileRepository.findById(fileId).map(cdrFile -> CdrFileDto.of(cdrFile, file)));
+        return CacheUtils.cacheGet(cdrFileCache, fileId, () ->
+                fileRSocketClient.getFile(fileId).flatMap(file ->
+                        cdrFileRepository.findById(fileId).map(cdrFile -> CdrFileDto.of(cdrFile, file))));
     }
 }
