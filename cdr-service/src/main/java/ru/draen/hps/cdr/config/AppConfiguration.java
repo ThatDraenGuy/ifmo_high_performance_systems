@@ -1,5 +1,7 @@
 package ru.draen.hps.cdr.config;
 
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.map.IMap;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import io.rsocket.core.Resume;
@@ -23,6 +25,7 @@ import org.springframework.messaging.rsocket.service.RSocketServiceProxyFactory;
 import org.springframework.util.MimeTypeUtils;
 import reactor.core.publisher.Flux;
 import reactor.util.retry.Retry;
+import ru.draen.hps.cdr.app.cdrfile.controller.dto.CdrFileDto;
 import ru.draen.hps.cdr.client.FileRSocketClient;
 import ru.draen.hps.common.core.model.EUserRole;
 import ru.draen.hps.common.webflux.config.auth.RequestApplier;
@@ -91,5 +94,10 @@ public class AppConfiguration {
     @Lazy
     public FileRSocketClient fileRSocketClient(RSocketServiceProxyFactory factory) {
         return factory.createClient(FileRSocketClient.class);
+    }
+
+    @Bean
+    public IMap<Long, CdrFileDto> cdrFileCache(HazelcastInstance hazelcastInstance) {
+        return hazelcastInstance.getMap("cdr-files");
     }
 }

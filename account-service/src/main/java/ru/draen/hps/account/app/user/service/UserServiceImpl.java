@@ -1,5 +1,6 @@
 package ru.draen.hps.account.app.user.service;
 
+import com.hazelcast.map.IMap;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,7 @@ import ru.draen.hps.common.core.label.ILabelService;
 import ru.draen.hps.common.core.model.EUserRole;
 import ru.draen.hps.common.dbms.domain.User;
 import ru.draen.hps.common.security.config.auth.AppUserDetails;
+import ru.draen.hps.common.webmvc.utils.CacheUtils;
 
 import java.util.Optional;
 import java.util.Set;
@@ -26,13 +28,15 @@ import java.util.Set;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final TransactionTemplate readOnlyTransactionTemplate;
     private final UserRepository userRepository;
+    private final IMap<String, User> userCache;
 
     @Override
     public Optional<User> findByUsername(String username) {
-        return readOnlyTransactionTemplate.execute(status -> {
-            Specification<User> spec = UserSpecification.byUsername(username);
-            return userRepository.findOne(spec);
-        });
+        return CacheUtils.cacheGet(userCache, username, () ->
+                readOnlyTransactionTemplate.execute(status -> {
+                    Specification<User> spec = UserSpecification.byUsername(username);
+                    return userRepository.findOne(spec);
+                }));
     }
 
     @Override

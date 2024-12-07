@@ -74,6 +74,11 @@
             <artifactId>spring-boot-starter-rsocket</artifactId>
             <version>${org.springframework.boot.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-spring</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

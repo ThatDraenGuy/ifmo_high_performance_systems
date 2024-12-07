@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.draen.hps.common.jpadao.entity.IEntity;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "languages")
 @Getter
 @Setter
-public class Language implements IEntity<Long> {
+public class Language implements IEntity<Long>, Serializable {
     @Id
     @Column(name = "lang_id")
     private Long id;
