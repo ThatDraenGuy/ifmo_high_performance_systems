@@ -10,6 +10,7 @@ import ru.draen.hps.cdr.app.cdrdata.dao.CdrDataRepository;
 import ru.draen.hps.cdr.app.cdrdata.controller.dto.CdrDataDto;
 import ru.draen.hps.cdr.client.AccountClient;
 import ru.draen.hps.cdr.common.model.ClientModel;
+import ru.draen.hps.common.core.utils.TimestampHelper;
 import ru.draen.hps.common.r2dbcdao.domain.CdrData;
 
 
@@ -43,6 +44,11 @@ public class CdrDataServiceImpl implements CdrDataService {
                 .flatMap(call -> cdrDataRepository.findById(call.getId()).zipWith(Mono.just(call)))
                 .map(this::applyUpdate)
                 .flatMap(cdrDataRepository::save);
+    }
+
+    @Override
+    public Mono<Void> deleteByFile(Long fileId) {
+        return cdrDataRepository.deleteByFile(TimestampHelper.current(), fileId);
     }
 
     private CdrData applyUpdate(Tuple2<CdrData, CdrData> calls) {

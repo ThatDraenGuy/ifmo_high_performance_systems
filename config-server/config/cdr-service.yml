@@ -10,7 +10,9 @@ app:
     group-id: cdr-service
     topics:
       file-uploaded: file-upload
+      file-upload-cancel: file-upload-cancel
       cdr-file-parsed: cdr-file-parsed
+      cdr-file-cancel: cdr-file-cancel
   socket:
     file-service-port: 7000
 

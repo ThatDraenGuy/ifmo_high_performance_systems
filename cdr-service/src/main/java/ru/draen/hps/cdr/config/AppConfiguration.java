@@ -26,9 +26,16 @@ import org.springframework.util.MimeTypeUtils;
 import reactor.core.publisher.Flux;
 import reactor.util.retry.Retry;
 import ru.draen.hps.cdr.app.cdrfile.controller.dto.CdrFileDto;
+import ru.draen.hps.cdr.app.cdrfile.controller.dto.ParseCdrRequest;
+import ru.draen.hps.cdr.app.cdrfile.service.CdrFileService;
 import ru.draen.hps.cdr.client.FileRSocketClient;
+import ru.draen.hps.cdr.producer.CdrFileParsedProducer;
+import ru.draen.hps.cdr.producer.FileUploadCancelProducer;
 import ru.draen.hps.common.core.model.EUserRole;
+import ru.draen.hps.common.messaging.model.FileRelatedMsg;
 import ru.draen.hps.common.webflux.config.auth.RequestApplier;
+import ru.draen.hps.common.webflux.saga.SagaStep;
+import ru.draen.hps.common.webflux.utils.SagaUtils;
 
 import java.net.URI;
 import java.time.Duration;
@@ -99,5 +106,18 @@ public class AppConfiguration {
     @Bean
     public IMap<Long, CdrFileDto> cdrFileCache(HazelcastInstance hazelcastInstance) {
         return hazelcastInstance.getMap("cdr-files");
+    }
+
+    @Bean
+    public SagaStep<ParseCdrRequest, CdrFileDto> cdrSagaStep(CdrFileService cdrFileService,
+                                                         CdrFileParsedProducer cdrFileParsedProducer,
+                                                         FileUploadCancelProducer fileUploadCancelProducer) {
+        return SagaUtils.createStep(
+                ParseCdrRequest::getFileId,
+                req -> cdrFileService.parseData(req.getFileId()),
+                req -> cdrFileService.delete(req.getFileId()),
+                cdrFileParsedProducer::send,
+                (req, e) -> fileUploadCancelProducer.send(req.getFileId(), e)
+        );
     }
 }

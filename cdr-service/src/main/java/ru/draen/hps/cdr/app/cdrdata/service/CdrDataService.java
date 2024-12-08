@@ -12,4 +12,5 @@ public interface CdrDataService {
     Flux<CdrData> findByClient(Long fileId, Long clientId);
     Flux<CdrData> save(Flux<CdrData> calls);
     Mono<CdrData> update(Mono<CdrData> calls);
+    Mono<Void> deleteByFile(Long fileId);
 }

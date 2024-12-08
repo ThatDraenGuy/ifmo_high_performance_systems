@@ -5,8 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
-import ru.draen.hps.billing.producer.dto.BillingPerformedMsg;
 import ru.draen.hps.common.messaging.model.AppMessage;
+import ru.draen.hps.common.messaging.model.FileRelatedMsg;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -36,6 +36,6 @@ public class BillingPerformedProducerTest {
     void send() {
         billingPerformedProducer.send(1L).subscribe();
 
-        verify(kafkaTemplate).send("topic", new BillingPerformedMsg(1L));
+        verify(kafkaTemplate).send("topic", new FileRelatedMsg(1L));
     }
 }

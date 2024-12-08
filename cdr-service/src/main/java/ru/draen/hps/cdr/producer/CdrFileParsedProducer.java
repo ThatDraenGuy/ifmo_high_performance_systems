@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import ru.draen.hps.cdr.I18n;
 import ru.draen.hps.cdr.app.cdrfile.controller.dto.CdrFileDto;
-import ru.draen.hps.cdr.producer.dto.CdrFileParsedMsg;
 import ru.draen.hps.common.core.label.ILabelService;
 import ru.draen.hps.common.messaging.model.AppMessage;
+import ru.draen.hps.common.messaging.model.FileRelatedMsg;
 
 import static java.util.Objects.isNull;
 
@@ -27,7 +27,7 @@ public class CdrFileParsedProducer {
 
     public Mono<CdrFileDto> send(CdrFileDto cdrFile) {
         return Mono.fromFuture(kafkaTemplate
-                        .send(fileParsedTopic, new CdrFileParsedMsg(cdrFile.getFileId()))
+                        .send(fileParsedTopic, new FileRelatedMsg(cdrFile.getFileId()))
                         .whenComplete((res, e) -> {
                             if (!isNull(e)) {
                                 log.error(lbs.msg("errors.messaging.fileParsed", e));

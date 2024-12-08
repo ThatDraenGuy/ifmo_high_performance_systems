@@ -93,4 +93,9 @@ public class CdrFileServiceImpl implements CdrFileService {
                 fileRSocketClient.getFile(fileId).flatMap(file ->
                         cdrFileRepository.findById(fileId).map(cdrFile -> CdrFileDto.of(cdrFile, file))));
     }
+
+    @Override
+    public Mono<Void> delete(Long fileId) {
+        return cdrDataService.deleteByFile(fileId).then(cdrFileRepository.deleteById(fileId));
+    }
 }

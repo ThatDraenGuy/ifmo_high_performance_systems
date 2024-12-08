@@ -10,6 +10,7 @@ app:
     group-id: file-service
     topics:
       file-uploaded: file-upload
+      file-upload-cancel: file-upload-cancel
 
 server:
   port: 8083

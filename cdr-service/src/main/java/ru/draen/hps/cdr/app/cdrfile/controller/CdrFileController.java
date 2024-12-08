@@ -14,10 +14,10 @@ import ru.draen.hps.cdr.app.cdrdata.service.CdrDataService;
 import ru.draen.hps.cdr.app.cdrfile.controller.dto.ParseCdrRequest;
 import ru.draen.hps.cdr.app.cdrfile.service.CdrFileService;
 import ru.draen.hps.cdr.common.model.ClientModel;
-import ru.draen.hps.cdr.producer.CdrFileParsedProducer;
 import ru.draen.hps.common.core.exception.NotFoundException;
 import ru.draen.hps.common.core.mapper.IMapper;
 import ru.draen.hps.common.r2dbcdao.domain.CdrData;
+import ru.draen.hps.common.webflux.saga.SagaStep;
 
 @RestController
 @RequestMapping(value = "${api.prefix}/cdr-files", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -25,13 +25,13 @@ import ru.draen.hps.common.r2dbcdao.domain.CdrData;
 @SecurityRequirement(name = "Bearer Authentication")
 public class CdrFileController {
     private final CdrFileService cdrFileService;
-    private final CdrFileParsedProducer cdrFileParsedProducer;
     private final CdrDataService cdrDataService;
     private final IMapper<CdrData, CdrDataDto> cdrDataMapper;
+    private final SagaStep<ParseCdrRequest, CdrFileDto> cdrSagaStep;
 
     @PostMapping("/parse")
     public Mono<CdrFileDto> parse(@Validated @RequestBody ParseCdrRequest request) {
-        return cdrFileService.parseData(request.getFileId()).flatMap(cdrFileParsedProducer::send);
+        return cdrSagaStep.process(request);
     }
 
     @GetMapping("/{id}")

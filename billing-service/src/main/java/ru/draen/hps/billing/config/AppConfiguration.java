@@ -7,8 +7,15 @@ import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import ru.draen.hps.billing.app.billing.controller.dto.BillingRequest;
+import ru.draen.hps.billing.app.billing.service.BillingService;
+import ru.draen.hps.billing.producer.BillingPerformedProducer;
+import ru.draen.hps.billing.producer.CdrFileCancelProducer;
 import ru.draen.hps.common.core.model.EUserRole;
+import ru.draen.hps.common.messaging.model.FileRelatedMsg;
 import ru.draen.hps.common.webflux.config.auth.RequestApplier;
+import ru.draen.hps.common.webflux.saga.SagaStep;
+import ru.draen.hps.common.webflux.utils.SagaUtils;
 
 @Configuration
 @OpenAPIDefinition(
@@ -32,5 +39,20 @@ public class AppConfiguration {
                 .pathMatchers(apiPrefix + "/billing/**").hasAuthority(EUserRole.OPERATOR.name())
                 .pathMatchers(docsPath).permitAll()
                 .anyExchange().authenticated();
+    }
+
+    @Bean
+    public SagaStep<BillingRequest, Void> billingSagaStep(
+            BillingService billingService,
+            BillingPerformedProducer billingPerformedProducer,
+            CdrFileCancelProducer cdrFileCancelProducer
+    ) {
+        return SagaUtils.createStep(
+                BillingRequest::cdrFileId,
+                billingService::perform,
+                SagaUtils::noRollback,
+                billingPerformedProducer::send,
+                (req, e) -> cdrFileCancelProducer.send(req.cdrFileId(), e)
+        );
     }
 }

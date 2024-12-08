@@ -10,6 +10,7 @@ app:
     group-id: billing-service
     topics:
       cdr-file-parsed: cdr-file-parsed
+      cdr-file-cancel: cdr-file-cancel
       billing-performed: billing-performed
 
 server:

@@ -11,10 +11,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.rsocket.server.RSocketServerCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
+import ru.draen.hps.common.core.exception.NotFoundException;
+import ru.draen.hps.common.core.mapper.IMapper;
 import ru.draen.hps.common.core.model.EUserRole;
 import ru.draen.hps.common.dbms.domain.File;
 import ru.draen.hps.common.webflux.config.auth.RequestApplier;
+import ru.draen.hps.common.webflux.saga.SagaStep;
+import ru.draen.hps.common.webflux.utils.SagaUtils;
+import ru.draen.hps.file.controller.dto.FileBriefDto;
+import ru.draen.hps.file.controller.dto.FileDto;
+import ru.draen.hps.file.producer.FileUploadedProducer;
+import ru.draen.hps.file.service.FileService;
 
 import java.time.Duration;
 
@@ -54,5 +63,23 @@ public class AppConfiguration {
     @Bean
     public IMap<Long, File> fileCache(HazelcastInstance hazelcastInstance) {
         return hazelcastInstance.getMap("files");
+    }
+
+    @Bean
+    public SagaStep<FileDto, FileBriefDto> fileSagaStep(
+            FileService fileService,
+            IMapper<File, FileBriefDto> fileBriefMapper,
+            IMapper<File, FileDto> fileMapper,
+            FileUploadedProducer fileUploadedProducer
+    ) {
+        return SagaUtils.createStartStep(
+                FileDto::getFileId,
+                fileDto -> fileService.create(fileMapper.toEntity(fileDto)).map(fileBriefMapper::toDto),
+                FileBriefDto::getFileId,
+                fileDto -> fileService.delete(fileDto.getFileId())
+                        .flatMap(result -> result ? Mono.empty() : Mono.error(NotFoundException::new)),
+                fileUploadedProducer::send,
+                SagaUtils::noOnError
+        );
     }
 }
