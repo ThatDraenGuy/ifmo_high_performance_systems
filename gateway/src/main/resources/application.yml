@@ -20,6 +20,8 @@ spring:
         locator:
           enabled: 'true'
           lower-case-service-id: 'true'
+        default-filters:
+          - RewritePath=${CONTEXT_PATH:/}.*?/(?<remaining>.*), /$\{remaining}
 
 springdoc:
   api-docs:

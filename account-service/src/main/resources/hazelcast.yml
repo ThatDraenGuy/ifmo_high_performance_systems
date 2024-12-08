@@ -29,3 +29,7 @@ hazelcast:
     join:
       multicast:
         enabled: true
+  serialization:
+    compact-serialization:
+      serializers:
+        - serializer: ru.draen.hps.common.webmvc.utils.InstantSerializer

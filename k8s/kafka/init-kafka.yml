@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: init-kafka
+  labels:
+    app: init-kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: init-kafka
+  template:
+    metadata:
+      labels:
+        app: init-kafka
+    spec:
+      containers:
+        - name: init-kafka
+          image: confluentinc/cp-kafka:latest
+          command:
+            - /bin/sh
+          args:
+            - -c
+            - >
+              # blocks until kafka is reachable
+              kafka-topics --bootstrap-server kafka:9092 --list;
+
+              echo -e 'Creating kafka topics';
+
+              kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic billing-performed --replication-factor 3 --partitions 3;
+              kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic cdr-file-parsed --replication-factor 3 --partitions 3;
+              kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic file-upload --replication-factor 3 --partitions 3;
+
+              echo -e 'Successfully created the following topics:';
+              kafka-topics --bootstrap-server kafka:9092 --list;
+          resources:
+            requests:
+              cpu: "0.2"
+              memory: 300Mi
+            limits:
+              cpu: "1.0"
+              memory: 300Mi
+---
+

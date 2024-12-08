@@ -6,7 +6,7 @@ api:
 
 app:
   kafka:
-    url: "kafka-1:9092,kafka-2:9092,kafka-3:9092"
+    url: "kafka:9092"
     group-id: billing-service
     topics:
       cdr-file-parsed: cdr-file-parsed

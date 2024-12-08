@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gateway-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/websocket-services : "socket-cluster-ip-service"
+spec:
+  defaultBackend:
+    service:
+      name: gateway
+      port:
+        number: 8080
+  rules:
+    - http:
+        paths:
+          - path: /eureka
+            backend:
+              service:
+                name: eureka-server
+                port:
+                  number: 8761
+            pathType: Prefix
+          - path: /gateway
+            backend:
+              service:
+                name: gateway
+                port:
+                  number: 8080
+            pathType: Prefix
+          - path: /kafka
+            backend:
+              service:
+                name: kafka-ui
+                port:
+                  number: 8080
+            pathType: Prefix

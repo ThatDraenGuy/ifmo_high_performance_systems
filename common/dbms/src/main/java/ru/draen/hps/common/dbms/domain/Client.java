@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.draen.hps.common.jpadao.entity.ADeletableEntity;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "clients")
 @Getter
 @Setter
-public class Client extends ADeletableEntity<Long> {
+public class Client extends ADeletableEntity<Long> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clients_cli_id_gen")
     @SequenceGenerator(name = "clients_cli_id_gen", sequenceName = "clients_cli_id_seq", allocationSize = 1)
