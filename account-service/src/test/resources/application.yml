@@ -18,3 +18,7 @@ eureka:
   client:
     registerWithEureka: false
     fetchRegistry: false
+
+springdoc:
+  api-docs:
+    path: /v3/openapi

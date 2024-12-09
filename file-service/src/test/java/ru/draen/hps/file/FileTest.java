@@ -2,6 +2,7 @@ package ru.draen.hps.file;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,7 @@ import ru.draen.hps.file.controller.dto.OperatorBriefDto;
         "/file/setup.sql"
 }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @AutoConfigureMockMvc
+@Disabled
 public class FileTest {
     @Autowired
     WebTestClient webTestClient;

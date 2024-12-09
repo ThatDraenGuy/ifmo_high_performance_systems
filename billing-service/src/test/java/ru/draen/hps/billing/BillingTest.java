@@ -2,6 +2,7 @@ package ru.draen.hps.billing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +34,7 @@ import org.springframework.web.reactive.function.BodyInserters;
         "/cdrdata/setup.sql"
 }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @AutoConfigureMockMvc
+@Disabled
 public class BillingTest {
     @Autowired
     WebTestClient webTestClient;

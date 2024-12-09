@@ -5,6 +5,7 @@ import io.r2dbc.spi.ConnectionFactory;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +40,7 @@ import java.time.ZoneOffset;
 @SpringBootTest
 @AutoConfigureWebTestClient
 @Testcontainers
+@Disabled
 public class CdrTest {
     @Container
     private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres");

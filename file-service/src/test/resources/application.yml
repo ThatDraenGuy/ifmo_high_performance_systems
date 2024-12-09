@@ -14,3 +14,15 @@ spring:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
     url: jdbc:tc:postgresql://hps
     hikari.minimum-idle: 5
+
+app:
+  kafka:
+    url: "kafka:9092"
+    group-id: file-service
+    topics:
+      file-uploaded: file-upload
+      file-upload-cancel: file-upload-cancel
+
+springdoc:
+  api-docs:
+    path: /v3/openapi
