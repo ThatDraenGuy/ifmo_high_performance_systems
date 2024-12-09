@@ -19,3 +19,15 @@ eureka:
   client:
     registerWithEureka: false
     fetchRegistry: false
+
+app:
+  kafka:
+    group-id: billing-service
+    topics:
+      cdr-file-parsed: cdr-file-parsed
+      cdr-file-cancel: cdr-file-cancel
+      billing-performed: billing-performed
+
+springdoc:
+  api-docs:
+    path: /v3/openapi

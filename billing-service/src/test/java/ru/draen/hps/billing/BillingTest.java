@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -34,7 +35,7 @@ import org.springframework.web.reactive.function.BodyInserters;
         "/cdrdata/setup.sql"
 }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @AutoConfigureMockMvc
-@Disabled
+@EmbeddedKafka(bootstrapServersProperty = "app.kafka.url")
 public class BillingTest {
     @Autowired
     WebTestClient webTestClient;

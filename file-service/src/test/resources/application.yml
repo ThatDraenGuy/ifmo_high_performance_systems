@@ -17,7 +17,6 @@ spring:
 
 app:
   kafka:
-    url: "kafka:9092"
     group-id: file-service
     topics:
       file-uploaded: file-upload
