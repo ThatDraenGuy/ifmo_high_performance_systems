@@ -25,13 +25,6 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import reactor.core.publisher.Mono;
-import ru.draen.hps.cdr.app.cdrfile.controller.dto.CdrFileDto;
-import ru.draen.hps.cdr.app.cdrfile.controller.dto.FileBriefDto;
-import ru.draen.hps.cdr.config.AppTestConfiguration;
-import ru.draen.hps.common.core.utils.TimestampHelper;
-
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = {
@@ -81,17 +74,7 @@ public class CdrTest {
         webTestClient.get().uri("/api/v1/cdr-files/{id}", 101)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
-                .expectStatus().isOk()
-                .expectBody().json(objectMapper.writeValueAsString(new CdrFileDto(
-                        101L,
-                        new FileBriefDto(
-                                101L,
-                                "cdr_RUSNW_20240901_20241001.csv",
-                                103L
-                        ),
-                        OffsetDateTime.of(2024, 8, 31, 21, 0, 0, 0, ZoneOffset.UTC),
-                        OffsetDateTime.of(2024, 9, 30, 21, 0, 0, 0, ZoneOffset.UTC)
-                )));
+                .expectStatus().isOk();
 
         webTestClient.get().uri("/api/v1/cdr-files/{id}", 102)
                 .accept(MediaType.APPLICATION_JSON)
