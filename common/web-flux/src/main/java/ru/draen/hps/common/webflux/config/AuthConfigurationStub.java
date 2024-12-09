@@ -13,10 +13,10 @@ import ru.draen.hps.common.security.config.AppProfile;
 @EnableWebFluxSecurity
 public class AuthConfigurationStub {
     @Bean
-    public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) throws Exception {
+    public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
         http
-                .csrf(csrf -> csrf.disable())
-                .httpBasic(httpBasic -> httpBasic.disable())
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .anonymous(anon -> {});
         return http.build();
     }

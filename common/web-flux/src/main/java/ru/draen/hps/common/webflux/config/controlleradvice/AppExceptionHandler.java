@@ -33,12 +33,12 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
     })
     private ResponseEntity<Object> handleExceptions(Exception e, ServerWebExchange exchange) {
         return handleException(e, exchange, switch (e) {
-            case BadRequestException ex -> HttpStatus.BAD_REQUEST;
-            case NotImplementedException ex -> HttpStatus.NOT_IMPLEMENTED;
-            case NotFoundException ex -> HttpStatus.NOT_FOUND;
-            case ProcessingException ex -> HttpStatus.CONFLICT;
-            case TokenException ex -> HttpStatus.FORBIDDEN;
-            case AccessDeniedException ex -> HttpStatus.FORBIDDEN;
+            case BadRequestException ignored -> HttpStatus.BAD_REQUEST;
+            case NotImplementedException ignored -> HttpStatus.NOT_IMPLEMENTED;
+            case NotFoundException ignored -> HttpStatus.NOT_FOUND;
+            case ProcessingException ignored -> HttpStatus.CONFLICT;
+            case TokenException ignored -> HttpStatus.FORBIDDEN;
+            case AccessDeniedException ignored -> HttpStatus.FORBIDDEN;
             default -> HttpStatus.INTERNAL_SERVER_ERROR;
         });
     }

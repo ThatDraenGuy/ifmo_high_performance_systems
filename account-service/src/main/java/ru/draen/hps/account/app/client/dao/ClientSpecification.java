@@ -6,7 +6,6 @@ import org.springframework.data.jpa.domain.Specification;
 import ru.draen.hps.account.app.client.controller.dto.ClientCondition;
 import ru.draen.hps.common.dbms.domain.Client;
 import ru.draen.hps.common.dbms.domain.Client_;
-import ru.draen.hps.common.dbms.domain.Operator_;
 import ru.draen.hps.common.jpadao.utils.EMatchMode;
 import ru.draen.hps.common.jpadao.utils.PredicateBuilder;
 

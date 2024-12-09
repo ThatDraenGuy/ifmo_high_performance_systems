@@ -36,7 +36,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @AutoConfigureMockMvc
 @EmbeddedKafka(bootstrapServersProperty = "app.kafka.url")
-public class BillingTest {
+class BillingTest {
     @Autowired
     WebTestClient webTestClient;
 

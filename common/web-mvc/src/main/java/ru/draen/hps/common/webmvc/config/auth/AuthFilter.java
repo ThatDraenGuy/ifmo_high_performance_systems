@@ -45,7 +45,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             } catch (Exception e) {
-                log.error("Error during auth", e); //TODO think wtf to do about it
+                log.error("Error during auth", e);
             }
         }
         filterChain.doFilter(request, response);

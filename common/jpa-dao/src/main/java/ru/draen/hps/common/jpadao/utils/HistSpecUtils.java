@@ -7,6 +7,7 @@ import jakarta.persistence.criteria.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import ru.draen.hps.common.jpadao.entity.ADeletableEntity_;
 import ru.draen.hps.common.jpadao.entity.AHistoricalEntity;
 import ru.draen.hps.common.jpadao.entity.AHistoricalEntity_;
 import ru.draen.hps.common.jpadao.entity.EHistStatus;
@@ -48,7 +49,7 @@ public class HistSpecUtils {
         return cb.and(
                 cb.lessThanOrEqualTo(histPath.get(AHistoricalEntity_.startDate), moment),
                 cb.greaterThan(histPath.get(AHistoricalEntity_.endDate), moment),
-                cb.isNull(histPath.get(AHistoricalEntity_.delDate))
+                cb.isNull(histPath.get(ADeletableEntity_.delDate))
         );
     }
 
@@ -60,7 +61,7 @@ public class HistSpecUtils {
                                                                       @NonNull Expression<Instant> moment) {
         return cb.and(
                 cb.greaterThan(histPath.get(AHistoricalEntity_.startDate), moment),
-                cb.isNull(histPath.get(AHistoricalEntity_.delDate))
+                cb.isNull(histPath.get(ADeletableEntity_.delDate))
         );
     }
 
@@ -72,11 +73,11 @@ public class HistSpecUtils {
                                                                       @NonNull Expression<Instant> moment) {
         return cb.and(
                 cb.lessThanOrEqualTo(histPath.get(AHistoricalEntity_.endDate), moment),
-                cb.isNull(histPath.get(AHistoricalEntity_.delDate))
+                cb.isNull(histPath.get(ADeletableEntity_.delDate))
         );
     }
 
     public static <T extends AHistoricalEntity<?>> Predicate deleted(@NonNull CriteriaBuilder cb, @NonNull Path<T> histPath) {
-        return cb.isNotNull(histPath.get(AHistoricalEntity_.delDate));
+        return cb.isNotNull(histPath.get(ADeletableEntity_.delDate));
     }
 }

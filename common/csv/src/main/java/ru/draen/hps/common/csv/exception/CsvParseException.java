@@ -10,11 +10,9 @@ import java.util.List;
 
 @Slf4j
 public class CsvParseException extends ProcessingException {
-    private final List<CsvError> errors;
 
     @SneakyThrows
     public CsvParseException(List<CsvError> errors) {
-        this.errors = errors;
         ObjectMapper objectMapper = new ObjectMapper();
         log.error(objectMapper.writeValueAsString(errors));
     }

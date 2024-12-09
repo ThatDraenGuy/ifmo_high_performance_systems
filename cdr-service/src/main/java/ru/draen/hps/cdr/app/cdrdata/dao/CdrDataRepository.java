@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.draen.hps.common.r2dbcdao.domain.CdrData;
-import ru.draen.hps.common.r2dbcdao.domain.Client;
 
 import java.time.Instant;
 

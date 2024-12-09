@@ -21,7 +21,7 @@ public class CdrDataCsvParser extends ACsvParserBase<CdrDataItem> {
 
     private static final BeanVerifier<CdrDataItem> PHONE_NUMBER_VERIFIER =
             item -> {
-        Pattern pattern = Pattern.compile("^[1-9][0-9]{10}$");
+        Pattern pattern = Pattern.compile("^[1-9]\\d{10}$");
         if (!pattern.matcher(item.getPhoneNumber()).matches()) {
             throw new CsvConstraintViolationException(
                     lbs.msg("CdrDataCsvParser.csvValidation.phoneNumber", item.getPhoneNumber()));

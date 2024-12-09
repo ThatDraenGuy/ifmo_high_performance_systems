@@ -1,5 +1,7 @@
 package ru.draen.hps.common.webflux.utils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
@@ -9,11 +11,13 @@ import ru.draen.hps.common.webflux.saga.SagaStep;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.ToLongFunction;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
 public class SagaUtils {
     public static<T, F, R> SagaStep<T, R> createStep(
-            Function<T, Long> stepIdProvider,
+            ToLongFunction<T> stepIdProvider,
             Function<T, Mono<F>> processor,
             Function<T, Mono<Void>> rollback,
             Function<F, Mono<R>> next,
@@ -22,7 +26,7 @@ public class SagaUtils {
         return new SagaStep<>() {
             @Override
             public Mono<R> process(T request) {
-                long stepId = stepIdProvider.apply(request);
+                long stepId = stepIdProvider.applyAsLong(request);
                 log.info("SAGA STEP {} STARTED", stepId);
                 return processor.apply(request)
                         .doOnSuccess(item -> log.info("SAGA STEP {} PROCESSED", stepId))
@@ -36,7 +40,7 @@ public class SagaUtils {
 
             @Override
             public Mono<Void> cancel(T request) {
-                long stepId = stepIdProvider.apply(request);
+                long stepId = stepIdProvider.applyAsLong(request);
                 return rollback.apply(request)
                         .doOnSuccess(item -> log.info("SAGA STEP {} ROLLBACK APPLIED", stepId))
                         .then(onError
@@ -48,9 +52,9 @@ public class SagaUtils {
     }
 
     public static<T, F, R> SagaStep<T, R> createStartStep(
-            Function<T, Long> stepIdProvider,
+            ToLongFunction<T> stepIdProvider,
             Function<T, Mono<F>> processor,
-            Function<F, Long> stepIdProvider2,
+            ToLongFunction<F> stepIdProvider2,
             Function<T, Mono<Void>> rollback,
             Function<F, Mono<R>> next,
             BiFunction<T, Throwable, Mono<F>> onError
@@ -61,7 +65,7 @@ public class SagaUtils {
                 int hash = request.hashCode();
                 log.info("NEW SAGA {} STARTED", request.hashCode());
                 return processor.apply(request)
-                        .map(item -> Tuples.of(item, stepIdProvider2.apply(item)))
+                        .map(item -> Tuples.of(item, stepIdProvider2.applyAsLong(item)))
                         .doOnSuccess(tuple -> log.info("NEW SAGA {} PROCESSED - STEP ID CREATED {}", hash, tuple.getT2()))
                         .doOnError(e -> log.error("NEW SAGA {} ENCOUNTERED ERROR {}", hash, e.getMessage()))
                         .onErrorResume(e -> onError.apply(request, e)
@@ -74,7 +78,7 @@ public class SagaUtils {
 
             @Override
             public Mono<Void> cancel(T request) {
-                long stepId = stepIdProvider.apply(request);
+                long stepId = stepIdProvider.applyAsLong(request);
                 return rollback.apply(request)
                         .doOnSuccess(item -> log.info("SAGA STEP {} ROLLBACK APPLIED", stepId))
                         .then(onError
@@ -85,11 +89,11 @@ public class SagaUtils {
         };
     }
 
-    public static<T, R> Mono<R> noOnError(T item, Throwable cause) {
+    public static<T, R> Mono<R> noOnError(T ignored, Throwable ignoredCause) {
         return Mono.empty();
     }
 
-    public static<T> Mono<Void> noRollback(T item) {
+    public static<T> Mono<Void> noRollback(T ignored) {
         return Mono.empty();
     }
 }

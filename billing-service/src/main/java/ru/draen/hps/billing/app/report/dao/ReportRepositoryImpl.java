@@ -15,5 +15,6 @@ public class ReportRepositoryImpl extends ADeletableRepository<Report, Long> imp
 
     @Override
     protected void defaultFetchProfile(@NonNull Root<Report> root) {
+        //no fetch
     }
 }

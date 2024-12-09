@@ -53,8 +53,8 @@ public class CdrFileController {
 
     @PutMapping("/{id}")
     public Mono<CdrDataDto> updateRecord(@PathVariable("id") Long id,
-                                         @Validated(Processed.class) @RequestBody Mono<CdrDataDto> record) {
-        return cdrDataService.update(record
+                                         @Validated(Processed.class) @RequestBody Mono<CdrDataDto> cdrRecord) {
+        return cdrDataService.update(cdrRecord
                 .map(rec -> rec.withCdrFileId(id))
                 .map(cdrDataMapper::toEntity))
                 .map(cdrDataMapper::toDto);

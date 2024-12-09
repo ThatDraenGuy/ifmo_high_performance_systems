@@ -15,5 +15,6 @@ public class TariffRepositoryImpl extends ADeletableRepository<Tariff, Long> imp
 
     @Override
     protected void defaultFetchProfile(@NonNull Root<Tariff> root) {
+        //no fetch
     }
 }

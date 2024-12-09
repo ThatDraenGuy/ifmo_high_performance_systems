@@ -3,6 +3,8 @@ package ru.draen.hps.common.csv;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.opencsv.exceptions.CsvException;
 
+import java.io.Serializable;
+
 public record CsvError(
         String message,
         @JsonIgnore Throwable cause,

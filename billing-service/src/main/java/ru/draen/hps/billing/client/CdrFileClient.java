@@ -23,5 +23,5 @@ public interface CdrFileClient {
     Flux<CdrDataModel> findClientRecords(@PathVariable("id") Long fileId, @RequestParam("clientId") Long clientId);
 
     @PutMapping("/{id}")
-    Mono<CdrDataModel> updateRecord(@PathVariable("id") Long fileId, @RequestBody CdrDataModel record);
+    Mono<CdrDataModel> updateRecord(@PathVariable("id") Long fileId, @RequestBody CdrDataModel cdrRecord);
 }

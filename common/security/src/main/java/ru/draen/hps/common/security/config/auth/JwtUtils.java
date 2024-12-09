@@ -11,6 +11,7 @@ import ru.draen.hps.common.core.label.ILabelService;
 import ru.draen.hps.common.security.I18n;
 
 import java.io.FileReader;
+import java.io.Serializable;
 import java.security.KeyPair;
 import java.time.Instant;
 import java.util.Date;
@@ -66,5 +67,5 @@ public class JwtUtils {
 
     }
 
-    public record AccessToken(String username) {}
+    public record AccessToken(String username) implements Serializable {}
 }

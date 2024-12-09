@@ -35,7 +35,7 @@ import reactor.core.publisher.Mono;
 @AutoConfigureWebTestClient
 @Testcontainers
 @EmbeddedKafka(bootstrapServersProperty = "app.kafka.url")
-public class CdrTest {
+class CdrTest {
     @Container
     private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres");
     static {

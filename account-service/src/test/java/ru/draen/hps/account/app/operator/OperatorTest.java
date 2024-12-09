@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "/operator/setup.sql"
 }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @AutoConfigureMockMvc
-public class OperatorTest {
+class OperatorTest {
     @Autowired
     MockMvc mockMvc;
 

@@ -17,7 +17,7 @@ import ru.draen.hps.common.webflux.utils.SagaUtils;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class CdrFileParsedListenerTest {
+class CdrFileParsedListenerTest {
     private BillingService billingService;
     private BillingPerformedProducer billingPerformedProducer;
     private CdrFileCancelProducer cdrFileCancelProducer;

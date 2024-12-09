@@ -15,10 +15,7 @@ import static java.util.Objects.isNull;
 @Setter
 @Slf4j
 public abstract class ALabelServiceBase implements ILabelService {
-    private volatile Supplier<Locale> localeResolver;
-
-    @Override
-    public abstract String msg(@NonNull Locale locale, @NonNull String code, Object... args) throws NoSuchMessageException;
+    private Supplier<Locale> localeResolver;
 
     @Override
     public String msg(@NonNull String code, Object... args) throws NoSuchMessageException {

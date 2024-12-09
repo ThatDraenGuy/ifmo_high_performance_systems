@@ -77,7 +77,7 @@ public class AppConfiguration {
                 fileDto -> fileService.create(fileMapper.toEntity(fileDto)).map(fileBriefMapper::toDto),
                 FileBriefDto::getFileId,
                 fileDto -> fileService.delete(fileDto.getFileId())
-                        .flatMap(result -> result ? Mono.empty() : Mono.error(NotFoundException::new)),
+                        .flatMap(result -> Boolean.TRUE.equals(result) ? Mono.empty() : Mono.error(NotFoundException::new)),
                 fileUploadedProducer::send,
                 SagaUtils::noOnError
         );

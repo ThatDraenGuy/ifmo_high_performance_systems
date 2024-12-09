@@ -24,7 +24,7 @@ public class CdrFileCancelProducer {
     @Value("${app.kafka.topics.cdr-file-cancel}")
     private String cdrFileCancel;
 
-    public<T> Mono<T> send(Long fileId, Throwable cause) {
+    public<T> Mono<T> send(Long fileId, Throwable ignored) {
         return Mono.fromFuture(kafkaTemplate
                         .send(cdrFileCancel, new FileRelatedMsg(fileId))
                         .whenComplete((res, e) -> {

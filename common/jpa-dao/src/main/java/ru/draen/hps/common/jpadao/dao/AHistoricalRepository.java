@@ -5,6 +5,7 @@ import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Root;
 import lombok.NonNull;
 import org.springframework.data.jpa.domain.Specification;
+import ru.draen.hps.common.jpadao.entity.ADeletableEntity_;
 import ru.draen.hps.common.jpadao.entity.AHistoricalEntity;
 import ru.draen.hps.common.jpadao.entity.AHistoricalEntity_;
 
@@ -46,7 +47,7 @@ public abstract class AHistoricalRepository<E extends AHistoricalEntity<ID>, ID>
                 logicalKey(entity).toPredicate(root, cb.createQuery(), cb),
                 cb.greaterThan(root.get(AHistoricalEntity_.endDate), entity.getStartDate()),
                 cb.lessThan(root.get(AHistoricalEntity_.startDate), root.get(AHistoricalEntity_.endDate)),
-                cb.isNull(root.get(AHistoricalEntity_.delDate))
+                cb.isNull(root.get(ADeletableEntity_.delDate))
         );
 
         return entityManager.createQuery(cu).executeUpdate() != 0;
@@ -65,7 +66,7 @@ public abstract class AHistoricalRepository<E extends AHistoricalEntity<ID>, ID>
         Optional<E> entity = findOne((root, cq, cb) -> cb.and(
                 cb.equal(root.get(getIdAttribute(root)), id),
                 cb.lessThan(root.get(AHistoricalEntity_.startDate), root.get(AHistoricalEntity_.endDate)),
-                cb.isNull(root.get(AHistoricalEntity_.delDate))
+                cb.isNull(root.get(ADeletableEntity_.delDate))
         ));
         entity.ifPresent(this::delete);
         return entity.isPresent();

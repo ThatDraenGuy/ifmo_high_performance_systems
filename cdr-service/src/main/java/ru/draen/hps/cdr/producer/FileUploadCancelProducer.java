@@ -7,7 +7,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import ru.draen.hps.cdr.I18n;
-import ru.draen.hps.cdr.app.cdrfile.controller.dto.CdrFileDto;
 import ru.draen.hps.common.core.label.ILabelService;
 import ru.draen.hps.common.messaging.model.AppMessage;
 import ru.draen.hps.common.messaging.model.FileRelatedMsg;
@@ -25,7 +24,7 @@ public class FileUploadCancelProducer {
     @Value("${app.kafka.topics.file-upload-cancel}")
     private String fileUploadCancel;
 
-    public<T> Mono<T> send(Long fileId, Throwable cause) {
+    public<T> Mono<T> send(Long fileId, Throwable ignored) {
         return Mono.fromFuture(kafkaTemplate
                         .send(fileUploadCancel, new FileRelatedMsg(fileId))
                         .whenComplete((res, e) -> {

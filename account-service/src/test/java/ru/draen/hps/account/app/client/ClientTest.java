@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "/client/setup.sql"
 }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @AutoConfigureMockMvc
-public class ClientTest {
+class ClientTest {
     @Autowired
     MockMvc mockMvc;
 

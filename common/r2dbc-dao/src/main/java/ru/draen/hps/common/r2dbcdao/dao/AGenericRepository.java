@@ -1,6 +1,5 @@
 package ru.draen.hps.common.r2dbcdao.dao;
 
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.r2dbc.convert.R2dbcConverter;
@@ -22,7 +21,7 @@ public abstract class AGenericRepository<E extends IEntity<ID>, ID> implements I
     private final R2dbcEntityOperations entityOperations;
     private final RelationalPersistentProperty idProperty;
 
-    public AGenericRepository(R2dbcEntityOperations entityOperations, R2dbcConverter converter) {
+    protected AGenericRepository(R2dbcEntityOperations entityOperations, R2dbcConverter converter) {
         this.entityOperations = entityOperations;
         idProperty = converter.getMappingContext().getRequiredPersistentEntity(getEntityClass()).getRequiredIdProperty();
     }

@@ -34,7 +34,7 @@ import ru.draen.hps.file.controller.dto.OperatorBriefDto;
 }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
 @AutoConfigureMockMvc
 @EmbeddedKafka(bootstrapServersProperty = "app.kafka.url")
-public class FileTest {
+class FileTest {
     @Autowired
     WebTestClient webTestClient;
 

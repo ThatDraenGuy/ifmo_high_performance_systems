@@ -2,7 +2,6 @@ package ru.draen.hps.cdr.app.cdrdata.controller.mapper;
 
 import ru.draen.hps.cdr.app.cdrdata.controller.dto.CdrDataDto;
 import ru.draen.hps.common.core.annotation.Mapper;
-import ru.draen.hps.common.core.exception.NotImplementedException;
 import ru.draen.hps.common.core.mapper.IMapper;
 import ru.draen.hps.common.core.utils.TimestampHelper;
 import ru.draen.hps.common.r2dbcdao.domain.CdrData;

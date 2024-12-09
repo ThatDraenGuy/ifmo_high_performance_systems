@@ -30,7 +30,7 @@ public abstract class ADeletableRepository<E extends ADeletableEntity<ID>, ID> e
     @Override
     public void delete(E entity) {
         entity.setDelDate(getServerTimestamp());
-        entity.setDelUser("Anonymous user"); //TODO user session
+        entity.setDelUser("Anonymous user");
         super.save(entity);
     }
 
@@ -41,7 +41,7 @@ public abstract class ADeletableRepository<E extends ADeletableEntity<ID>, ID> e
         Root<E> root = cu.from(getEntityClass());
 
         cu.set(ADeletableEntity_.delDate, getServerTimestamp());
-        cu.set(ADeletableEntity_.delUser, "Anonymous user"); //TODO user session
+        cu.set(ADeletableEntity_.delUser, "Anonymous user");
 
         cu.where(
                 spec.toPredicate(root, cb.createQuery(), cb),

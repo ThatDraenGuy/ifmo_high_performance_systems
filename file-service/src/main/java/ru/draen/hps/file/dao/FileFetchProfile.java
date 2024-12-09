@@ -8,7 +8,8 @@ import ru.draen.hps.common.dbms.domain.File_;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FileFetchProfile {
-    public static void brief(From<?, File> root) {
+    public static void brief(From<?, File> ignored) {
+        //no fetch
     }
 
     public static void withContent(From<?, File> root) {

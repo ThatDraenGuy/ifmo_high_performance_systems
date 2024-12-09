@@ -13,7 +13,6 @@ import ru.draen.hps.common.webflux.saga.SagaStep;
 import ru.draen.hps.file.controller.dto.FileBriefDto;
 import ru.draen.hps.file.controller.dto.FileCondition;
 import ru.draen.hps.file.controller.dto.FileDto;
-import ru.draen.hps.file.producer.FileUploadedProducer;
 import ru.draen.hps.file.service.FileService;
 import ru.draen.hps.common.dbms.domain.File;
 import ru.draen.hps.common.core.mapper.IMapper;
@@ -48,6 +47,6 @@ public class FileController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> delete(@PathVariable("id") Long id) {
-        return fileService.delete(id).flatMap(result -> result ? Mono.empty() : Mono.error(NotFoundException::new));
+        return fileService.delete(id).flatMap(result -> Boolean.TRUE.equals(result) ? Mono.empty() : Mono.error(NotFoundException::new));
     }
 }

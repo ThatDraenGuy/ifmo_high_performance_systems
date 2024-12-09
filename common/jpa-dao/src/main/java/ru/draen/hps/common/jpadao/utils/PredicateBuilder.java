@@ -69,7 +69,7 @@ public class PredicateBuilder {
                     cb.and(
                             cb.lessThanOrEqualTo(histPath.get(AHistoricalEntity_.startDate), actualDate),
                             cb.greaterThan(histPath.get(AHistoricalEntity_.endDate), actualDate),
-                            cb.isNull(histPath.get(AHistoricalEntity_.delDate))
+                            cb.isNull(histPath.get(ADeletableEntity_.delDate))
                     )
             );
         }

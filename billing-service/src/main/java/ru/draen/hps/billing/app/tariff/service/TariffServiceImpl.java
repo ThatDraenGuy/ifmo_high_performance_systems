@@ -1,17 +1,14 @@
 package ru.draen.hps.billing.app.tariff.service;
 
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import reactor.core.publisher.Mono;
 import ru.draen.hps.billing.app.tariff.dao.TariffHistRepository;
 import ru.draen.hps.billing.app.tariff.dao.TariffRepository;
-import ru.draen.hps.billing.app.tariff.dao.TariffToRulesRepository;
 import ru.draen.hps.common.dbms.domain.Tariff;
 import ru.draen.hps.common.dbms.domain.TariffHist;
-import ru.draen.hps.common.jpadao.dao.EntityLoader;
 
 import java.util.Optional;
 

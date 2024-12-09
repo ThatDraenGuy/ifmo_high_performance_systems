@@ -6,5 +6,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FetchProfiles {
-    public static <T> void nothing(From<?, T> root) {}
+    public static <T> void nothing(From<?, T> ignored) {
+        // an empty profile
+    }
 }
