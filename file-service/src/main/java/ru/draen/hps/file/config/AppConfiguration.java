@@ -38,7 +38,7 @@ import java.time.Duration;
                 )
         ),
         servers = {
-                @Server(url = "/file-service", description = "Gateway server")
+                @Server(url = "${app.openapi.prefix}/file-service", description = "Gateway server")
         }
 )
 public class AppConfiguration {

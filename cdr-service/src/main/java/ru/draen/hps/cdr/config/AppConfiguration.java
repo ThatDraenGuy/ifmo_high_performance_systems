@@ -50,7 +50,7 @@ import java.util.List;
                 )
         ),
         servers = {
-                @Server(url = "/cdr-service", description = "Gateway server")
+                @Server(url = "${app.openapi.prefix}/cdr-service", description = "Gateway server")
         }
 )
 public class AppConfiguration {

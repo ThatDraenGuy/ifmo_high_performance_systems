@@ -5,6 +5,8 @@ api:
     password: test
 
 app:
+  openapi:
+    prefix: /gateway
   kafka:
     url: "kafka:9092"
     group-id: cdr-service

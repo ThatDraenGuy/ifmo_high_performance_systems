@@ -23,21 +23,26 @@ spring:
         default-filters:
           - RewritePath=${CONTEXT_PATH:/}.*?/(?<remaining>.*), /$\{remaining}
 
+server:
+  servlet:
+    context-path: ${CONTEXT_PATH:/}
+
 springdoc:
   api-docs:
     enabled: true
-    path: /v3/openapi
+    path: ${CONTEXT_PATH:}/v3/openapi
   swagger-ui:
-    path: /swagger-ui
+#    url: ${CONTEXT_PATH:}/v3/openapi
+    config-url: ${CONTEXT_PATH:}/v3/openapi/swagger-config
     enabled: true
     urls:
-      - url: /file-service/v3/openapi
+      - url: ${CONTEXT_PATH:}/file-service/v3/openapi
         name: File Service
-      - url: /cdr-service/v3/openapi
+      - url: ${CONTEXT_PATH:}/cdr-service/v3/openapi
         name: Cdr Service
-      - url: /billing-service/v3/openapi
+      - url: ${CONTEXT_PATH:}/billing-service/v3/openapi
         name: Billing Service
-      - url: /account-service/v3/openapi
+      - url: ${CONTEXT_PATH:}/account-service/v3/openapi
         name: Account Service
 
 eureka:

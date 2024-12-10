@@ -4,6 +4,10 @@ api:
     username: test
     password: test
 
+app:
+  openapi:
+    prefix: /gateway
+
 server:
   port: 8084
 spring:

@@ -27,7 +27,7 @@ import ru.draen.hps.common.webflux.utils.SagaUtils;
                 )
         ),
         servers = {
-                @Server(url = "/billing-service", description = "Gateway server")
+                @Server(url = "${app.openapi.prefix}/billing-service", description = "Gateway server")
         }
 )
 public class AppConfiguration {

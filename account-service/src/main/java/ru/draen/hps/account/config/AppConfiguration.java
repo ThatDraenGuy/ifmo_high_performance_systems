@@ -25,7 +25,7 @@ import ru.draen.hps.common.webmvc.config.auth.RequestApplier;
                 )
         ),
         servers = {
-                @Server(url = "/account-service", description = "Gateway server")
+                @Server(url = "${app.openapi.prefix}/account-service", description = "Gateway server")
         }
 )
 public class AppConfiguration {
